@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+dist-ssr/
+build/
+*.local
+
+# Environment — NEVER commit real values (§36, §37)
+.env
+.env.*
+!.env.example
+
+# Supabase local artifacts
+supabase/.branches/
+supabase/.temp/
+supabase/.env
+.branches/
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test / coverage
+coverage/
+.nyc_output/
+*.tsbuildinfo
+
+# Vercel
+.vercel/
+
+# OS
+Thumbs.db
+desktop.ini

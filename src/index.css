@@ -1,0 +1,247 @@
+@import 'tailwindcss';
+
+/* =============================================================================
+   DESIGN SYSTEM HBG LABS (§39)
+   =============================================================================
+   Registre visuel : premium, moderne, technologique, épuré, professionnel.
+
+   Trois niveaux, du plus stable au plus contextuel :
+
+     1. PALETTE BRUTE      — les teintes, sans intention d'usage
+     2. JETONS SÉMANTIQUES — background, foreground, primary… ; c'est la
+                             couche qui bascule entre clair et sombre
+     3. UTILITAIRES        — Tailwind les dérive du niveau 2
+
+   Les composants n'utilisent QUE le niveau 3 (`bg-surface`, `text-muted`).
+   Écrire `bg-slate-900` en dur dans un composant le rend aveugle au thème et
+   fige une décision qui appartient à cette feuille.
+
+   Couleurs en OKLCH : contrairement à HSL, un même écart de clarté y produit
+   un écart perçu constant. Les nuances d'une échelle restent donc cohérentes
+   entre elles, et les contrastes calculés pour l'accessibilité (§43) tiennent
+   sur toute la gamme.
+   ========================================================================== */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* -----------------------------------------------------------------------------
+   1. Palette brute
+   -------------------------------------------------------------------------- */
+@theme {
+  /* Bleu HBG Labs — technique, sobre, sans effet de mode. */
+  --color-brand-50: oklch(0.97 0.014 258);
+  --color-brand-100: oklch(0.938 0.03 258);
+  --color-brand-200: oklch(0.885 0.058 258);
+  --color-brand-300: oklch(0.809 0.096 258);
+  --color-brand-400: oklch(0.712 0.14 260);
+  --color-brand-500: oklch(0.623 0.178 262);
+  --color-brand-600: oklch(0.546 0.196 264);
+  --color-brand-700: oklch(0.478 0.181 265);
+  --color-brand-800: oklch(0.412 0.15 266);
+  --color-brand-900: oklch(0.362 0.117 266);
+  --color-brand-950: oklch(0.246 0.077 267);
+
+  /* Neutres légèrement bleutés : plus froids et plus « produit » qu'un gris
+     pur, sans virer au bleu perceptible. */
+  --color-ink-50: oklch(0.984 0.003 248);
+  --color-ink-100: oklch(0.968 0.006 248);
+  --color-ink-200: oklch(0.929 0.012 250);
+  --color-ink-300: oklch(0.869 0.019 252);
+  --color-ink-400: oklch(0.704 0.03 256);
+  --color-ink-500: oklch(0.554 0.035 257);
+  --color-ink-600: oklch(0.446 0.035 257);
+  --color-ink-700: oklch(0.372 0.034 259);
+  --color-ink-800: oklch(0.279 0.033 260);
+  --color-ink-900: oklch(0.208 0.035 265);
+  --color-ink-950: oklch(0.137 0.032 266);
+
+  /* Statuts. Le vert n'est employé QUE sur une information vérifiée (§17) :
+     un voyant vert sur une donnée non contrôlée est un mensonge à
+     l'utilisateur. Une information inconnue prend le gris `unknown`. */
+  --color-success-50: oklch(0.972 0.033 156);
+  --color-success-500: oklch(0.653 0.157 156);
+  --color-success-600: oklch(0.579 0.146 157);
+  --color-success-700: oklch(0.492 0.124 158);
+
+  --color-warning-50: oklch(0.98 0.035 92);
+  --color-warning-500: oklch(0.769 0.156 78);
+  --color-warning-600: oklch(0.681 0.156 66);
+  --color-warning-700: oklch(0.576 0.14 58);
+
+  --color-danger-50: oklch(0.971 0.02 18);
+  --color-danger-500: oklch(0.637 0.208 25);
+  --color-danger-600: oklch(0.577 0.213 27);
+  --color-danger-700: oklch(0.505 0.19 27);
+
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-mono:
+    ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+}
+
+/* -----------------------------------------------------------------------------
+   2. Jetons sémantiques
+   -------------------------------------------------------------------------- */
+:root {
+  --background: var(--color-ink-50);
+  --foreground: var(--color-ink-900);
+
+  --surface: oklch(1 0 0);
+  --surface-foreground: var(--color-ink-900);
+  --surface-muted: var(--color-ink-100);
+
+  --muted: var(--color-ink-500);
+  --border: var(--color-ink-200);
+  --input: var(--color-ink-300);
+
+  --primary: var(--color-brand-600);
+  --primary-foreground: oklch(1 0 0);
+  --primary-hover: var(--color-brand-700);
+
+  --secondary: var(--color-ink-100);
+  --secondary-foreground: var(--color-ink-800);
+
+  --success: var(--color-success-600);
+  --success-surface: var(--color-success-50);
+  --warning: var(--color-warning-600);
+  --warning-surface: var(--color-warning-50);
+  --danger: var(--color-danger-600);
+  --danger-surface: var(--color-danger-50);
+
+  /* État inconnu — la couleur des informations non vérifiées (§17). */
+  --unknown: var(--color-ink-400);
+  --unknown-surface: var(--color-ink-100);
+
+  --ring: var(--color-brand-500);
+}
+
+.dark {
+  --background: var(--color-ink-950);
+  --foreground: var(--color-ink-100);
+
+  --surface: var(--color-ink-900);
+  --surface-foreground: var(--color-ink-100);
+  --surface-muted: var(--color-ink-800);
+
+  --muted: var(--color-ink-400);
+  --border: var(--color-ink-800);
+  --input: var(--color-ink-700);
+
+  --primary: var(--color-brand-500);
+  --primary-foreground: var(--color-ink-950);
+  --primary-hover: var(--color-brand-400);
+
+  --secondary: var(--color-ink-800);
+  --secondary-foreground: var(--color-ink-100);
+
+  --success: var(--color-success-500);
+  --success-surface: oklch(0.28 0.05 156);
+  --warning: var(--color-warning-500);
+  --warning-surface: oklch(0.3 0.05 78);
+  --danger: var(--color-danger-500);
+  --danger-surface: oklch(0.28 0.07 25);
+
+  --unknown: var(--color-ink-400);
+  --unknown-surface: var(--color-ink-800);
+
+  --ring: var(--color-brand-400);
+}
+
+/* `inline` fait référencer les variables ci-dessus telles quelles : la
+   bascule clair/sombre suffit alors à repeindre toutes les utilitaires,
+   sans recompilation ni classe conditionnelle. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-surface-muted: var(--surface-muted);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-success: var(--success);
+  --color-success-surface: var(--success-surface);
+  --color-warning: var(--warning);
+  --color-warning-surface: var(--warning-surface);
+  --color-danger: var(--danger);
+  --color-danger-surface: var(--danger-surface);
+  --color-unknown: var(--unknown);
+  --color-unknown-surface: var(--unknown-surface);
+  --color-ring: var(--ring);
+}
+
+/* -----------------------------------------------------------------------------
+   3. Base
+   -------------------------------------------------------------------------- */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Anneau de focus visible au clavier, discret à la souris (§43).
+     `:focus-visible` plutôt que `:focus` : un halo autour de chaque bouton
+     cliqué à la souris pousse les équipes à supprimer l'outline — et à
+     rendre le site inutilisable au clavier. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  /* Respect de la préférence système de réduction d'animation (§43). */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Cible d'évitement, premier élément focalisable de la page (§43). */
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 0.75rem 1.25rem;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    border-radius: var(--radius-md);
+  }
+
+  .skip-link:focus {
+    left: 1rem;
+    top: 1rem;
+  }
+}
