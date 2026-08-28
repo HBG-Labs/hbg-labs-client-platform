@@ -2,10 +2,10 @@
 
 Marche à suivre pour rendre le projet opérationnel sur une machine neuve.
 
-Le lot 1 (fondations, base de données, RLS) est écrit et vérifié localement,
-mais **les tests d'isolation multi-tenant ne peuvent pas s'exécuter sans une
-base Supabase**. L'étape 3 ci-dessous est donc la porte à franchir pour que le
-lot soit réellement validé.
+Le projet Supabase **HBGLABS CLIENT PLATFORM** est déjà relié, le schéma y est
+appliqué et la suite d'isolation y passe intégralement. Cette marche à suivre
+sert à reproduire l'installation sur une autre machine, ou à repartir d'un
+projet neuf.
 
 ---
 
@@ -36,7 +36,7 @@ cp .env.example .env      # PowerShell : Copy-Item .env.example .env
 À ce stade, ces commandes fonctionnent déjà, sans aucun compte externe :
 
 ```bash
-npm run check:schema   # analyse statique des 15 migrations
+npm run check:schema   # analyse statique des 16 migrations
 npm run lint
 npm run typecheck
 ```
@@ -54,8 +54,10 @@ n'est simulée en l'absence de base.
 1. Ouvrir [supabase.com/dashboard](https://supabase.com/dashboard) et créer un
    projet (offre gratuite).
 2. **Nom** : `hbg-labs-dev` — un projet distinct de la future production.
-3. **Région** : choisir la plus proche des utilisateurs. Depuis la Martinique,
-   `us-east-1` offre généralement une latence plus faible que l'Europe.
+3. **Région** : choisir la plus proche des utilisateurs. Le projet existant est
+   en `eu-west-1` ; depuis la Martinique, `us-east-1` offrirait généralement une
+   latence plus faible — à mesurer avant un éventuel changement, qui impose de
+   recréer le projet.
 4. Conserver le mot de passe de base de données généré : il est demandé lors du
    `db push` et n'est plus affichable ensuite.
 
@@ -80,14 +82,15 @@ Dashboard → **Project Settings → API** :
 ```bash
 npx supabase login
 npx supabase link                 # sélectionner le projet dans la liste
-npm run db:push                   # applique les 15 migrations
+npm run db:push                   # applique les 16 migrations
 npm run db:seed                   # insère la grille tarifaire réelle (§7)
 npm run db:types                  # régénère src/types/database.types.ts
 ```
 
-`db:types` remplace le fichier placeholder par les types réels des tables. Les
-paramètres de type explicites présents dans `tests/rls/fixtures.ts` peuvent
-alors être retirés.
+`db:types` régénère `src/types/database.types.ts` depuis la base. Ce fichier
+est **généré** : ne le modifiez jamais à la main, relancez la commande. Les
+tests et l'application s'y typent, une colonne renommée dans une migration
+casse donc la compilation plutôt que d'échouer à l'exécution.
 
 ### 3.4 Vérification de l'isolation multi-tenant
 
@@ -99,8 +102,12 @@ La suite crée deux organisations, quatre utilisateurs et un jeu complet de
 données métier, exécute la matrice de §47 sur chaque table, puis détruit tout.
 Compter deux à trois minutes selon la latence réseau.
 
-**Tant que cette commande n'a pas été exécutée avec succès, le statut du lot 1
-reste « RLS écrite, non vérifiée ».**
+Résultat attendu : **136 tests au vert**, 5 fichiers.
+
+Enchaînez avec `npm run check:privileges`, qui compare les privilèges réels de
+la base aux privilèges attendus. Les deux sont complémentaires : les tests
+vérifient les policies, l'audit vérifie les privilèges — et un manque de
+privilège rend une policy inopérante sans qu'aucun test ne l'indique.
 
 La suite refuse de démarrer si `VITE_APP_ENV=production` : elle crée et
 supprime des utilisateurs, et ne doit jamais toucher la base de production.

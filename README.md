@@ -3,8 +3,9 @@
 Plateforme SaaS multi-tenant de HBG Labs : création de sites web, hébergement,
 maintenance, gestion des domaines, abonnements, facturation et support client.
 
-**Statut : lot 1 livré** — fondations du projet, schéma de base de données et
-politiques d'isolation multi-tenant.
+**Statut : lot 1 livré et vérifié** — fondations du projet, schéma de base de
+données et politiques d'isolation multi-tenant, appliqués sur le projet
+Supabase et validés par 136 tests.
 
 ---
 
@@ -28,9 +29,10 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 | Commande | Effet |
 |---|---|
 | `npm run dev` | serveur de développement |
-| `npm run verify` | schéma + lint + types + build + scan de secrets |
+| `npm run verify` | schéma + privilèges + lint + types + build + scan de secrets |
 | `npm run test:rls` | isolation multi-tenant — **exige une base Supabase** |
 | `npm run check:schema` | analyse statique des migrations, sans base |
+| `npm run check:privileges` | privilèges réels de la base vs. attendus |
 | `npm run db:push` | applique les migrations au projet lié |
 | `npm run db:seed` | insère la grille tarifaire |
 | `npm run db:types` | régénère les types TypeScript depuis la base |
@@ -52,11 +54,11 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 ## Ce que contient le lot 1
 
 - Projet Vite · React 19 · TypeScript · Tailwind 4, arborescence modulaire (§38)
-- 15 migrations SQL : 19 tables, 22 types, 30 fonctions (§45)
+- 16 migrations SQL : 19 tables, 22 types, 30 fonctions (§45)
 - RLS activée **et forcée** sur toutes les tables, 11 gardes par trigger
-- Suite de tests d'isolation multi-tenant (§47)
+- Suite de 136 tests d'isolation multi-tenant (§47), tous au vert
 - Design system : jetons de couleur, `Button`, `Card`, `StatusBadge`, états
-- Trois gardes automatiques contre l'exposition de secrets (§36)
+- Quatre gardes automatiques : secrets, environnement, schéma, privilèges (§36)
 - Grille tarifaire réelle en base, jamais codée en dur (§7)
 
 ## Ce qu'il ne contient pas
@@ -68,18 +70,29 @@ maquettée.
 
 ---
 
-## Vérification en attente
+## Vérification
 
-Les tests RLS sont écrits mais **n'ont pas encore été exécutés** : ils exigent
-une base Supabase, et aucun projet n'existe à ce jour. Tant que
-`npm run test:rls` n'a pas tourné, le statut est *« RLS écrite, non vérifiée »*.
+Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
+(PostgreSQL 17, eu-west-1) et la suite d'isolation y a été exécutée.
 
-Ce qui est vérifié à ce stade, sans aucun compte externe :
+| Contrôle | Résultat |
+|---|---|
+| Application des 16 migrations sur base vierge | sans erreur |
+| `npm run test:rls` — 136 tests, 5 fichiers | tous au vert |
+| `npm run check:privileges` | conforme, aucun surplus ni manque |
+| `npm run check:schema` | RLS activée et forcée sur 19/19 tables |
+| `npm run verify` | lint, types, build, aucun secret dans le bundle |
 
-- 401 instructions SQL analysées par un parseur PostgreSQL 17 — syntaxe valide
-- cohérence référentielle des 15 migrations : clés étrangères, fonctions, types,
-  RLS présente et forcée sur les 19 tables
-- `npm run verify` : lint, types, build de production, absence de secret dans le
-  bundle
+### Un défaut trouvé et corrigé
 
-Voir [docs/SETUP.md §3.4](./docs/SETUP.md).
+L'audit des privilèges réels a révélé que `authenticated` détenait INSERT,
+UPDATE, DELETE, TRUNCATE, REFERENCES et TRIGGER sur toutes les tables —
+y compris celles documentées en lecture seule. Cause : Supabase accorde tout
+par défaut, et un `GRANT` est additif, il ne retire rien.
+
+Aucune donnée n'a jamais été exposée : la RLS bloquait les effets, ce que les
+133 tests d'alors confirmaient. Mais **TRUNCATE échappe à la RLS**, et il n'y
+avait donc qu'une barrière là où la documentation en annonçait deux.
+
+Corrigé par la migration 16, et désormais surveillé en continu par
+`npm run check:privileges`. Détail dans [RLS.md §4bis](./docs/RLS.md).

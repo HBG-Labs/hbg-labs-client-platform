@@ -1,5 +1,14 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { randomUUID } from 'node:crypto';
+import type { Database } from '../../src/types/database.types';
+
+/**
+ * Clients typés sur le schéma réel, régénéré par `npm run db:types`.
+ * Les tests bénéficient ainsi de la même vérification de colonnes que
+ * l'application : une colonne renommée dans une migration casse la
+ * compilation des tests, au lieu d'échouer à l'exécution des mois plus tard.
+ */
+type Db = SupabaseClient<Database>;
 
 /**
  * Jeu de données du scénario §47.
@@ -32,14 +41,14 @@ export interface TestActor {
   readonly userId: string;
   readonly email: string;
   /** Client porteur de la session de cet utilisateur. */
-  readonly db: SupabaseClient;
+  readonly db: Db;
 }
 
 export interface Fixtures {
   /** Contourne la RLS. Sert à préparer et à vérifier, jamais à tester. */
-  readonly admin: SupabaseClient;
+  readonly admin: Db;
   /** Sans session : le visiteur du site public. */
-  readonly anon: SupabaseClient;
+  readonly anon: Db;
 
   readonly userA: TestActor;
   readonly userA2: TestActor;
@@ -69,13 +78,13 @@ export interface Fixtures {
   readonly planId: string;
 }
 
-export function serviceClient(): SupabaseClient {
+export function serviceClient(): Db {
   return createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }
 
-export function anonClient(): SupabaseClient {
+export function anonClient(): Db {
   return createClient(SUPABASE_URL, ANON_KEY, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
@@ -83,7 +92,7 @@ export function anonClient(): SupabaseClient {
 
 /** Crée un utilisateur confirmé et ouvre une session à son nom. */
 async function createActor(
-  admin: SupabaseClient,
+  admin: Db,
   label: string,
   runId: string,
 ): Promise<TestActor> {
@@ -115,9 +124,19 @@ async function createActor(
   return { label, userId: created.user.id, email, db };
 }
 
-/** Interrompt le test avec le message d'erreur Postgres, plus parlant qu'un throw nu. */
+/**
+ * Interrompt le test avec le message d'erreur Postgres, plus parlant qu'un
+ * throw nu.
+ *
+ * Le paramètre est `data: T` et non `data: T | null`. La réponse de
+ * supabase-js est une union discriminée — `{ data: X; error: null }` ou
+ * `{ data: null; error: PostgrestError }` — et `T | null` force TypeScript à
+ * inférer T sur les deux branches à la fois, ce qui donne `never`. En
+ * écrivant `data: T`, T s'infère en `X | null`, que `NonNullable` réduit
+ * ensuite à X.
+ */
 function must<T>(
-  result: { data: T | null; error: { message: string } | null },
+  result: { data: T; error: { message: string } | null },
   what: string,
 ): NonNullable<T> {
   if (result.error || result.data === null) {
@@ -177,10 +196,7 @@ export async function setupFixtures(): Promise<Fixtures> {
   );
 
   // --- Offre de référence --------------------------------------------------
-  // Paramètre de type explicite : `database.types.ts` est encore un
-  // placeholder, l'inférence de supabase-js sur `.single()` retombe donc sur
-  // `never`. Il disparaîtra une fois les types générés (`npm run db:types`).
-  const plan = must<{ id: string }>(
+  const plan = must(
     await admin.from('plans').select('id').eq('code', 'PRO').single(),
     'Lecture du plan PRO (le seed a-t-il été appliqué ?)',
   );
@@ -275,7 +291,7 @@ export async function setupFixtures(): Promise<Fixtures> {
   const invoiceA = invoices.find((i) => i.organization_id === orgA)!.id as string;
   const invoiceB = invoices.find((i) => i.organization_id === orgB)!.id as string;
 
-  const payment = must<{ id: string }>(
+  const payment = must(
     await admin
       .from('payments')
       .insert({
@@ -292,7 +308,7 @@ export async function setupFixtures(): Promise<Fixtures> {
       .single(),
     'Création du paiement',
   );
-  const paymentA = payment.id as string;
+  const paymentA = payment.id;
 
   const tickets = must(
     await admin
@@ -346,7 +362,7 @@ export async function setupFixtures(): Promise<Fixtures> {
   const publicMessageA = messages.find((m) => m.is_internal_note === false)!.id as string;
   const internalNoteA = messages.find((m) => m.is_internal_note === true)!.id as string;
 
-  const notification = must<{ id: string }>(
+  const notification = must(
     await admin
       .from('notifications')
       .insert({
@@ -362,7 +378,7 @@ export async function setupFixtures(): Promise<Fixtures> {
       .single(),
     'Création de la notification',
   );
-  const notificationA = notification.id as string;
+  const notificationA = notification.id;
 
   return {
     admin,

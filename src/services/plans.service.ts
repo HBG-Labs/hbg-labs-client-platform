@@ -81,7 +81,7 @@ export async function fetchPublicPlans(): Promise<PublicPlan[]> {
 
   if (error) throw error;
 
-  return ((data ?? []) as unknown as PublicPlan[]).map((plan) => ({
+  return (data ?? []).map((plan) => ({
     ...plan,
     // Le tri des caractéristiques ne peut pas être demandé à PostgREST sur une
     // relation imbriquée de façon fiable ; il est fait ici, sur un tableau de

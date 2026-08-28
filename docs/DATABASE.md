@@ -1,6 +1,8 @@
 # Schéma de données
 
-19 tables, 22 types énumérés, 30 fonctions. Ordre d'application conforme à §45.
+19 tables, 22 types énumérés, 30 fonctions, 16 migrations. Ordre d'application
+conforme à §45 ; la 16ᵉ est un correctif de privilèges décrit en
+[RLS.md §4bis](./RLS.md).
 
 Ce document décrit les **intentions** ; les définitions font foi dans
 `supabase/migrations/`. Les policies sont détaillées dans [RLS.md](./RLS.md).

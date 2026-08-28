@@ -102,14 +102,30 @@ describe('profiles.platform_role', () => {
 
 describe('Inscription — métadonnées contrôlées par le client', () => {
   it('Un rôle passé dans les métadonnées d inscription est ignoré', async () => {
-    // `raw_user_meta_data` est entièrement rempli par le client. Si
-    // `handle_new_user` y lisait un rôle, il suffirait de s'inscrire avec
-    // `{ platform_role: 'OWNER' }` pour devenir administrateur.
+    // LA propriété vérifiée ici : le trigger `handle_new_user` ne lit QUE
+    // `full_name` dans `raw_user_meta_data`, et n'écrit jamais
+    // `platform_role`. Sans cette discipline, s'inscrire avec
+    // `{ platform_role: 'OWNER' }` suffirait à devenir administrateur de la
+    // plateforme, avec accès aux données de tous les clients.
+    //
+    // POURQUOI admin.createUser ET NON auth.signUp
+    //
+    // Le parcours signUp public vérifie l'enregistrement MX du domaine de
+    // l'adresse. Aucun domaine de test — .test, example.com — ne le franchit,
+    // et le désactiver affaiblirait une protection réelle du projet pour le
+    // confort d'un test.
+    //
+    // Les deux chemins écrivent le MÊME `raw_user_meta_data` et déclenchent le
+    // MÊME trigger : la garantie testée est identique. Ce que ce test ne
+    // couvre pas, c'est la validation d'email de GoTrue — qui n'est pas
+    // notre code.
     const email = `rlstest-meta-${Date.now()}@hbg-labs.test`;
-    const { data, error } = await f.anon.auth.signUp({
+
+    const { data, error } = await f.admin.auth.admin.createUser({
       email,
       password: 'RlsTest-2026-Xy',
-      options: { data: { full_name: 'Injection', platform_role: 'OWNER' } },
+      email_confirm: true,
+      user_metadata: { full_name: 'Injection', platform_role: 'OWNER' },
     });
 
     expect(error).toBeNull();
@@ -122,9 +138,15 @@ describe('Inscription — métadonnées contrôlées par le client', () => {
       .eq('id', userId!)
       .single();
 
+    // Le rôle transmis est ignoré : la colonne conserve son défaut.
     expect(profile.data?.platform_role).toBeNull();
     // Le nom, lui, est bien repris : la fonction lit ce champ et lui seul.
     expect(profile.data?.full_name).toBe('Injection');
+
+    // Contre-épreuve : la métadonnée a bien été enregistrée par GoTrue. Sans
+    // cela, le test passerait aussi si les métadonnées étaient simplement
+    // perdues en route — et ne prouverait rien sur le trigger.
+    expect(data.user?.user_metadata?.platform_role).toBe('OWNER');
 
     await f.admin.auth.admin.deleteUser(userId!);
   });

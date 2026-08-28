@@ -156,6 +156,38 @@ publiée n'appelle `set_config`.
 
 ---
 
+## 4bis. Privilèges de table — la seconde barrière
+
+Les policies décident QUELLES LIGNES un rôle atteint. Les privilèges décident
+s'il peut émettre l'opération. Les deux sont nécessaires, et ils ne se
+remplacent pas.
+
+**Défaut trouvé après le premier déploiement.** Supabase pose
+`alter default privileges ... grant all on tables to anon, authenticated` :
+toute table naît avec tous les privilèges accordés aux deux rôles. Les
+migrations 02 à 15 écrivaient `grant select ...` en croyant définir les
+privilèges — un GRANT est additif, le surplus est resté. `authenticated`
+détenait INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES et TRIGGER sur toutes
+les tables, y compris `invoices`, `payments` et `audit_logs`.
+
+Les 133 tests d'isolation passaient : la RLS bloquait bien les effets, et
+aucune donnée n'a jamais été accessible. Mais **TRUNCATE n'est pas soumis à la
+RLS** — c'est une commande de niveau table. Il n'y avait qu'une barrière là où
+ce document en annonçait deux.
+
+La migration 16 retire tout à `anon` et `authenticated` sur l'ensemble des
+tables, réattribue explicitement le strict nécessaire, et modifie les
+privilèges par défaut pour que les tables futures ne reproduisent pas le
+problème.
+
+`npm run check:privileges` interroge la base réelle et compare aux privilèges
+attendus, dans les deux sens : un surplus (danger) comme un manque (une policy
+qui ne s'appliquera jamais). Une analyse statique ne pouvait pas voir ce
+défaut — il ne venait pas de ce que les migrations écrivent, mais de ce
+qu'elles n'écrivent pas.
+
+---
+
 ## 5. Storage
 
 Trois buckets, tous **privés**. L'isolation repose sur le premier segment du
@@ -183,7 +215,8 @@ Les fichiers se servent par **URL signée**, jamais par URL publique (§35).
 
 ## 6. Vérification
 
-`npm run test:rls` — 5 fichiers, exécutés contre une base réelle.
+`npm run test:rls` — 5 fichiers, **136 tests**, exécutés contre une base réelle.
+Tous passent au 28 août 2026 sur le projet HBGLABS CLIENT PLATFORM.
 
 | Fichier | Objet |
 |---|---|
@@ -227,4 +260,5 @@ Les refus d'écriture, eux, produisent un vrai code d'erreur :
 7. Si une colonne doit être protégée indépendamment de sa ligne : ajouter une
    garde par trigger — la RLS n'y suffira pas.
 8. Ajouter la table à la matrice de la section 3 et à `tests/rls/`.
-9. `npm run check:schema` avant de pousser.
+9. Ajouter la table à `EXPECTED` dans `scripts/audit-privileges.mjs`.
+10. `npm run check:schema` puis `npm run check:privileges` avant de pousser.

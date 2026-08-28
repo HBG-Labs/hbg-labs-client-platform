@@ -72,12 +72,46 @@ describe('Catalogue public', () => {
   });
 
   it('Le visiteur ne peut pas modifier le catalogue', async () => {
-    const { error } = await f.anon
+    // Deux barrières indépendantes, vérifiées ensemble :
+    //   - le PRIVILÈGE d'écriture est retiré à anon (migration 16) → erreur 42501 ;
+    //   - même sans lui, aucune policy UPDATE ne vise anon → zéro ligne touchée.
+    //
+    // Cette seconde vérification compte autant que la première : une écriture
+    // que seule la RLS bloque ne lève PAS d'erreur, elle n'affecte simplement
+    // rien. Une assertion portant uniquement sur l'erreur laisserait donc
+    // passer une régression de privilèges sans rien signaler — ce qui est
+    // précisément ce qui s'était produit avant la migration 16.
+    const { data, error } = await f.anon
       .from('plan_prices')
       .update({ unit_amount_cents: 1 })
-      .eq('unit_amount_cents', 4900);
+      .eq('unit_amount_cents', 4900)
+      .select('id');
 
-    expect(error).not.toBeNull();
+    expect(error?.code).toBe('42501');
+    expect(data ?? []).toHaveLength(0);
+
+    const check = await f.admin
+      .from('plan_prices')
+      .select('id')
+      .eq('unit_amount_cents', 1);
+    expect(check.data ?? []).toHaveLength(0);
+  });
+
+  it('Le visiteur ne peut ni insérer ni supprimer dans le catalogue', async () => {
+    const insert = await f.anon
+      .from('plan_prices')
+      .insert({ plan_id: f.planId, kind: 'ONE_TIME', unit_amount_cents: 1 });
+    expect(insert.error?.code).toBe('42501');
+
+    const remove = await f.anon
+      .from('plans')
+      .delete()
+      .eq('code', 'PRO')
+      .select('id');
+    expect(remove.error?.code).toBe('42501');
+
+    const check = await f.admin.from('plans').select('id').eq('code', 'PRO');
+    expect(check.data).toHaveLength(1);
   });
 });
 
