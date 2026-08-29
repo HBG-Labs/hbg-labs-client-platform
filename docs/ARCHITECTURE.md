@@ -117,6 +117,8 @@ visible et contrainte, plutôt que de compter sur le frontend pour s'en souvenir
 | `check-env.mjs` | aucun secret sous préfixe `VITE_` |
 | `check-bundle-secrets.mjs` | aucun secret dans `dist/` |
 | `check-schema-coherence.mjs` | aucune table sans RLS |
+| `audit-privileges.mjs` | privilèges réels conformes à l'intention |
+| `sync-auth-config.mjs` | configuration Auth distante alignée sur le dépôt |
 | `tests/rls/` | vérification comportementale contre une base réelle |
 
 Aucune de ces barrières ne suffit seule. Une table dont on oublie la RLS est
@@ -183,7 +185,7 @@ et cache long sur les assets versionnés.
 |---|---|---|
 | **1, livré** | fondations, schéma, RLS, tests d'isolation | 1, 4, 5 |
 | **2, livré** | site public, référencement, formulaires devis et contact | 2 |
-| 3 | authentification, garde de routes | 3 |
+| **3, livré** | authentification Supabase, gardes de route, changement de mot de passe | 3 |
 | 4 | espaces client et administrateur | 6, 7 |
 | 5 | Stripe : Checkout, webhooks, abonnements, facturation | 8-12 |
 | 6 | tickets, notifications, emails | 13, 16 |

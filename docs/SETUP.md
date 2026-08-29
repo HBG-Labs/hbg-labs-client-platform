@@ -112,11 +112,42 @@ privilège rend une policy inopérante sans qu'aucun test ne l'indique.
 La suite refuse de démarrer si `VITE_APP_ENV=production` : elle crée et
 supprime des utilisateurs, et ne doit jamais toucher la base de production.
 
-### 3.5 Politique de mot de passe
+### 3.5 Configuration Auth du projet distant
 
-`supabase/config.toml` impose 10 caractères et trois classes. Cette
-configuration ne s'applique automatiquement qu'à une stack locale. Sur un projet
-distant, la reporter à la main : Dashboard → **Authentication → Policies**.
+`supabase/config.toml` est versionné mais ne s'applique qu'à une stack locale.
+Un projet distant garde les valeurs par défaut de Supabase, quoi que dise le
+fichier.
+
+```bash
+npm run auth:check   # signale les écarts sans rien modifier
+npm run auth:sync    # aligne le projet sur le dépôt
+```
+
+Quatre réglages étaient en écart à la mise en place, tous conséquents :
+
+| Réglage | Défaut Supabase | Attendu | Conséquence du défaut |
+|---|---|---|---|
+| `site_url` | `localhost:3000` | `localhost:5173` | liens de courriel vers un port mort |
+| `uri_allow_list` | vide | origines locales | toute redirection refusée |
+| `password_min_length` | 6 | 10 | politique annoncée non appliquée |
+| `password_required_characters` | aucune | 3 classes | idem |
+
+`auth:check` fait partie de `npm run verify` : une dérive de configuration
+apparaît à la vérification suivante.
+
+### 3.6 Limite d'envoi de courriels
+
+Le serveur SMTP intégré de Supabase est plafonné à **2 courriels par heure**.
+Cette limite suffit à peine pour tester une inscription, et ne convient pas à
+un usage réel : une poignée de clients suffirait à la saturer.
+
+Un serveur SMTP dédié est requis avant la mise en production. Resend figure
+déjà dans la pile prévue (§26) et sera raccordé au lot 6.
+
+À savoir également : le parcours d'inscription public vérifie que le domaine de
+l'adresse possède un enregistrement MX. Les domaines de test (`.test`,
+`example.com`) sont donc refusés. Pour créer un compte de test, utiliser une
+adresse réelle ou l'API d'administration.
 
 ---
 
@@ -154,7 +185,8 @@ production (§48).
 Aucun compte ne naît administrateur : le trigger `handle_new_user` ignore
 délibérément les métadonnées d'inscription, qui sont contrôlées par le client.
 
-Le premier OWNER se crée donc depuis le dashboard Supabase → **SQL Editor** :
+Cela vaut aussi pour votre propre compte : créez-le d'abord par le formulaire
+d'inscription, puis promouvez-le depuis le dashboard Supabase → **SQL Editor** :
 
 ```sql
 update public.profiles

@@ -3,9 +3,9 @@
 Plateforme SaaS multi-tenant de HBG Labs : création de sites web, hébergement,
 maintenance, gestion des domaines, abonnements, facturation et support client.
 
-**Statut : lots 1 et 2 livrés.** Fondations et schéma multi-tenant en place et
-vérifiés sur Supabase ; site public complet, avec formulaires de devis et de
-contact opérationnels.
+**Statut : lots 1 à 3 livrés.** Fondations et schéma multi-tenant vérifiés sur
+Supabase, site public complet avec formulaires opérationnels, authentification
+réelle avec confirmation d'adresse et réinitialisation de mot de passe.
 
 ---
 
@@ -37,6 +37,8 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 | `npm run db:push` | applique les migrations au projet lié |
 | `npm run db:seed` | insère la grille tarifaire |
 | `npm run db:types` | régénère les types TypeScript depuis la base |
+| `npm run auth:check` | écarts de configuration Auth du projet distant |
+| `npm run auth:sync` | aligne la configuration Auth sur le dépôt |
 
 ---
 
@@ -51,6 +53,23 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 | [SETUP.md](./docs/SETUP.md) | installation, comptes externes, dépannage |
 
 ---
+
+## Ce que contient le lot 3
+
+Authentification Supabase (§9), sans aucune session simulée :
+
+- Inscription avec confirmation d'adresse, connexion, déconnexion
+- Mot de passe oublié, réinitialisation par lien, changement depuis les paramètres
+- Session persistante alimentée par `onAuthStateChange`, cache vidé à la déconnexion
+- Gardes de route `RequireAuth` et `RequireGuest`, distinguant « session en
+  cours de résolution » de « non connecté »
+- Tableau de bord affichant le profil et les rattachements réels, sans tuile fictive
+- `sync-auth-config.mjs` : la configuration Auth du projet distant devient
+  vérifiable, et sa dérive détectable
+
+Deux règles de confidentialité sont appliquées et testées : le message d'échec
+de connexion ne révèle jamais si un compte existe, et la demande de
+réinitialisation répond la même chose pour une adresse inconnue.
 
 ## Ce que contient le lot 2
 
@@ -80,11 +99,16 @@ témoignages, et mentions légales en attente de vos informations d'entreprise.
 
 ## Ce qu'il ne contient pas
 
-Authentification, espaces client et administrateur, Stripe, intégration Vercel,
-notifications. Rien de tout cela n'est esquissé ni simulé : conformément au §57,
+Espace client complet (site, domaine, abonnement, demandes), espace
+administrateur, Stripe, intégration Vercel, notifications. Rien de tout cela n'est esquissé ni simulé : conformément au §57,
 une fonctionnalité absente est déclarée absente plutôt que maquettée.
 
-## Deux points en attente de votre part
+## Trois points en attente de votre part
+
+**Serveur SMTP.** Le service intégré de Supabase plafonne à deux courriels par
+heure. Suffisant pour tester, insuffisant dès les premiers clients : chaque
+inscription et chaque réinitialisation en consomme un. Resend est prévu au
+lot 6, mais la limite s'applique dès maintenant.
 
 **Informations d'entreprise.** `src/config/site.ts` attend la dénomination
 sociale, la forme juridique, le SIRET, l'adresse du siège, le directeur de la
@@ -108,8 +132,10 @@ Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
 |---|---|
 | Application des 16 migrations sur base vierge | sans erreur |
 | `npm run test:rls` : 136 tests, 5 fichiers | tous au vert |
-| `npm test` : 13 tests de rendu des pages publiques | tous au vert |
+| `npm test` : 30 tests de rendu et de gardes | tous au vert |
 | Écriture des formulaires depuis la clé anon | vérifiée contre la base réelle |
+| Parcours d'authentification, 13 contrôles | vérifié contre la base réelle |
+| `npm run auth:check` | configuration Auth conforme |
 | `npm run check:privileges` | conforme, aucun surplus ni manque |
 | `npm run check:schema` | RLS activée et forcée sur 19/19 tables |
 | `npm run verify` | lint, types, build, aucun secret dans le bundle |

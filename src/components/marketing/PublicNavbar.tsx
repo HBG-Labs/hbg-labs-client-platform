@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { mainNav } from '@/config/navigation';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Layout';
+import { useAuth } from '@/features/auth/auth-context';
 import { Logo } from './Logo';
 
 /**
@@ -22,6 +23,7 @@ import { Logo } from './Logo';
  */
 export function PublicNavbar() {
   const [open, setOpen] = useState(false);
+  const { user, isLoading } = useAuth();
 
   // Le tiroir se ferme au clic sur un lien, pas depuis un effet observant
   // l'URL. Fermer depuis un effet provoquerait un rendu en cascade après
@@ -55,6 +57,20 @@ export function PublicNavbar() {
           </ul>
 
           <div className="hidden items-center gap-2 md:flex">
+            {/* Rien n'est affiché tant que la session n'est pas résolue :
+                proposer « Connexion » puis basculer sur « Mon espace » produit
+                un scintillement à chaque chargement de page. */}
+            {!isLoading &&
+              (user ? (
+                <Button asChild size="sm" variant="outline">
+                  <Link to="/dashboard">Mon espace</Link>
+                </Button>
+              ) : (
+                <Button asChild size="sm" variant="ghost">
+                  <Link to="/connexion">Connexion</Link>
+                </Button>
+              ))}
+
             <Button asChild size="sm">
               <Link to="/devis">Demander un devis</Link>
             </Button>
@@ -146,7 +162,22 @@ export function PublicNavbar() {
                   </ul>
                 </div>
 
-                <div className="border-t border-border p-5">
+                <div className="space-y-3 border-t border-border p-5">
+                  {!isLoading &&
+                    (user ? (
+                      <Button asChild fullWidth variant="outline">
+                        <Link to="/dashboard" onClick={closeDrawer}>
+                          Mon espace
+                        </Link>
+                      </Button>
+                    ) : (
+                      <Button asChild fullWidth variant="outline">
+                        <Link to="/connexion" onClick={closeDrawer}>
+                          Connexion
+                        </Link>
+                      </Button>
+                    ))}
+
                   <Button asChild fullWidth>
                     <Link to="/devis" onClick={closeDrawer}>
                       Demander un devis

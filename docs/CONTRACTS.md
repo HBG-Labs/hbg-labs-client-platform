@@ -131,8 +131,8 @@ Signalez plutôt que d'inventer (§51). État après le lot 2 :
 | Besoin | État | Lot |
 |---|---|---|
 | Site public, formulaires devis et contact | **livré** | 2 |
-| Authentification, session, garde de routes | **absent** | 3 |
-| Espace client, espace administrateur | **absent** | 4 |
+| Authentification, session, garde de routes | **livré** | 3 |
+| Espace client complet, espace administrateur | **absent** | 4 |
 | Checkout Stripe, Customer Portal | **absent** | 5 |
 | Webhook Stripe | **absent** | 5 |
 | Envoi d'emails (Resend) | **absent** | 6 |
@@ -174,6 +174,34 @@ l'insertion.
 
 Les messages d'erreur doivent être écrits pour le cas du champ vide : c'est
 `min()` qui se déclenche alors, jamais `required_error`.
+
+---
+
+## 4ter. Session et autorisation
+
+```ts
+import { useAuth } from '@/features/auth/auth-context';
+import { useProfile, useMyOrganizations } from '@/features/auth/useProfile';
+
+const { user, isLoading, signOut } = useAuth();   // identité GoTrue
+const { data: profile } = useProfile();           // profil métier, platform_role
+const { data: memberships } = useMyOrganizations();
+```
+
+**Traitez toujours `isLoading` séparément de « non connecté ».** Une garde qui
+confond les deux éjecte l'utilisateur vers la connexion à chaque rechargement,
+avant que la session stockée n'ait été relue.
+
+**`RequireAuth` et `RequireGuest` règlent l'affichage, pas l'autorisation.**
+Elles évitent un écran vide, rien de plus, et se contournent en modifiant le
+JavaScript de la page. La protection réelle vient des policies RLS : sans
+session valide, PostgREST ne renvoie aucune ligne.
+
+Corollaire : `useIsPlatformStaff()` sert à masquer une entrée de menu, jamais à
+décider d'un accès.
+
+**Ne jamais fabriquer de session.** Aucun contournement de développement
+n'existe dans ce dépôt, et il ne doit pas en apparaître (§9).
 
 ---
 

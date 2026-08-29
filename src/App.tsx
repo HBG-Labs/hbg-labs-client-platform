@@ -1,22 +1,26 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from 'react-router-dom';
 import { queryClient } from '@/lib/query-client';
+import { AuthProvider } from '@/features/auth/AuthProvider';
 import { router } from '@/routes/router';
 
 /**
  * Racine applicative.
  *
  * Volontairement mince (§38) : elle assemble les fournisseurs de contexte et
- * délègue tout le reste. Les fournisseurs à venir — session Supabase,
- * notifications, thème — s'ajouteront ici, et nulle part ailleurs.
+ * délègue tout le reste. Le routage vit dans `@/routes/router`.
  *
- * Le routage vit dans `@/routes/router`, pas dans ce fichier : c'est ce qui
- * évite l'App.tsx tentaculaire que §38 met en garde.
+ * L'ordre d'imbrication compte. `AuthProvider` appelle `useQueryClient` pour
+ * vider le cache à la déconnexion : il doit donc se trouver à l'intérieur de
+ * `QueryClientProvider`. `RouterProvider` vient en dernier, les gardes de route
+ * consommant la session.
  */
 export function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
