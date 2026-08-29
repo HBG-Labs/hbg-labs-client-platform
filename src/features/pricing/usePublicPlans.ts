@@ -1,11 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchPublicPlans, type PublicPlan } from '@/services/plans.service';
-
-/** Clés de cache du domaine tarifaire, regroupées pour rester invalidables. */
-export const pricingKeys = {
-  all: ['pricing'] as const,
-  publicPlans: () => [...pricingKeys.all, 'public-plans'] as const,
-};
+import { pricingKeys } from './pricing.keys';
 
 /**
  * Charge la grille tarifaire publique.

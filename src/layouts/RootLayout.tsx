@@ -1,15 +1,15 @@
 import { Outlet } from 'react-router-dom';
 
 /**
- * Mise en page racine, commune à toutes les routes.
+ * Enveloppe racine, commune à toutes les routes.
  *
- * L'en-tête et le pied de page publics (§6) arriveront avec la landing page ;
- * l'espace client aura sa propre mise en page imbriquée, avec barre latérale
- * transformée en tiroir sur mobile (§40).
+ * Ne porte que le lien d'évitement, qui doit être le premier élément
+ * focalisable du document, avant toute barre de navigation. Le placer plus bas
+ * obligerait à traverser le menu au clavier pour atteindre le contenu.
  *
- * Le lien d'évitement est déjà là : il doit être le premier élément
- * focalisable du document, et le placer après coup demande de reprendre
- * l'arborescence entière (§43).
+ * Les repères de page (`<main>`, en-tête, pied de page) appartiennent aux mises
+ * en page filles : le site public et le futur espace client n'ont pas la même
+ * structure.
  */
 export function RootLayout() {
   return (
@@ -18,11 +18,7 @@ export function RootLayout() {
         Aller au contenu principal
       </a>
 
-      <div className="flex min-h-screen flex-col">
-        <main id="contenu-principal" className="flex-1">
-          <Outlet />
-        </main>
-      </div>
+      <Outlet />
     </>
   );
 }

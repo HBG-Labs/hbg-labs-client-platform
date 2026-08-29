@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "node scripts/check-env.mjs",
-    "build": "tsc -b && vite build && node scripts/check-bundle-secrets.mjs",
+    "build": "tsc -b && vite build && node scripts/generate-sitemap.mjs && node scripts/check-bundle-secrets.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
     "lint": "eslint .",
@@ -24,7 +24,7 @@
     "check:env": "node scripts/check-env.mjs",
     "check:schema": "node scripts/check-schema-coherence.mjs",
     "check:secrets": "node scripts/check-bundle-secrets.mjs",
-    "verify": "npm run check:schema && npm run check:privileges && npm run lint && npm run typecheck && vite build && npm run check:secrets",
+    "verify": "npm run check:schema && npm run check:privileges && npm run lint && npm run typecheck && npm run test && vite build && node scripts/generate-sitemap.mjs && npm run check:secrets",
     "check:privileges": "node scripts/audit-privileges.mjs"
   },
   "dependencies": {
@@ -51,6 +51,9 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@tailwindcss/vite": "^4.3.3",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.6",
     "@types/node": "^26.4.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.5",
@@ -60,6 +63,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.5",
     "globals": "^17.11.0",
+    "jsdom": "^30.0.1",
     "supabase": "^2.116.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",

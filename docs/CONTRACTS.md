@@ -126,16 +126,17 @@ Ne cherchez jamais à lire `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`,
 
 ## 4. Ce qui n'existe pas encore
 
-Signalez plutôt que d'inventer (§51). État au lot 1 :
+Signalez plutôt que d'inventer (§51). État après le lot 2 :
 
 | Besoin | État | Lot |
 |---|---|---|
+| Site public, formulaires devis et contact | **livré** | 2 |
 | Authentification, session, garde de routes | **absent** | 3 |
 | Espace client, espace administrateur | **absent** | 4 |
 | Checkout Stripe, Customer Portal | **absent** | 5 |
 | Webhook Stripe | **absent** | 5 |
-| Intégration Vercel (statut réel des sites) | **absent** | 7 |
 | Envoi d'emails (Resend) | **absent** | 6 |
+| Intégration Vercel (statut réel des sites) | **absent** | 7 |
 | Upload de pièces jointes | schéma et buckets prêts, pas de composant | 4 |
 | Catalogue Stripe (`stripe_price_id`) | **NULL en base** | 5 |
 
@@ -143,6 +144,36 @@ Signalez plutôt que d'inventer (§51). État au lot 1 :
 ligne aujourd'hui. `isPurchasable(plan)` renvoie `false` partout. Un bouton
 « Souscrire » mènerait à une erreur Stripe. Afficher « Demander un devis » tant
 que la fonction renvoie `false`.
+
+---
+
+## 4bis. Ce que le lot 2 met à disposition
+
+Réutilisez ces briques plutôt que d'en écrire de nouvelles.
+
+| Brique | Emplacement | Usage |
+|---|---|---|
+| `Container`, `Section`, `SectionHeading` | `components/ui/Layout` | rythme et largeurs de page |
+| `Field` + `Input`, `Textarea`, `Select` | `components/ui/` | champs de formulaire câblés ARIA |
+| `Alert` | `components/ui/Alert` | message contextuel, `role` adapté au ton |
+| `Accordion`, `AccordionItem` | `components/ui/Accordion` | repli natif `details`, indexable |
+| `Seo` | `components/Seo` | titre, description, canonique, Open Graph |
+| `localBusinessSchema`, `faqSchema` | `lib/structured-data` | données structurées schema.org |
+| `site`, `missingLegalFields` | `config/site` | identité et mentions légales |
+| `mainNav`, `footerNav` | `config/navigation` | structure de navigation |
+
+### Formulaires : le piège de la chaîne vide
+
+Un champ non rempli est enregistré par React Hook Form comme `''`, jamais
+comme `undefined`. Envoyée telle quelle, cette chaîne vide viole les
+contraintes de longueur minimale des colonnes facultatives et fait échouer
+l'insertion.
+
+`optionalText()` dans `src/schemas/lead.schema.ts` normalise le vide en
+`undefined` avant validation. Reprenez ce helper pour tout champ facultatif.
+
+Les messages d'erreur doivent être écrits pour le cas du champ vide : c'est
+`min()` qui se déclenche alors, jamais `required_error`.
 
 ---
 

@@ -48,7 +48,7 @@ webhook Stripe, création de session Checkout, envoi d'emails.
 docs/                    architecture, base, RLS, contrats, installation
 scripts/                 gardes exécutées au build et en CI
 supabase/
-  migrations/            15 fichiers, ordre §45
+  migrations/            16 fichiers, ordre §45
   seed.sql               grille tarifaire réelle — aucune donnée fictive
   config.toml
 tests/rls/               suite d'isolation multi-tenant (§47)
@@ -148,12 +148,13 @@ révoquez-le, ne vous contentez pas de le retirer.
 ## 6. Vérification
 
 ```bash
-npm run verify      # schéma + lint + types + build + scan de secrets
-npm run test:rls    # isolation multi-tenant — exige une base Supabase
+npm run verify      # schéma, privilèges, lint, types, tests, build, secrets
+npm run test:rls    # isolation multi-tenant (exige une base Supabase)
 ```
 
-`verify` tourne sans aucun compte externe. `test:rls` est la porte qui fait
-passer le lot 1 de « écrit » à « vérifié ».
+`verify` tourne sans aucun compte externe, hormis l'audit de privilèges qui
+s'abstient proprement en l'absence de jeton. `test:rls` exige une base
+Supabase reliée.
 
 ---
 
@@ -180,8 +181,8 @@ et cache long sur les assets versionnés.
 
 | Lot | Contenu | Phases §54 |
 |---|---|---|
-| **1 — livré** | fondations, schéma, RLS, tests d'isolation | 1, 4, 5 |
-| 2 | landing page et pages publiques | 2 |
+| **1, livré** | fondations, schéma, RLS, tests d'isolation | 1, 4, 5 |
+| **2, livré** | site public, référencement, formulaires devis et contact | 2 |
 | 3 | authentification, garde de routes | 3 |
 | 4 | espaces client et administrateur | 6, 7 |
 | 5 | Stripe : Checkout, webhooks, abonnements, facturation | 8-12 |

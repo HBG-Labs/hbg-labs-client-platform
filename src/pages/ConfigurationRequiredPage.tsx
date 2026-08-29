@@ -31,7 +31,7 @@ export function ConfigurationRequiredPage({ issues }: { issues: readonly string[
             marginBottom: '0.75rem',
           }}
         >
-          HBG Labs — Client Platform
+          HBG Labs · Plateforme Client
         </p>
 
         <h1 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.75rem' }}>
@@ -39,10 +39,8 @@ export function ConfigurationRequiredPage({ issues }: { issues: readonly string[
         </h1>
 
         <p style={{ color: '#94a3b8', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-          L’application ne peut pas démarrer tant que la connexion à Supabase n’est pas
-          renseignée. Aucune donnée n’est simulée en attendant&nbsp;: l’interface reste
-          volontairement inactive plutôt que d’afficher des informations qui n’existent
-          pas.
+          La connexion à Supabase doit être configurée pour démarrer l’application.
+          En l’absence de base active, l’interface reste verrouillée sans données factices.
         </p>
 
         <div

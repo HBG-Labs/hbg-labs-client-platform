@@ -3,9 +3,9 @@
 Plateforme SaaS multi-tenant de HBG Labs : création de sites web, hébergement,
 maintenance, gestion des domaines, abonnements, facturation et support client.
 
-**Statut : lot 1 livré et vérifié** — fondations du projet, schéma de base de
-données et politiques d'isolation multi-tenant, appliqués sur le projet
-Supabase et validés par 136 tests.
+**Statut : lots 1 et 2 livrés.** Fondations et schéma multi-tenant en place et
+vérifiés sur Supabase ; site public complet, avec formulaires de devis et de
+contact opérationnels.
 
 ---
 
@@ -29,8 +29,9 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 | Commande | Effet |
 |---|---|
 | `npm run dev` | serveur de développement |
-| `npm run verify` | schéma + privilèges + lint + types + build + scan de secrets |
-| `npm run test:rls` | isolation multi-tenant — **exige une base Supabase** |
+| `npm run verify` | schéma, privilèges, lint, types, tests, build, scan de secrets |
+| `npm test` | tests de rendu des pages publiques |
+| `npm run test:rls` | isolation multi-tenant (exige une base Supabase) |
 | `npm run check:schema` | analyse statique des migrations, sans base |
 | `npm run check:privileges` | privilèges réels de la base vs. attendus |
 | `npm run db:push` | applique les migrations au projet lié |
@@ -51,6 +52,22 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 
 ---
 
+## Ce que contient le lot 2
+
+Site public complet (§5, §6, §41) :
+
+- Landing page, pages services, création, hébergement, maintenance et tarifs
+- Formulaires de devis et de contact **réellement fonctionnels**, écrivant dans
+  Supabase par les policies vérifiées au lot 1
+- Mentions légales, politique de confidentialité et conditions générales
+- Navigation avec tiroir mobile, pied de page, 4 états UI sur chaque écran
+- Référencement : titres, descriptions, Open Graph, canoniques, données
+  structurées schema.org, sitemap et robots.txt générés au build
+- Chargement paresseux par page : l'accueil ne télécharge pas les CGV
+
+Deux écarts assumés par rapport au §6, détaillés plus bas : pas de section
+témoignages, et mentions légales en attente de vos informations d'entreprise.
+
 ## Ce que contient le lot 1
 
 - Projet Vite · React 19 · TypeScript · Tailwind 4, arborescence modulaire (§38)
@@ -63,10 +80,22 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 
 ## Ce qu'il ne contient pas
 
-Landing page, authentification, espaces client et administrateur, Stripe,
-intégration Vercel, notifications. Rien de tout cela n'est esquissé ni simulé :
-conformément au §57, une fonctionnalité absente est déclarée absente plutôt que
-maquettée.
+Authentification, espaces client et administrateur, Stripe, intégration Vercel,
+notifications. Rien de tout cela n'est esquissé ni simulé : conformément au §57,
+une fonctionnalité absente est déclarée absente plutôt que maquettée.
+
+## Deux points en attente de votre part
+
+**Informations d'entreprise.** `src/config/site.ts` attend la dénomination
+sociale, la forme juridique, le SIRET, l'adresse du siège, le directeur de la
+publication et l'adresse de contact. Tant qu'ils manquent, les pages légales
+affichent un avertissement de publication incomplète au lieu d'informations
+inventées. Ces mentions sont obligatoires avant toute mise en ligne publique.
+
+**Section témoignages.** Le §6 la prévoit, elle n'existe pas : aucun avis client
+réel n'est disponible, et en fabriquer contreviendrait au §57. La section
+« Nos engagements » occupe cette place. Un test empêche qu'un faux témoignage
+soit réintroduit par inadvertance.
 
 ---
 
@@ -78,7 +107,9 @@ Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
 | Contrôle | Résultat |
 |---|---|
 | Application des 16 migrations sur base vierge | sans erreur |
-| `npm run test:rls` — 136 tests, 5 fichiers | tous au vert |
+| `npm run test:rls` : 136 tests, 5 fichiers | tous au vert |
+| `npm test` : 13 tests de rendu des pages publiques | tous au vert |
+| Écriture des formulaires depuis la clé anon | vérifiée contre la base réelle |
 | `npm run check:privileges` | conforme, aucun surplus ni manque |
 | `npm run check:schema` | RLS activée et forcée sur 19/19 tables |
 | `npm run verify` | lint, types, build, aucun secret dans le bundle |

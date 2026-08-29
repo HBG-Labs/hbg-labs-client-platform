@@ -186,7 +186,7 @@ export const SUBSCRIPTION_STATUS_LABELS: Record<SubscriptionStatus, string> = {
   canceled: 'Annulé',
   unpaid: 'Impayé',
   incomplete: 'Incomplet',
-  incomplete_expired: 'Incomplet — expiré',
+  incomplete_expired: 'Incomplet (expiré)',
   paused: 'En pause',
 };
 

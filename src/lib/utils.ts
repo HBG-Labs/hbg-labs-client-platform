@@ -44,9 +44,9 @@ export function formatAmountCompact(cents: number, currency = 'EUR'): string {
 
 /** Date longue en français : « 28 août 2026 ». */
 export function formatDate(value: string | Date | null | undefined): string {
-  if (!value) return '—';
+  if (!value) return '-';
   const date = typeof value === 'string' ? new Date(value) : value;
-  if (Number.isNaN(date.getTime())) return '—';
+  if (Number.isNaN(date.getTime())) return '-';
 
   return new Intl.DateTimeFormat('fr-FR', {
     day: 'numeric',
@@ -57,9 +57,9 @@ export function formatDate(value: string | Date | null | undefined): string {
 
 /** Date et heure : « 28 août 2026 à 14:30 ». */
 export function formatDateTime(value: string | Date | null | undefined): string {
-  if (!value) return '—';
+  if (!value) return '-';
   const date = typeof value === 'string' ? new Date(value) : value;
-  if (Number.isNaN(date.getTime())) return '—';
+  if (Number.isNaN(date.getTime())) return '-';
 
   return new Intl.DateTimeFormat('fr-FR', {
     day: 'numeric',
