@@ -9,7 +9,6 @@ import {
 } from '@/services/plans.service';
 import { usePublicPlans } from '@/features/pricing/usePublicPlans';
 import { Button } from '@/components/ui/Button';
-import { StatusBadge } from '@/components/ui/StatusBadge';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
 
 /**
@@ -32,31 +31,33 @@ function PlanCard({ plan }: { plan: PublicPlan }) {
   return (
     <div
       className={cn(
-        'relative flex flex-col rounded-xl border bg-surface p-6 sm:p-8',
-        plan.is_featured ? 'border-primary shadow-lg' : 'border-border',
+        'relative flex flex-col rounded-2xl border bg-surface p-6 sm:p-8 transition-all duration-200',
+        plan.is_featured ? 'border-accent shadow-md ring-1 ring-accent' : 'border-border hover:border-ink/30',
       )}
     >
       {plan.is_featured && (
         <div className="absolute -top-3 left-6">
-          <StatusBadge tone="info" label="Le plus choisi" withDot={false} />
+          <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">
+            Le plus choisi
+          </span>
         </div>
       )}
 
       <div>
-        <h3 className="text-xl font-semibold">{plan.name}</h3>
+        <h3 className="font-serif text-2xl font-normal text-ink">{plan.name}</h3>
         {plan.tagline && <p className="mt-1.5 text-sm text-muted">{plan.tagline}</p>}
       </div>
 
       <div className="mt-6 border-y border-border py-6">
         {monthly ? (
           <p className="flex items-baseline gap-1.5">
-            <span className="text-4xl font-semibold tracking-tight">
+            <span className="font-serif text-4xl font-normal tracking-tight text-ink">
               {formatAmountCompact(monthly.unit_amount_cents, monthly.currency)}
             </span>
             <span className="text-muted">par mois</span>
           </p>
         ) : (
-          <p className="text-2xl font-semibold">Sur devis</p>
+          <p className="font-serif text-2xl font-normal text-ink">Sur devis</p>
         )}
 
         <p className="mt-2 text-sm text-muted">
@@ -81,18 +82,16 @@ function PlanCard({ plan }: { plan: PublicPlan }) {
         {plan.plan_features.map((feature) => (
           <li key={feature.id} className="flex gap-2.5 text-sm">
             {feature.is_included ? (
-              <Check className="mt-0.5 size-4 shrink-0 text-success" aria-hidden="true" />
+              <Check className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden="true" />
             ) : (
-              <Minus className="mt-0.5 size-4 shrink-0 text-unknown" aria-hidden="true" />
+              <Minus className="mt-0.5 size-4 shrink-0 text-muted/40" aria-hidden="true" />
             )}
             <span
-              className={cn(feature.is_included ? '' : 'text-muted line-through')}
+              className={cn(feature.is_included ? 'text-ink' : 'text-muted/60 line-through')}
               title={feature.detail ?? undefined}
             >
               {feature.label}
             </span>
-            {/* L'icône seule ne dit rien à un lecteur d'écran : le statut est
-                énoncé en toutes lettres, hors du flux visuel. */}
             <span className="sr-only">
               {feature.is_included ? 'inclus' : 'non inclus'}
             </span>
@@ -101,15 +100,6 @@ function PlanCard({ plan }: { plan: PublicPlan }) {
       </ul>
 
       <div className="mt-8">
-        {/* Le bouton reflète ce qui est réellement possible. Tant que le
-            catalogue Stripe n'existe pas, `isPurchasable` renvoie false et
-            l'appel à l'action mène au devis. Un bouton « Souscrire » aboutirait
-            à une erreur Stripe incompréhensible pour le visiteur.
-
-            Souscriptible, il mène à l'espace client et non directement au
-            paiement : le Checkout facture une ENTREPRISE, et il faut donc
-            savoir laquelle. La garde `RequireAuth` conduit à la connexion si
-            nécessaire, puis l'écran de facturation reprend l'offre choisie. */}
         <Button asChild fullWidth variant={plan.is_featured ? 'primary' : 'outline'}>
           <Link
             to={

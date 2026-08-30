@@ -15,19 +15,14 @@ export function Logo({ className }: { className?: string }) {
     <Link
       to="/"
       className={cn(
-        'inline-flex items-center gap-2 rounded-sm font-semibold tracking-tight',
+        'inline-flex items-baseline font-sans text-[15px] uppercase tracking-[-0.02em] text-ink',
         'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring',
         className,
       )}
       aria-label={`${site.name}, retour à l’accueil`}
     >
-      <span
-        aria-hidden="true"
-        className="grid size-8 place-items-center rounded-md bg-primary text-sm font-bold text-primary-foreground"
-      >
-        H
-      </span>
-      <span className="text-lg">{site.name}</span>
+      <span className="font-normal">HBG</span>
+      <span className="font-extrabold">LABS</span>
     </Link>
   );
 }

@@ -21,6 +21,20 @@ import type { TicketMessage } from '@/services/tickets.service';
 const messagesState: { current: TicketMessage[] } = { current: [] };
 const addMessage = vi.fn(async (..._args: unknown[]) => undefined);
 
+// Le fil rend désormais le bloc des pièces jointes. Ses hooks sont neutralisés
+// ici : ce fichier porte sur la conversation, et `ticket-attachments.test.tsx`
+// couvre le reste.
+vi.mock('@/features/tickets/useAttachments', () => ({
+  useTicketAttachments: () => ({ data: [], isPending: false, isError: false }),
+  useUploadAttachment: () => ({ mutateAsync: vi.fn(), isPending: false, isError: false }),
+  useDeleteAttachment: () => ({ mutate: vi.fn(), isPending: false, isError: false }),
+  useOpenAttachment: () => ({ mutate: vi.fn(), isPending: false, isError: false }),
+}));
+
+vi.mock('@/features/auth/useProfile', () => ({
+  useProfile: () => ({ data: null }),
+}));
+
 vi.mock('@/features/tickets/useTickets', () => ({
   useTicketMessages: () => ({
     data: messagesState.current,
@@ -63,6 +77,7 @@ describe('Fil de conversation', () => {
     renderWithProviders(
       <TicketConversation
         ticketId="ticket-1"
+        organizationId="org-1"
         description="Merci de remplacer les horaires du samedi."
         authorName="Marie Dupont"
         createdAt="2026-08-29T09:00:00.000Z"
@@ -82,6 +97,7 @@ describe('Fil de conversation', () => {
     renderWithProviders(
       <TicketConversation
         ticketId="ticket-1"
+        organizationId="org-1"
         description="Description."
         authorName="Marie Dupont"
         createdAt="2026-08-29T09:00:00.000Z"
@@ -104,6 +120,7 @@ describe('Fil de conversation', () => {
     renderWithProviders(
       <TicketConversation
         ticketId="ticket-1"
+        organizationId="org-1"
         description="Description."
         authorName="Marie Dupont"
         createdAt="2026-08-29T09:00:00.000Z"
@@ -118,6 +135,7 @@ describe('Fil de conversation', () => {
     renderWithProviders(
       <TicketConversation
         ticketId="ticket-1"
+        organizationId="org-1"
         description="Description."
         authorName="Marie Dupont"
         createdAt="2026-08-29T09:00:00.000Z"
@@ -134,6 +152,7 @@ describe('Fil de conversation', () => {
     renderWithProviders(
       <TicketConversation
         ticketId="ticket-1"
+        organizationId="org-1"
         description="Description."
         authorName="Marie Dupont"
         createdAt="2026-08-29T09:00:00.000Z"
@@ -152,6 +171,7 @@ describe('Fil de conversation', () => {
     renderWithProviders(
       <TicketConversation
         ticketId="ticket-1"
+        organizationId="org-1"
         description="Description."
         authorName="Marie Dupont"
         createdAt="2026-08-29T09:00:00.000Z"
@@ -174,6 +194,7 @@ describe('Fil de conversation', () => {
     renderWithProviders(
       <TicketConversation
         ticketId="ticket-1"
+        organizationId="org-1"
         description="Description."
         authorName="Marie Dupont"
         createdAt="2026-08-29T09:00:00.000Z"

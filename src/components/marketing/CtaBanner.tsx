@@ -22,20 +22,20 @@ export function CtaBanner({
   return (
     <Section tone="muted">
       <Container>
-        <div className="rounded-2xl border border-border bg-surface px-6 py-12 text-center sm:px-12">
-          <h2 className="text-balance text-2xl font-semibold tracking-tight sm:text-3xl">
+        <div className="rounded-3xl border border-border bg-surface px-8 py-16 text-center sm:px-16">
+          <h2 className="text-balance font-serif font-normal text-3xl sm:text-5xl text-ink tracking-tight">
             {title}
           </h2>
 
-          <p className="mx-auto mt-4 max-w-2xl text-pretty leading-relaxed text-muted">
+          <p className="mx-auto mt-4 max-w-2xl text-pretty font-sans text-[15px] sm:text-base leading-relaxed text-muted">
             {description}
           </p>
 
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Button asChild size="lg">
+          <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+            <Button asChild size="lg" variant="primary" className="px-10">
               <Link to="/devis">Créer mon site</Link>
             </Button>
-            <Button asChild size="lg" variant="outline">
+            <Button asChild size="lg" variant="outline" className="px-10">
               <Link to="/contact">Nous contacter</Link>
             </Button>
           </div>

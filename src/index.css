@@ -1,113 +1,116 @@
 @import 'tailwindcss';
 
 /* =============================================================================
-   DESIGN SYSTEM HBG LABS (§39)
+   DESIGN SYSTEM HBG LABS — ÉDITORIAL & PREMIUM
    =============================================================================
-   Registre visuel : premium, moderne, technologique, épuré, professionnel.
-
-   Trois niveaux, du plus stable au plus contextuel :
-
-     1. PALETTE BRUTE      — les teintes, sans intention d'usage
-     2. JETONS SÉMANTIQUES — background, foreground, primary… ; c'est la
-                             couche qui bascule entre clair et sombre
-     3. UTILITAIRES        — Tailwind les dérive du niveau 2
-
-   Les composants n'utilisent QUE le niveau 3 (`bg-surface`, `text-muted`).
-   Écrire `bg-slate-900` en dur dans un composant le rend aveugle au thème et
-   fige une décision qui appartient à cette feuille.
-
-   Couleurs en OKLCH : contrairement à HSL, un même écart de clarté y produit
-   un écart perçu constant. Les nuances d'une échelle restent donc cohérentes
-   entre elles, et les contrastes calculés pour l'accessibilité (§43) tiennent
-   sur toute la gamme.
+   Style agence créative, minimaliste, éditorial.
+   Typographie display en Instrument Serif + UI en Inter.
+   Palette :
+     --bg-page:   #F2F1EF (blanc cassé légèrement chaud)
+     --ink:       #1C1A18 (charcoal presque noir)
+     --ink-muted: #55514D (gris texte secondaire)
+     --accent:    #1B7A26 (vert forêt saturé)
    ========================================================================== */
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* -----------------------------------------------------------------------------
-   1. Palette brute
+   1. Palette brute & Polices
    -------------------------------------------------------------------------- */
 @theme {
-  /* Bleu HBG Labs — technique, sobre, sans effet de mode. */
-  --color-brand-50: oklch(0.97 0.014 258);
-  --color-brand-100: oklch(0.938 0.03 258);
-  --color-brand-200: oklch(0.885 0.058 258);
-  --color-brand-300: oklch(0.809 0.096 258);
-  --color-brand-400: oklch(0.712 0.14 260);
-  --color-brand-500: oklch(0.623 0.178 262);
-  --color-brand-600: oklch(0.546 0.196 264);
-  --color-brand-700: oklch(0.478 0.181 265);
-  --color-brand-800: oklch(0.412 0.15 266);
-  --color-brand-900: oklch(0.362 0.117 266);
-  --color-brand-950: oklch(0.246 0.077 267);
+  --color-bg-page: #F2F1EF;
+  --color-ink: #1C1A18;
+  --color-ink-muted: #55514D;
+  --color-accent: #1B7A26;
+  --color-accent-hover: #15621E;
 
-  /* Neutres légèrement bleutés : plus froids et plus « produit » qu'un gris
-     pur, sans virer au bleu perceptible. */
-  --color-ink-50: oklch(0.984 0.003 248);
-  --color-ink-100: oklch(0.968 0.006 248);
-  --color-ink-200: oklch(0.929 0.012 250);
-  --color-ink-300: oklch(0.869 0.019 252);
-  --color-ink-400: oklch(0.704 0.03 256);
-  --color-ink-500: oklch(0.554 0.035 257);
-  --color-ink-600: oklch(0.446 0.035 257);
-  --color-ink-700: oklch(0.372 0.034 259);
-  --color-ink-800: oklch(0.279 0.033 260);
-  --color-ink-900: oklch(0.208 0.035 265);
-  --color-ink-950: oklch(0.137 0.032 266);
+  /* Neutres chauds éditoriaux */
+  --color-warm-50: #FAF9F7;
+  --color-warm-100: #F2F1EF;
+  --color-warm-200: #E6E4E0;
+  --color-warm-300: #D8D5CF;
+  --color-warm-400: #A8A49C;
+  --color-warm-500: #76726B;
+  --color-warm-600: #55514D;
+  --color-warm-700: #383532;
+  --color-warm-800: #262422;
+  --color-warm-900: #1C1A18;
+  --color-warm-950: #121110;
 
-  /* Statuts. Le vert n'est employé QUE sur une information vérifiée (§17) :
-     un voyant vert sur une donnée non contrôlée est un mensonge à
-     l'utilisateur. Une information inconnue prend le gris `unknown`. */
-  --color-success-50: oklch(0.972 0.033 156);
-  --color-success-500: oklch(0.653 0.157 156);
-  --color-success-600: oklch(0.579 0.146 157);
-  --color-success-700: oklch(0.492 0.124 158);
+  /* Échelle de vert accent */
+  --color-brand-50: #F0FDF4;
+  --color-brand-100: #DCFCE7;
+  --color-brand-200: #BBF7D0;
+  --color-brand-300: #86EFAC;
+  --color-brand-400: #4ADE80;
+  --color-brand-500: #1B7A26;
+  --color-brand-600: #1B7A26;
+  --color-brand-700: #15621E;
+  --color-brand-800: #104B17;
+  --color-brand-900: #0A320F;
 
-  --color-warning-50: oklch(0.98 0.035 92);
-  --color-warning-500: oklch(0.769 0.156 78);
-  --color-warning-600: oklch(0.681 0.156 66);
-  --color-warning-700: oklch(0.576 0.14 58);
+  /* Statuts */
+  --color-success-50: #F0FDF4;
+  --color-success-500: #16A34A;
+  --color-success-600: #15803D;
+  --color-success-700: #166534;
 
-  --color-danger-50: oklch(0.971 0.02 18);
-  --color-danger-500: oklch(0.637 0.208 25);
-  --color-danger-600: oklch(0.577 0.213 27);
-  --color-danger-700: oklch(0.505 0.19 27);
+  --color-warning-50: #FFFBEB;
+  --color-warning-500: #F59E0B;
+  --color-warning-600: #D97706;
+  --color-warning-700: #B45309;
 
+  --color-danger-50: #FEF2F2;
+  --color-danger-500: #EF4444;
+  --color-danger-600: #DC2626;
+  --color-danger-700: #B91C1C;
+
+  /* Typographie */
   --font-sans:
     'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, sans-serif;
+  --font-serif:
+    'Instrument Serif', 'Playfair Display', Georgia, serif;
+  --font-display:
+    'Instrument Serif', 'Playfair Display', Georgia, serif;
   --font-mono:
     ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 
+  /* Rayons */
   --radius-xs: 0.25rem;
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
+  --radius-pill: 999px;
 }
 
 /* -----------------------------------------------------------------------------
    2. Jetons sémantiques
    -------------------------------------------------------------------------- */
 :root {
-  --background: var(--color-ink-50);
-  --foreground: var(--color-ink-900);
+  --background: var(--color-bg-page);
+  --foreground: var(--color-ink);
 
-  --surface: oklch(1 0 0);
-  --surface-foreground: var(--color-ink-900);
-  --surface-muted: var(--color-ink-100);
+  --surface: #FFFFFF;
+  --surface-foreground: var(--color-ink);
+  --surface-muted: #E6E4E0;
 
-  --muted: var(--color-ink-500);
-  --border: var(--color-ink-200);
-  --input: var(--color-ink-300);
+  --muted: var(--color-ink-muted);
+  --border: #DCD9D3;
+  --input: #CBC7BF;
 
-  --primary: var(--color-brand-600);
-  --primary-foreground: oklch(1 0 0);
-  --primary-hover: var(--color-brand-700);
+  --primary: var(--color-ink);
+  --primary-foreground: #FFFFFF;
+  --primary-hover: #2E2A27;
 
-  --secondary: var(--color-ink-100);
-  --secondary-foreground: var(--color-ink-800);
+  --accent: var(--color-accent);
+  --accent-foreground: #FFFFFF;
+  --accent-hover: var(--color-accent-hover);
+
+  --secondary: #E6E4E0;
+  --secondary-foreground: var(--color-ink);
 
   --success: var(--color-success-600);
   --success-surface: var(--color-success-50);
@@ -116,31 +119,34 @@
   --danger: var(--color-danger-600);
   --danger-surface: var(--color-danger-50);
 
-  /* État inconnu — la couleur des informations non vérifiées (§17). */
-  --unknown: var(--color-ink-400);
-  --unknown-surface: var(--color-ink-100);
+  --unknown: var(--color-warm-400);
+  --unknown-surface: var(--color-warm-100);
 
-  --ring: var(--color-brand-500);
+  --ring: var(--color-accent);
 }
 
 .dark {
-  --background: var(--color-ink-950);
-  --foreground: var(--color-ink-100);
+  --background: var(--color-warm-950);
+  --foreground: var(--color-warm-100);
 
-  --surface: var(--color-ink-900);
-  --surface-foreground: var(--color-ink-100);
-  --surface-muted: var(--color-ink-800);
+  --surface: var(--color-warm-900);
+  --surface-foreground: var(--color-warm-100);
+  --surface-muted: var(--color-warm-800);
 
-  --muted: var(--color-ink-400);
-  --border: var(--color-ink-800);
-  --input: var(--color-ink-700);
+  --muted: var(--color-warm-400);
+  --border: var(--color-warm-800);
+  --input: var(--color-warm-700);
 
-  --primary: var(--color-brand-500);
-  --primary-foreground: var(--color-ink-950);
-  --primary-hover: var(--color-brand-400);
+  --primary: var(--color-warm-100);
+  --primary-foreground: var(--color-warm-950);
+  --primary-hover: var(--color-warm-200);
 
-  --secondary: var(--color-ink-800);
-  --secondary-foreground: var(--color-ink-100);
+  --accent: #22A030;
+  --accent-foreground: #FFFFFF;
+  --accent-hover: #2CB53C;
+
+  --secondary: var(--color-warm-800);
+  --secondary-foreground: var(--color-warm-100);
 
   --success: var(--color-success-500);
   --success-surface: oklch(0.28 0.05 156);
@@ -149,15 +155,12 @@
   --danger: var(--color-danger-500);
   --danger-surface: oklch(0.28 0.07 25);
 
-  --unknown: var(--color-ink-400);
-  --unknown-surface: var(--color-ink-800);
+  --unknown: var(--color-warm-400);
+  --unknown-surface: var(--color-warm-800);
 
-  --ring: var(--color-brand-400);
+  --ring: #22A030;
 }
 
-/* `inline` fait référencer les variables ci-dessus telles quelles : la
-   bascule clair/sombre suffit alors à repeindre toutes les utilitaires,
-   sans recompilation ni classe conditionnelle. */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -170,6 +173,9 @@
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-hover: var(--primary-hover);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-hover: var(--accent-hover);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-success: var(--success);
@@ -205,17 +211,19 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Anneau de focus visible au clavier, discret à la souris (§43).
-     `:focus-visible` plutôt que `:focus` : un halo autour de chaque bouton
-     cliqué à la souris pousse les équipes à supprimer l'outline — et à
-     rendre le site inutilisable au clavier. */
+  /* Titres display */
+  .font-display, .font-serif {
+    font-family: var(--font-serif);
+  }
+
+  /* Anneau de focus visible */
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
     border-radius: var(--radius-xs);
   }
 
-  /* Respect de la préférence système de réduction d'animation (§43). */
+  /* Respect de la préférence système de réduction d'animation */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -229,7 +237,7 @@
 }
 
 @layer components {
-  /* Cible d'évitement, premier élément focalisable de la page (§43). */
+  /* Cible d'évitement */
   .skip-link {
     position: absolute;
     left: -9999px;
@@ -237,7 +245,7 @@
     padding: 0.75rem 1.25rem;
     background-color: var(--primary);
     color: var(--primary-foreground);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-pill);
   }
 
   .skip-link:focus {

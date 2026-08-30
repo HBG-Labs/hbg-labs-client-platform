@@ -9,4 +9,6 @@ export const ticketKeys = {
   list: () => [...ticketKeys.all, 'list'] as const,
   detail: (id: string) => [...ticketKeys.all, 'detail', id] as const,
   messages: (id: string) => [...ticketKeys.all, 'messages', id] as const,
+  /** Distinctes du fil : téléverser une pièce jointe ne relance pas les messages. */
+  attachments: (id: string) => [...ticketKeys.all, 'attachments', id] as const,
 };

@@ -3,13 +3,11 @@ import { cn } from '@/lib/utils';
 import { useFieldControl } from './field-context';
 
 const controlClasses = [
-  'w-full rounded-md border border-input bg-surface px-3 text-sm',
-  'text-foreground placeholder:text-muted',
-  'transition-colors',
-  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+  'w-full rounded-xl border border-input bg-surface px-4 text-sm font-sans',
+  'text-foreground placeholder:text-muted/60',
+  'transition-all duration-200',
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring focus-visible:border-accent',
   'disabled:cursor-not-allowed disabled:opacity-60',
-  // La bordure rouge n'est pas le seul signal d'erreur : le message sous le
-  // champ porte l'information pour qui ne distingue pas les couleurs.
   'aria-[invalid=true]:border-danger',
 ];
 

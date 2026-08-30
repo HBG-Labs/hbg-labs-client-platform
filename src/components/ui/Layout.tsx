@@ -16,13 +16,13 @@ export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
 export function Container({ className, width = 'default', ...props }: ContainerProps) {
   const widths = {
     // 65 caractères par ligne environ, la longueur confortable en lecture.
-    narrow: 'max-w-3xl',
-    default: 'max-w-6xl',
-    wide: 'max-w-7xl',
+    narrow: 'max-w-4xl',
+    default: 'max-w-7xl',
+    wide: 'max-w-[1480px]',
   };
 
   return (
-    <div className={cn('mx-auto w-full px-5 sm:px-8', widths[width], className)} {...props} />
+    <div className={cn('mx-auto w-full px-4 sm:px-6 lg:px-10', widths[width], className)} {...props} />
   );
 }
 
@@ -81,22 +81,26 @@ export function SectionHeading({
       )}
     >
       {eyebrow && (
-        <p className="mb-3 text-sm font-medium uppercase tracking-wider text-primary">
+        <p className="mb-3 font-sans text-xs font-semibold uppercase tracking-widest text-accent">
           {eyebrow}
         </p>
       )}
 
       <Tag
         className={cn(
-          'text-balance font-semibold tracking-tight',
-          Tag === 'h1' ? 'text-4xl sm:text-5xl' : 'text-2xl sm:text-3xl',
+          'text-balance font-serif font-normal tracking-[-0.01em] text-ink',
+          Tag === 'h1'
+            ? 'text-4xl sm:text-6xl md:text-7xl leading-[1.05]'
+            : 'text-3xl sm:text-4xl md:text-5xl leading-[1.1]',
         )}
       >
         {title}
       </Tag>
 
       {description && (
-        <p className="mt-4 text-pretty text-lg leading-relaxed text-muted">{description}</p>
+        <p className="mt-4 text-pretty font-sans text-[15px] sm:text-base leading-relaxed text-muted">
+          {description}
+        </p>
       )}
     </div>
   );

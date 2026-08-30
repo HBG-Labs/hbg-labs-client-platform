@@ -110,6 +110,7 @@ export function DemandeDetailPage() {
               <CardContent className="pt-6">
                 <TicketConversation
                   ticketId={ticketId}
+                  organizationId={ticket.data.organization_id}
                   description={ticket.data.description}
                   authorName={profile.data?.full_name || 'Vous'}
                   createdAt={ticket.data.created_at}

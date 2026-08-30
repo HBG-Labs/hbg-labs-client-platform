@@ -97,7 +97,7 @@ describe('Page d’accueil', () => {
     renderWithProviders(<HomePage />);
 
     const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent('Votre site web');
+    expect(heading).toHaveTextContent("Créer l'impossible");
   });
 
   it('ne comporte qu’un seul titre de niveau 1', async () => {

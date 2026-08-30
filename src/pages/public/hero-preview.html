@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HBG Labs — Création de sites web</title>
+  <meta name="description" content="HBG Labs transforme vos idées les plus ambitieuses en sites web réels." />
+
+  <!-- ============================================================
+       POLICES — Instrument Serif (display) + Inter (UI)
+       ============================================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+       Modifier uniquement cette section pour ajuster l'identité
+       ============================================================ */
+    :root {
+      --bg-page:     #F2F1EF;   /* blanc cassé légèrement chaud              */
+      --ink:         #1C1A18;   /* charcoal presque noir                     */
+      --ink-muted:   #55514D;   /* gris texte secondaire                     */
+      --accent:      #1B7A26;   /* vert forêt — couleur titre hero           */
+      --radius-pill: 999px;
+
+      --font-display: 'Instrument Serif', 'Playfair Display', Georgia, serif;
+      --font-ui:      'Inter', 'Helvetica Neue', Arial, sans-serif;
+
+      --ease: 200ms ease-out;
+    }
+
+    /* ============================================================
+       RESET MINIMALISTE
+       ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--ink);
+      font-family: var(--font-ui);
+      /* Empêche le scroll quand le menu mobile est ouvert */
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ============================================================
+       ACCESSIBILITÉ — Focus visible
+       ============================================================ */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* ============================================================
+       TOPBAR
+       Transparente, positionnée par-dessus le hero
+       ============================================================ */
+    .topbar {
+      position: fixed;
+      inset-block-start: 0;
+      inset-inline: 0;
+      z-index: 100;
+      height: 72px;
+      padding: 0 24px;
+      max-width: 1540px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      /* Pas de fond, pas de bordure, pas d'ombre — transparent par design */
+    }
+
+    /* ── Logo ── */
+    /* Wordmark pur : HBG (400) + LABS (800) collés, tout en majuscules */
+    .logo {
+      display: inline-flex;
+      align-items: baseline;
+      font-family: var(--font-ui);
+      font-size: 15px;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--ink);
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .logo__hbg  { font-weight: 400; }
+    .logo__labs { font-weight: 800; }
+
+    /* ── Navigation desktop ── */
+    .nav-desktop {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      /* Centré dans l'espace restant */
+      flex: 1;
+      justify-content: center;
+    }
+
+    .nav-desktop a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      white-space: nowrap;
+      transition: color var(--ease);
+    }
+
+    .nav-desktop a:hover { color: var(--accent); }
+
+    /* ── CTA topbar ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--ink);
+      color: #fff;
+      font-family: var(--font-ui);
+      font-weight: 500;
+      border: none;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity var(--ease), transform var(--ease);
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      opacity: 0.88;
+      transform: scale(1.02);
+    }
+
+    /* Taille topbar */
+    .btn--sm {
+      font-size: 14px;
+      padding: 14px 28px;
+    }
+
+    /* Taille hero */
+    .btn--lg {
+      font-size: 15px;
+      padding: 22px 52px;
+    }
+
+    /* ── Burger (mobile uniquement) ── */
+    .burger {
+      display: none;          /* masqué sur desktop */
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      width: 44px;
+      height: 44px;
+      padding: 10px 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .burger__bar {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background-color: var(--ink);
+      transform-origin: center;
+      transition: transform var(--ease), opacity var(--ease);
+    }
+
+    /* Animation burger → croix */
+    .burger[aria-expanded="true"] .burger__bar:nth-child(1) {
+      transform: translateY(7.5px) rotate(45deg);
+    }
+    .burger[aria-expanded="true"] .burger__bar:nth-child(2) {
+      opacity: 0;
+    }
+    .burger[aria-expanded="true"] .burger__bar:nth-child(3) {
+      transform: translateY(-7.5px) rotate(-45deg);
+    }
+
+    /* ============================================================
+       OVERLAY NAVIGATION MOBILE
+       Plein écran, fond --bg-page
+       ============================================================ */
+    .nav-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      background-color: var(--bg-page);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+      /* Masqué par défaut */
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--ease);
+    }
+
+    /* État ouvert */
+    .nav-overlay[aria-hidden="false"] {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .nav-overlay__close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--ink);
+      font-family: var(--font-ui);
+    }
+
+    .nav-overlay__links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-overlay__links a {
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--ink);
+      transition: color var(--ease);
+    }
+
+    .nav-overlay__links a:hover { color: var(--accent); }
+
+    /* ============================================================
+       HERO SECTION
+       Layout immersif plein cadre
+       ============================================================ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background-color: var(--bg-page);
+    }
+
+    /* ── Image de fond plein cadre ── */
+    .hero__visual {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .hero__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: right bottom;
+    }
+
+    /* ── Contenu texte posé directement sur l'image ── */
+    .hero__text {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 32px 80px 36px;
+      max-width: 680px;
+    }
+
+    /* Titre display — h1 unique de la page */
+    .hero__title {
+      font-family: var(--font-display);
+      font-weight: 400;                       /* la taille fait le travail */
+      font-size: clamp(56px, 7vw, 104px);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--accent);
+      /* text-wrap: balance; — deux lignes naturelles selon la largeur */
+    }
+
+    /* Sous-titre */
+    .hero__subtitle {
+      margin-top: 32px;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--ink);
+      opacity: 0.85;
+      max-width: 420px;
+    }
+
+    /* CTA hero — aligné à gauche */
+    .hero__cta {
+      margin-top: 40px;
+      align-self: flex-start;
+    }
+
+    /* ============================================================
+       RESPONSIVE — Tablette (≤ 1100px)
+       ============================================================ */
+    @media (max-width: 1100px) {
+      .topbar { padding: 0 28px; }
+      .hero__text { padding: 120px 40px 80px 40px; }
+    }
+
+      .hero__subtitle { max-width: 100%; }
+    }
+
+    /* ============================================================
+       RESPONSIVE — Mobile (≤ 768px)
+       ============================================================ */
+    @media (max-width: 768px) {
+      /* Topbar */
+      .topbar {
+        padding: 0 20px;
+      }
+
+      /* Masquer nav et CTA desktop, afficher burger */
+      .nav-desktop,
+      .topbar .btn { display: none; }
+
+      .burger { display: flex; }
+
+      /* Hero mobile */
+      .hero {
+        min-height: 100vh;
+        min-height: 100svh;
+      }
+
+      /* Colonne texte mobile */
+      .hero__text {
+        padding: 96px 24px 40px 24px;
+        justify-content: flex-start;
+      }
+
+      .hero__title {
+        font-size: clamp(48px, 13vw, 80px);
+      }
+
+      .hero__subtitle { max-width: 100%; }
+
+      .hero__cta { padding: 18px 40px; }
+    }
+
+    /* ============================================================
+       UTILITAIRE — Screen reader only
+       ============================================================ */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================================
+       TOPBAR
+       Transparente, positionnée par-dessus le hero
+       ============================================================ -->
+  <header class="topbar" role="banner">
+
+    <!-- Logo — wordmark texte pur
+         INJECTER : href vers votre page d'accueil si différent de "/" -->
+    <a href="/" class="logo" aria-label="HBG Labs — Retour à l'accueil">
+      <span class="logo__hbg">HBG</span><span class="logo__labs">LABS</span>
+    </a>
+
+    <!-- Navigation principale (desktop)
+         INJECTER : les URLs finales de chaque section -->
+    <nav class="nav-desktop" aria-label="Navigation principale">
+      <a href="/realisations">Nos réalisations</a>
+      <a href="/a-propos">À propos</a>
+      <a href="/services">Services</a>
+      <a href="/coulisses">Coulisses</a>
+      <a href="/contact">Contact</a>
+    </nav>
+
+    <!-- Bouton CTA desktop
+         INJECTER : URL de votre formulaire ou page de démarrage -->
+    <a href="/demarrer" class="btn btn--sm" aria-label="Démarrer un projet avec HBG Labs">
+      Démarrer un projet
+    </a>
+
+    <!-- Burger — visible uniquement sur mobile -->
+    <button
+      class="burger"
+      id="js-burger"
+      aria-label="Ouvrir le menu de navigation"
+      aria-expanded="false"
+      aria-controls="js-nav-overlay"
+    >
+      <span class="burger__bar"></span>
+      <span class="burger__bar"></span>
+      <span class="burger__bar"></span>
+    </button>
+
+  </header>
+
+
+  <!-- ============================================================
+       OVERLAY NAVIGATION MOBILE
+       Plein écran, se pose au-dessus de tout
+       ============================================================ -->
+  <div
+    class="nav-overlay"
+    id="js-nav-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Menu de navigation"
+    aria-hidden="true"
+  >
+    <!-- Bouton fermer -->
+    <button
+      class="nav-overlay__close"
+      id="js-nav-close"
+      aria-label="Fermer le menu"
+    >✕</button>
+
+    <!-- Liens de navigation
+         INJECTER : les mêmes URLs que la nav desktop -->
+    <ul class="nav-overlay__links">
+      <li><a href="/realisations">Nos réalisations</a></li>
+      <li><a href="/a-propos">À propos</a></li>
+      <li><a href="/services">Services</a></li>
+      <li><a href="/coulisses">Coulisses</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+
+    <!-- INJECTER : URL de votre formulaire -->
+    <a href="/demarrer" class="btn btn--sm">Démarrer un projet</a>
+
+  </div>
+
+
+  <!-- ============================================================
+       CONTENU PRINCIPAL
+       ============================================================ -->
+  <main id="contenu-principal">
+
+    <!-- Section hero -->
+    <section class="hero" aria-labelledby="hero-heading">
+
+      <!-- ── Colonne gauche : texte ── -->
+      <div class="hero__text">
+
+        <!-- h1 — unique sur la page entière
+             INJECTER : votre accroche finale si différente -->
+        <h1 class="hero__title" id="hero-heading">
+          Créer<br>
+          l'impossible
+        </h1>
+
+        <!-- Sous-titre
+             INJECTER : votre texte d'accroche définitif -->
+        <p class="hero__subtitle">
+          On transforme vos idées les plus ambitieuses en sites web réels.
+          Parce qu'«&nbsp;infaisable&nbsp;» n'est que le point de départ.
+        </p>
+
+        <!-- CTA hero
+             INJECTER : URL de votre formulaire ou page de démarrage -->
+        <a href="/demarrer" class="btn btn--lg hero__cta">
+          Démarrer un projet
+        </a>
+
+      </div><!-- /hero__text -->
+
+
+      <!-- ── Colonne droite : visuel ── -->
+      <div class="hero__visual" aria-hidden="true">
+        <img
+          class="hero__image"
+          src="/images/hero-editorial.jpg"
+          alt="HBG Labs — Création digitale et croissance"
+          width="1100"
+          height="900"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div><!-- /hero__visual -->
+
+    </section>
+
+  </main>
+
+
+  <!-- ============================================================
+       SCRIPT — Menu mobile
+       Pas de dépendance, IIFE isolé
+       ============================================================ -->
+  <script>
+    (function () {
+      'use strict';
+
+      var burger  = document.getElementById('js-burger');
+      var overlay = document.getElementById('js-nav-overlay');
+      var close   = document.getElementById('js-nav-close');
+
+      if (!burger || !overlay || !close) return;
+
+      /* Ouvre le menu overlay */
+      function openMenu() {
+        overlay.setAttribute('aria-hidden', 'false');
+        burger.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+        /* Focus sur le premier lien pour l'accessibilité clavier */
+        var firstLink = overlay.querySelector('a, button');
+        if (firstLink) firstLink.focus();
+      }
+
+      /* Ferme le menu overlay */
+      function closeMenu() {
+        overlay.setAttribute('aria-hidden', 'true');
+        burger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+        burger.focus(); /* Retour du focus au déclencheur */
+      }
+
+      burger.addEventListener('click', openMenu);
+      close.addEventListener('click', closeMenu);
+
+      /* Fermer avec la touche Échap */
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlay.getAttribute('aria-hidden') === 'false') {
+          closeMenu();
+        }
+      });
+
+      /* Fermer au clic sur un lien (navigation effective) */
+      overlay.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', closeMenu);
+      });
+
+    })();
+  </script>
+
+</body>
+</html>

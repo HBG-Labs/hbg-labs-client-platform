@@ -100,6 +100,7 @@ export function TicketDetailPage() {
                 <CardContent className="pt-6">
                   <TicketConversation
                     ticketId={ticketId}
+                    organizationId={ticket.data.organization_id}
                     description={ticket.data.description}
                     authorName="Le client"
                     createdAt={ticket.data.created_at}

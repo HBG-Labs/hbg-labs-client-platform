@@ -42,6 +42,28 @@ export function formatAmountCompact(cents: number, currency = 'EUR'): string {
   }).format(cents / 100);
 }
 
+/**
+ * Taille de fichier lisible.
+ *
+ * Base 1024 et unités Kio/Mio, comme le système d'exploitation qui a servi à
+ * choisir le fichier : annoncer « 25 Mo » pour un plafond exprimé en 26 214 400
+ * octets ferait échouer un fichier que l'interface disait acceptable.
+ */
+export function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} o`;
+
+  const units = ['Kio', 'Mio', 'Gio'];
+  let value = bytes / 1024;
+  let unit = 0;
+
+  while (value >= 1024 && unit < units.length - 1) {
+    value /= 1024;
+    unit += 1;
+  }
+
+  return `${value.toFixed(value >= 10 ? 0 : 1).replace('.', ',')} ${units[unit]}`;
+}
+
 /** Date longue en français : « 28 août 2026 ». */
 export function formatDate(value: string | Date | null | undefined): string {
   if (!value) return '-';

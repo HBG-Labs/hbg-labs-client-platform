@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/Button';
 import { Field } from '@/components/ui/Field';
 import { Textarea } from '@/components/ui/Input';
 import { ErrorState, LoadingState } from '@/components/ui/States';
+import { TicketAttachments } from './TicketAttachments';
 
 /**
  * Fil de conversation d'une demande.
@@ -28,6 +29,11 @@ import { ErrorState, LoadingState } from '@/components/ui/States';
  * client qui la forcerait verrait son message publié en clair : le trigger
  * `stamp_message_author_role` ramène `is_internal_note` à `false` pour tout
  * auteur non-staff.
+ *
+ * Les pièces jointes sont rattachées à la DEMANDE, non à un message. Le schéma
+ * permet les deux (`ticket_attachments.message_id` est nullable), mais lier un
+ * fichier à un message obligerait à envoyer le message avant de pouvoir joindre
+ * quoi que ce soit — ou à téléverser vers un message qui n'existe pas encore.
  */
 
 function MessageBubble({ message }: { message: TicketMessage }) {
@@ -75,6 +81,13 @@ function MessageBubble({ message }: { message: TicketMessage }) {
 
 export interface TicketConversationProps {
   ticketId: string;
+  /**
+   * Organisation de la demande. Sert à composer le chemin Storage des pièces
+   * jointes, dont elle est le premier segment — c'est sur lui que repose
+   * l'isolation côté Storage. Le trigger le recalcule de toute façon depuis le
+   * ticket : une valeur erronée serait refusée, pas appliquée.
+   */
+  organizationId: string;
   /** Description initiale, premier élément du fil. */
   description: string;
   authorName: string;
@@ -87,6 +100,7 @@ export interface TicketConversationProps {
 
 export function TicketConversation({
   ticketId,
+  organizationId,
   description,
   authorName,
   createdAt,
@@ -147,6 +161,14 @@ export function TicketConversation({
           <MessageBubble key={message.id} message={message} />
         ))}
       </ol>
+
+      <div className="border-t border-border pt-6">
+        <TicketAttachments
+          ticketId={ticketId}
+          organizationId={organizationId}
+          readOnly={readOnly}
+        />
+      </div>
 
       {readOnly ? (
         <Alert tone="info" title="Demande close">

@@ -70,11 +70,11 @@ export function AppLayout() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="border-b border-border bg-surface">
+    <div className="flex min-h-screen flex-col bg-background">
+      <header className="border-b border-border bg-surface/80 backdrop-blur-md">
         <Container>
-          <div className="flex h-16 items-center justify-between gap-4">
-            <div className="flex items-center gap-8">
+          <div className="flex h-[72px] items-center justify-between gap-4">
+            <div className="flex items-center gap-10">
               <Logo />
 
               <nav aria-label="Espace client" className="hidden md:block">
@@ -86,10 +86,12 @@ export function AppLayout() {
                         end={item.end}
                         className={({ isActive }) =>
                           cn(
-                            'inline-flex h-10 items-center gap-2 rounded-md px-3 text-sm font-medium transition-colors',
+                            'inline-flex h-10 items-center gap-2 rounded-full px-4 text-sm font-medium transition-all duration-200',
                             'hover:bg-surface-muted',
                             'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-                            isActive ? 'text-primary' : 'text-foreground',
+                            isActive
+                              ? 'bg-ink text-white font-semibold shadow-sm'
+                              : 'text-ink hover:text-accent',
                           )
                         }
                       >
@@ -102,16 +104,16 @@ export function AppLayout() {
               </nav>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <NotificationBell />
 
               {isStaff && (
                 <Link
                   to="/admin"
                   className={cn(
-                    'inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-3 text-sm font-medium',
-                    'text-primary hover:bg-surface-muted',
-                    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+                    'inline-flex min-h-10 items-center gap-2 rounded-full border border-border px-4 text-sm font-medium',
+                    'text-accent hover:bg-surface-muted hover:border-accent',
+                    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring transition-colors',
                   )}
                 >
                   <ShieldCheck className="size-4" aria-hidden="true" />
@@ -125,18 +127,18 @@ export function AppLayout() {
                 <button
                   type="button"
                   className={cn(
-                    'inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-sm',
-                    'hover:bg-surface-muted',
+                    'inline-flex min-h-10 items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-sm',
+                    'hover:border-ink/30 transition-colors',
                     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
                   )}
                 >
                   <span
                     aria-hidden="true"
-                    className="grid size-8 shrink-0 place-items-center rounded-full bg-primary text-xs font-semibold text-primary-foreground"
+                    className="grid size-7 shrink-0 place-items-center rounded-full bg-ink text-xs font-semibold text-white"
                   >
                     {initial}
                   </span>
-                  <span className="hidden max-w-40 truncate sm:inline">{displayName}</span>
+                  <span className="hidden max-w-40 truncate font-medium text-ink sm:inline">{displayName}</span>
                   <ChevronDown className="size-4 text-muted" aria-hidden="true" />
                 </button>
               </DropdownMenu.Trigger>
@@ -145,10 +147,10 @@ export function AppLayout() {
                 <DropdownMenu.Content
                   align="end"
                   sideOffset={8}
-                  className="z-50 min-w-56 rounded-lg border border-border bg-surface p-1.5 shadow-lg"
+                  className="z-50 min-w-56 rounded-2xl border border-border bg-surface p-2 shadow-xl"
                 >
                   <div className="border-b border-border px-3 py-2.5">
-                    <p className="truncate text-sm font-medium">{displayName}</p>
+                    <p className="truncate text-sm font-semibold text-ink">{displayName}</p>
                     {user?.email && (
                       <p className="truncate text-xs text-muted">{user.email}</p>
                     )}
@@ -156,12 +158,12 @@ export function AppLayout() {
 
                   {/* Sur mobile, le menu porte aussi la navigation : l'en-tête
                       ne l'affiche pas en dessous de md. */}
-                  <div className="md:hidden">
+                  <div className="md:hidden py-1">
                     {navigation.map((item) => (
                       <DropdownMenu.Item key={item.to} asChild>
                         <Link
                           to={item.to}
-                          className="flex min-h-11 cursor-pointer items-center gap-2 rounded-md px-3 text-sm outline-none data-[highlighted]:bg-surface-muted"
+                          className="flex min-h-10 cursor-pointer items-center gap-2 rounded-lg px-3 text-sm text-ink outline-none data-[highlighted]:bg-surface-muted"
                         >
                           <item.icon className="size-4" aria-hidden="true" />
                           {item.label}
@@ -170,17 +172,19 @@ export function AppLayout() {
                     ))}
                   </div>
 
-                  <DropdownMenu.Item asChild>
-                    <button
-                      type="button"
-                      onClick={() => void handleSignOut()}
-                      disabled={signingOut}
-                      className="flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-md px-3 text-sm text-danger outline-none data-[highlighted]:bg-danger-surface disabled:opacity-60"
-                    >
-                      <LogOut className="size-4" aria-hidden="true" />
-                      {signingOut ? 'Déconnexion…' : 'Se déconnecter'}
-                    </button>
-                  </DropdownMenu.Item>
+                  <div className="pt-1">
+                    <DropdownMenu.Item asChild>
+                      <button
+                        type="button"
+                        onClick={() => void handleSignOut()}
+                        disabled={signingOut}
+                        className="flex min-h-10 w-full cursor-pointer items-center gap-2 rounded-lg px-3 text-sm text-danger outline-none data-[highlighted]:bg-danger-surface disabled:opacity-60"
+                      >
+                        <LogOut className="size-4" aria-hidden="true" />
+                        {signingOut ? 'Déconnexion…' : 'Se déconnecter'}
+                      </button>
+                    </DropdownMenu.Item>
+                  </div>
                 </DropdownMenu.Content>
               </DropdownMenu.Portal>
               </DropdownMenu.Root>
@@ -189,7 +193,7 @@ export function AppLayout() {
         </Container>
       </header>
 
-      <main id="contenu-principal" className="flex-1 bg-surface-muted">
+      <main id="contenu-principal" className="flex-1 bg-background">
         <Suspense fallback={<LoadingState fullPage label="Chargement…" />}>
           <Outlet />
         </Suspense>

@@ -49,7 +49,7 @@ const navigation = [
 
 function NavigationList({ onNavigate }: { onNavigate?: () => void }) {
   return (
-    <ul className="space-y-1">
+    <ul className="space-y-1.5">
       {navigation.map((item) => (
         <li key={item.to}>
           <NavLink
@@ -58,11 +58,11 @@ function NavigationList({ onNavigate }: { onNavigate?: () => void }) {
             onClick={onNavigate}
             className={({ isActive }) =>
               cn(
-                'flex min-h-11 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors',
+                'flex min-h-10 items-center gap-3 rounded-full px-4 text-sm font-medium transition-all duration-200',
                 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
                 isActive
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-foreground hover:bg-surface-muted',
+                  ? 'bg-ink text-white shadow-sm'
+                  : 'text-ink hover:bg-surface-muted hover:text-accent',
               )
             }
           >
@@ -87,8 +87,8 @@ export function AdminLayout() {
   }
 
   const sidebarFooter = (
-    <div className="border-t border-border p-4">
-      <p className="truncate text-sm font-medium">{profile?.full_name || user?.email}</p>
+    <div className="border-t border-border p-5">
+      <p className="truncate text-sm font-semibold text-ink">{profile?.full_name || user?.email}</p>
       {profile?.platform_role && (
         <div className="mt-2">
           <StatusBadge
@@ -99,17 +99,17 @@ export function AdminLayout() {
         </div>
       )}
 
-      <div className="mt-3 space-y-1">
+      <div className="mt-4 space-y-1">
         <Link
           to="/dashboard"
-          className="flex min-h-11 items-center rounded-md px-3 text-sm text-muted hover:bg-surface-muted hover:text-foreground"
+          className="flex min-h-10 items-center rounded-lg px-3 text-sm text-muted hover:bg-surface-muted hover:text-ink transition-colors"
         >
           Mon espace client
         </Link>
         <button
           type="button"
           onClick={() => void handleSignOut()}
-          className="flex min-h-11 w-full items-center gap-2 rounded-md px-3 text-sm text-danger hover:bg-danger-surface"
+          className="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-sm text-danger hover:bg-danger-surface transition-colors"
         >
           <LogOut className="size-4" aria-hidden="true" />
           Se déconnecter
@@ -119,25 +119,23 @@ export function AdminLayout() {
   );
 
   return (
-    <div className="flex min-h-screen bg-surface-muted">
+    <div className="flex min-h-screen bg-background">
       {/* ---- Barre latérale, grand écran ---- */}
       <aside className="hidden w-64 shrink-0 flex-col border-r border-border bg-surface lg:flex">
-        <div className="border-b border-border p-4">
+        <div className="border-b border-border p-5">
           <div className="flex items-start justify-between gap-2">
             <div>
               <Logo />
-              <p className="mt-2 text-xs uppercase tracking-wider text-muted">
+              <p className="mt-2 font-sans text-[11px] font-semibold uppercase tracking-wider text-accent">
                 Administration
               </p>
             </div>
 
-            {/* La cloche vit dans l'en-tête de la barre latérale : c'est le seul
-                élément permanent de l'administration sur grand écran. */}
             <NotificationBell align="start" />
           </div>
         </div>
 
-        <nav aria-label="Administration" className="flex-1 overflow-y-auto p-3">
+        <nav aria-label="Administration" className="flex-1 overflow-y-auto p-4">
           <NavigationList />
         </nav>
 
@@ -146,17 +144,17 @@ export function AdminLayout() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         {/* ---- En-tête mobile ---- */}
-        <header className="flex h-16 items-center justify-between border-b border-border bg-surface px-4 lg:hidden">
+        <header className="flex h-[72px] items-center justify-between border-b border-border bg-surface px-6 lg:hidden">
           <Logo />
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <NotificationBell />
 
             <Dialog.Root open={open} onOpenChange={setOpen}>
               <Dialog.Trigger asChild>
                 <button
                   type="button"
-                  className="inline-flex size-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  className="inline-flex size-10 items-center justify-center rounded-full text-ink hover:bg-ink/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                   aria-label="Ouvrir le menu d’administration"
                 >
                   <Menu className="size-6" aria-hidden="true" />
@@ -164,19 +162,19 @@ export function AdminLayout() {
               </Dialog.Trigger>
 
               <Dialog.Portal>
-                <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50 lg:hidden" />
-                <Dialog.Content className="fixed inset-y-0 left-0 z-50 flex w-[85%] max-w-xs flex-col border-r border-border bg-surface shadow-xl lg:hidden">
-                  <div className="flex h-16 items-center justify-between border-b border-border px-4">
-                    <Dialog.Title className="text-sm font-medium text-muted">
+                <Dialog.Overlay className="fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm lg:hidden" />
+                <Dialog.Content className="fixed inset-y-0 left-0 z-50 flex w-[85%] max-w-xs flex-col border-r border-border bg-surface shadow-2xl lg:hidden">
+                  <div className="flex h-[72px] items-center justify-between border-b border-border px-6">
+                    <Dialog.Title className="text-sm font-semibold uppercase tracking-wider text-accent">
                       Administration
                     </Dialog.Title>
                     <Dialog.Close asChild>
                       <button
                         type="button"
-                        className="inline-flex size-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                        className="inline-flex size-10 items-center justify-center rounded-full text-ink hover:bg-ink/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                         aria-label="Fermer le menu"
                       >
-                        <X className="size-6" aria-hidden="true" />
+                        <X className="size-5" aria-hidden="true" />
                       </button>
                     </Dialog.Close>
                   </div>
@@ -185,7 +183,7 @@ export function AdminLayout() {
                     Navigation de l’espace d’administration
                   </Dialog.Description>
 
-                  <nav aria-label="Administration" className="flex-1 overflow-y-auto p-3">
+                  <nav aria-label="Administration" className="flex-1 overflow-y-auto p-4">
                     <NavigationList onNavigate={() => setOpen(false)} />
                   </nav>
 
@@ -196,7 +194,7 @@ export function AdminLayout() {
           </div>
         </header>
 
-        <main id="contenu-principal" className="min-w-0 flex-1">
+        <main id="contenu-principal" className="min-w-0 flex-1 bg-background">
           <Suspense fallback={<LoadingState fullPage label="Chargement…" />}>
             <Outlet />
           </Suspense>
@@ -219,8 +217,8 @@ export function AdminPageHeader({
   return (
     <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-        {description && <p className="mt-1.5 text-sm text-muted">{description}</p>}
+        <h1 className="font-serif text-3xl sm:text-4xl font-normal tracking-tight text-ink">{title}</h1>
+        {description && <p className="mt-1.5 font-sans text-sm text-muted">{description}</p>}
       </div>
       {action}
     </div>

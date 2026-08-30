@@ -25,28 +25,27 @@ export function PublicNavbar() {
   const [open, setOpen] = useState(false);
   const { user, isLoading } = useAuth();
 
-  // Le tiroir se ferme au clic sur un lien, pas depuis un effet observant
-  // l'URL. Fermer depuis un effet provoquerait un rendu en cascade après
-  // chaque navigation, y compris quand le tiroir est déjà fermé.
   const closeDrawer = () => setOpen(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
-      <Container>
-        <nav className="flex h-16 items-center justify-between gap-4" aria-label="Navigation principale">
+    <header className="sticky top-0 z-40 h-[72px] bg-background/80 backdrop-blur-md transition-colors duration-200">
+      <Container width="wide" className="h-full">
+        <nav
+          className="flex h-full items-center justify-between gap-6"
+          aria-label="Navigation principale"
+        >
           <Logo />
 
-          <ul className="hidden items-center gap-1 md:flex">
+          <ul className="hidden items-center gap-8 md:flex">
             {mainNav.map((item) => (
               <li key={item.to}>
                 <RouterNavLink
                   to={item.to}
                   className={({ isActive }) =>
                     cn(
-                      'inline-flex h-10 items-center rounded-md px-3 text-sm font-medium transition-colors',
-                      'hover:bg-surface-muted',
+                      'text-[14px] font-medium tracking-tight text-ink transition-colors duration-200 hover:text-accent',
                       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-                      isActive ? 'text-primary' : 'text-foreground',
+                      isActive && 'text-accent font-semibold',
                     )
                   }
                 >
@@ -56,10 +55,7 @@ export function PublicNavbar() {
             ))}
           </ul>
 
-          <div className="hidden items-center gap-2 md:flex">
-            {/* Rien n'est affiché tant que la session n'est pas résolue :
-                proposer « Connexion » puis basculer sur « Mon espace » produit
-                un scintillement à chaque chargement de page. */}
+          <div className="hidden items-center gap-3 md:flex">
             {!isLoading &&
               (user ? (
                 <Button asChild size="sm" variant="outline">
@@ -71,8 +67,8 @@ export function PublicNavbar() {
                 </Button>
               ))}
 
-            <Button asChild size="sm">
-              <Link to="/devis">Demander un devis</Link>
+            <Button asChild size="sm" variant="primary">
+              <Link to="/devis">Démarrer un projet</Link>
             </Button>
           </div>
 
@@ -81,7 +77,7 @@ export function PublicNavbar() {
             <Dialog.Trigger asChild>
               <button
                 type="button"
-                className="inline-flex size-11 items-center justify-center rounded-md md:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                className="inline-flex size-11 items-center justify-center rounded-full md:hidden text-ink hover:bg-ink/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 aria-label="Ouvrir le menu"
               >
                 <Menu className="size-6" aria-hidden="true" />
@@ -89,37 +85,34 @@ export function PublicNavbar() {
             </Dialog.Trigger>
 
             <Dialog.Portal>
-              <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50 md:hidden" />
+              <Dialog.Overlay className="fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm md:hidden" />
 
               <Dialog.Content
                 className={cn(
                   'fixed inset-y-0 right-0 z-50 flex w-[85%] max-w-sm flex-col',
-                  'border-l border-border bg-background shadow-xl md:hidden',
+                  'border-l border-border bg-background shadow-2xl md:hidden',
                 )}
               >
-                <div className="flex h-16 items-center justify-between border-b border-border px-5">
-                  <Dialog.Title className="text-sm font-medium text-muted">
-                    Navigation
-                  </Dialog.Title>
+                <div className="flex h-[72px] items-center justify-between border-b border-border px-6">
+                  <Logo />
 
                   <Dialog.Close asChild>
                     <button
                       type="button"
-                      className="inline-flex size-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                      className="inline-flex size-10 items-center justify-center rounded-full text-ink hover:bg-ink/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                       aria-label="Fermer le menu"
                     >
-                      <X className="size-6" aria-hidden="true" />
+                      <X className="size-5" aria-hidden="true" />
                     </button>
                   </Dialog.Close>
                 </div>
 
-                {/* Description exigée par Radix pour l'annonce vocale du dialogue. */}
                 <Dialog.Description className="sr-only">
                   Menu de navigation du site
                 </Dialog.Description>
 
-                <div className="flex-1 overflow-y-auto p-5">
-                  <ul className="space-y-1">
+                <div className="flex-1 overflow-y-auto px-6 py-8">
+                  <ul className="space-y-4">
                     {mainNav.map((item) => (
                       <li key={item.to}>
                         <RouterNavLink
@@ -127,9 +120,8 @@ export function PublicNavbar() {
                           onClick={closeDrawer}
                           className={({ isActive }) =>
                             cn(
-                              'flex min-h-11 items-center rounded-md px-3 font-medium',
-                              'hover:bg-surface-muted',
-                              isActive && 'text-primary',
+                              'block py-2 text-lg font-medium text-ink transition-colors hover:text-accent',
+                              isActive && 'text-accent font-semibold',
                             )
                           }
                         >
@@ -137,7 +129,7 @@ export function PublicNavbar() {
                         </RouterNavLink>
 
                         {item.children && (
-                          <ul className="ml-3 mt-1 space-y-1 border-l border-border pl-3">
+                          <ul className="ml-3 mt-2 space-y-2 border-l border-border pl-4">
                             {item.children.map((child) => (
                               <li key={child.to}>
                                 <RouterNavLink
@@ -145,9 +137,8 @@ export function PublicNavbar() {
                                   onClick={closeDrawer}
                                   className={({ isActive }) =>
                                     cn(
-                                      'flex min-h-11 items-center rounded-md px-3 text-sm',
-                                      'text-muted hover:bg-surface-muted hover:text-foreground',
-                                      isActive && 'text-primary',
+                                      'block py-1 text-sm text-muted hover:text-accent',
+                                      isActive && 'text-accent font-medium',
                                     )
                                   }
                                 >
@@ -162,7 +153,7 @@ export function PublicNavbar() {
                   </ul>
                 </div>
 
-                <div className="space-y-3 border-t border-border p-5">
+                <div className="space-y-3 border-t border-border p-6">
                   {!isLoading &&
                     (user ? (
                       <Button asChild fullWidth variant="outline">
@@ -178,9 +169,9 @@ export function PublicNavbar() {
                       </Button>
                     ))}
 
-                  <Button asChild fullWidth>
+                  <Button asChild fullWidth variant="primary">
                     <Link to="/devis" onClick={closeDrawer}>
-                      Demander un devis
+                      Démarrer un projet
                     </Link>
                   </Button>
                 </div>

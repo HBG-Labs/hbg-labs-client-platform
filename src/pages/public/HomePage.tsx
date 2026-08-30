@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { site } from '@/config/site';
 import {
   benefits,
@@ -40,38 +40,45 @@ export function HomePage() {
         structuredData={[localBusinessSchema(), faqSchema(faq)]}
       />
 
-      {/* ---- 1. Hero ---- */}
-      <Section className="pt-16 sm:pt-24">
-        <Container>
-          <div className="max-w-3xl">
-            <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-sm text-muted">
-              <ShieldCheck className="size-4 text-primary" aria-hidden="true" />
-              Création, hébergement et maintenance réunis
-            </p>
+      {/* ---- 1. Hero Éditorial Plein Cadre Immersion ---- */}
+      <section className="relative min-h-[calc(100vh-72px)] w-full overflow-hidden flex items-center bg-background">
+        {/* Image de fond plein cadre */}
+        <img
+          src="/images/hero-editorial.jpg"
+          alt="HBG Labs — Création digitale et croissance"
+          className="absolute inset-0 h-full w-full object-cover object-bottom sm:object-[75%_bottom] md:object-[80%_center]"
+          loading="eager"
+          fetchPriority="high"
+        />
 
-            <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-6xl">
-              {site.headline}
+        {/* Contenu textuel et boutons posés directement sur l'image */}
+        <Container width="wide" className="relative z-10 py-16 sm:py-24">
+          <div className="max-w-xl">
+            <h1
+              id="hero-heading"
+              className="text-balance font-serif font-normal text-accent text-[clamp(56px,7.5vw,104px)] leading-[1.05] tracking-[-0.01em]"
+            >
+              Créer <br />l'impossible
             </h1>
 
-            <p className="mt-6 text-pretty text-lg leading-relaxed text-muted sm:text-xl">
-              {site.positioning} Un seul interlocuteur pour concevoir votre site, le
-              mettre en ligne et le tenir à jour.
+            <p className="mt-8 max-w-md font-sans text-[15px] sm:text-base leading-relaxed text-ink/80">
+              On transforme vos idées les plus ambitieuses en sites web réels.
+              Parce qu'«&nbsp;infaisable&nbsp;» n'est que le point de départ.
             </p>
 
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg">
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+              <Button asChild size="lg" variant="primary" className="px-12 py-5 text-[15px] shadow-sm">
                 <Link to="/devis">
-                  Créer mon site
-                  <ArrowRight aria-hidden="true" />
+                  Démarrer un projet
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline">
+              <Button asChild size="lg" variant="outline" className="px-8 py-5 text-[15px] bg-surface/80 backdrop-blur-sm hover:bg-surface border-ink/20">
                 <Link to="/tarifs">Découvrir les offres</Link>
               </Button>
             </div>
           </div>
         </Container>
-      </Section>
+      </section>
 
       {/* ---- 2. Problème client ---- */}
       <Section tone="muted">
@@ -86,9 +93,9 @@ export function HomePage() {
             {painPoints.map((point) => (
               <div
                 key={point.title}
-                className="rounded-lg border border-border bg-surface p-6"
+                className="rounded-2xl border border-border bg-surface p-8 transition-colors duration-200 hover:border-ink/40"
               >
-                <h3 className="font-semibold">{point.title}</h3>
+                <h3 className="font-sans text-lg font-semibold text-ink">{point.title}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
                   {point.description}
                 </p>
@@ -112,17 +119,17 @@ export function HomePage() {
               <Link
                 key={pillar.to}
                 to={pillar.to}
-                className="group flex flex-col rounded-lg border border-border bg-surface p-6 transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                className="group flex flex-col rounded-2xl border border-border bg-surface p-8 transition-all duration-200 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
-                <pillar.icon className="size-6 text-primary" aria-hidden="true" />
-                <h3 className="mt-4 font-semibold">{pillar.title}</h3>
+                <pillar.icon className="size-6 text-accent" aria-hidden="true" />
+                <h3 className="mt-4 font-sans text-lg font-semibold text-ink">{pillar.title}</h3>
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
                   {pillar.description}
                 </p>
-                <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-accent">
                   En savoir plus
                   <ArrowRight
-                    className="size-4 transition-transform group-hover:translate-x-0.5"
+                    className="size-4 transition-transform duration-200 group-hover:translate-x-1"
                     aria-hidden="true"
                   />
                 </span>
@@ -143,14 +150,14 @@ export function HomePage() {
 
           <ol className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {howItWorks.map((step) => (
-              <li key={step.number}>
+              <li key={step.number} className="flex flex-col">
                 <p
-                  className="font-mono text-3xl font-semibold text-primary/40"
+                  className="font-serif text-4xl font-normal text-accent/50"
                   aria-hidden="true"
                 >
                   {step.number}
                 </p>
-                <h3 className="mt-3 font-semibold">{step.title}</h3>
+                <h3 className="mt-3 font-sans text-base font-semibold text-ink">{step.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted">
                   {step.description}
                 </p>
@@ -175,7 +182,7 @@ export function HomePage() {
           </div>
 
           <p className="mt-8 text-center text-sm text-muted">
-            <Link to="/tarifs" className="font-medium text-primary hover:underline">
+            <Link to="/tarifs" className="font-medium text-accent hover:underline">
               Comparer les offres en détail
             </Link>
           </p>
@@ -193,8 +200,8 @@ export function HomePage() {
           <div className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
             {benefits.map((benefit) => (
               <div key={benefit.title}>
-                <benefit.icon className="size-5 text-primary" aria-hidden="true" />
-                <h3 className="mt-3 font-semibold">{benefit.title}</h3>
+                <benefit.icon className="size-5 text-accent" aria-hidden="true" />
+                <h3 className="mt-3 font-sans font-semibold text-ink">{benefit.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted">
                   {benefit.description}
                 </p>
@@ -217,11 +224,11 @@ export function HomePage() {
                 {hostingDetails.map((item) => (
                   <li key={item.title} className="flex gap-4">
                     <item.icon
-                      className="mt-0.5 size-5 shrink-0 text-primary"
+                      className="mt-0.5 size-5 shrink-0 text-accent"
                       aria-hidden="true"
                     />
                     <div>
-                      <h3 className="font-medium">{item.title}</h3>
+                      <h3 className="font-sans font-medium text-ink">{item.title}</h3>
                       <p className="mt-1 text-sm leading-relaxed text-muted">
                         {item.description}
                       </p>
@@ -232,7 +239,7 @@ export function HomePage() {
               <p className="mt-8">
                 <Link
                   to="/hebergement"
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline"
                 >
                   Détail de l’hébergement
                   <ArrowRight className="size-4" aria-hidden="true" />
@@ -249,11 +256,11 @@ export function HomePage() {
                 {maintenanceDetails.map((item) => (
                   <li key={item.title} className="flex gap-4">
                     <item.icon
-                      className="mt-0.5 size-5 shrink-0 text-primary"
+                      className="mt-0.5 size-5 shrink-0 text-accent"
                       aria-hidden="true"
                     />
                     <div>
-                      <h3 className="font-medium">{item.title}</h3>
+                      <h3 className="font-sans font-medium text-ink">{item.title}</h3>
                       <p className="mt-1 text-sm leading-relaxed text-muted">
                         {item.description}
                       </p>
@@ -264,7 +271,7 @@ export function HomePage() {
               <p className="mt-8">
                 <Link
                   to="/maintenance"
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline"
                 >
                   Détail de la maintenance
                   <ArrowRight className="size-4" aria-hidden="true" />
