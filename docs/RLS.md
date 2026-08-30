@@ -131,7 +131,9 @@ modifier.
 
 | Garde | Empêche |
 |---|---|
-| `guard_platform_role` | `update profiles set platform_role='OWNER' where id=auth.uid()` — sa ligne, sa policy, escalade totale |
+| `guard_platform_role` | toute attribution hors `platform_access`, y compris par service_role |
+| `guard_profile_email` | réécrire son adresse de profil pour viser la liste d'autorisation |
+| `apply_platform_access` | (applique le rôle listé à l'inscription, source verrouillée) |
 | `guard_membership_keys` | déplacer son adhésion vers un autre tenant |
 | `guard_last_org_owner` | laisser une organisation sans OWNER, donc ingérable |
 | `guard_stripe_customer_id` | rattacher les factures d'un client à un autre |
@@ -153,6 +155,50 @@ Un paramètre local à la transaction est posé juste avant cette mise à jour e
 retiré aussitôt après. Un client ne peut pas le poser lui-même : PostgREST
 n'expose que les paramètres `request.*` qu'il contrôle, et aucune fonction
 publiée n'appelle `set_config`.
+
+---
+
+## 3bis. Qui peut atteindre l'administration
+
+Un rôle plateforme ne s'attribue qu'à une adresse inscrite dans
+`platform_access`, avec exactement ce rôle. Cette condition s'applique à
+**tous**, y compris `service_role`.
+
+| Mécanisme | Effet |
+|---|---|
+| `platform_access` | table sans policy ni privilège : invisible et inaccessible depuis l'application |
+| `apply_platform_access` | applique le rôle autorisé à la création du profil, source verrouillée |
+| `guard_platform_role` | refuse toute attribution hors liste ; le retrait reste ouvert à un OWNER |
+| `guard_profile_email` | `profiles.email` devient immuable pour son porteur |
+
+**Pourquoi le retrait échappe à la liste.** Un verrou qui rend la révocation
+aussi difficile que l'attribution se retourne contre son propriétaire le jour
+où il faut agir vite. Retirer un rôle reste donc ouvert à un OWNER et au
+backend.
+
+**Pourquoi l'adresse du profil est devenue immuable.** La liste raisonne sur
+`profiles.email`, copie de `auth.users.email`. La policy `profiles_update_self`
+laissait chacun réécrire sa propre ligne : cette copie serait devenue le maillon
+faible du dispositif.
+
+**Limite énoncée.** Qui détient `service_role` détient la base : il peut
+modifier la liste ou supprimer le trigger. Aucune protection en base ne s'en
+prémunit. Ce que ce dispositif apporte reste réel : une promotion silencieuse
+depuis l'application devient une intervention délibérée sur le schéma.
+
+Ajouter un collaborateur, depuis le SQL Editor Supabase :
+
+```sql
+insert into public.platform_access (email, role, note)
+values ('collegue@exemple.fr', 'SUPPORT', 'Support client');
+
+-- Si le compte existe déjà. Sinon, le rôle s'applique à l'inscription.
+update public.profiles set platform_role = 'SUPPORT'
+ where email = 'collegue@exemple.fr';
+```
+
+`npm run check:access` compare à tout moment les rôles détenus et les
+autorisations.
 
 ---
 
@@ -215,8 +261,8 @@ Les fichiers se servent par **URL signée**, jamais par URL publique (§35).
 
 ## 6. Vérification
 
-`npm run test:rls` — 5 fichiers, **136 tests**, exécutés contre une base réelle.
-Tous passent au 28 août 2026 sur le projet HBGLABS CLIENT PLATFORM.
+`npm run test:rls` — 6 fichiers, **147 tests**, exécutés contre une base réelle.
+Tous passent sur le projet HBGLABS CLIENT PLATFORM.
 
 | Fichier | Objet |
 |---|---|
@@ -225,6 +271,7 @@ Tous passent au 28 août 2026 sur le projet HBGLABS CLIENT PLATFORM.
 | `03-financial-tables` | aucune écriture applicative, idempotence des webhooks, cohérence des montants |
 | `04-support-confidentiality` | notes internes, périmètre de modification client |
 | `05-public-surface` | ce qu'Internet atteint avec la seule clé anon |
+| `06-platform-access` | verrou d'accès à l'administration, dans les deux sens |
 
 Chaque interdiction est accompagnée d'une **contre-épreuve** : une garde qui
 bloque tout passerait les tests de refus tout en rendant l'application

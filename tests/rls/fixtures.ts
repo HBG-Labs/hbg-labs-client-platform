@@ -149,6 +149,38 @@ export async function setupFixtures(): Promise<Fixtures> {
   const admin = serviceClient();
   const runId = randomUUID().slice(0, 8);
 
+  try {
+    return await buildFixtures(admin, runId);
+  } catch (cause) {
+    // Un montage qui échoue à mi-parcours laisse derrière lui les comptes déjà
+    // créés. Le démontage étant conditionné à la réussite du montage, ils ne
+    // seraient jamais supprimés et s'accumuleraient à chaque exécution.
+    //
+    // Ce nettoyage de secours a été ajouté après avoir constaté vingt comptes
+    // orphelins issus de cinq exécutions échouées.
+    await sweepRunArtifacts(admin, runId);
+    throw cause;
+  }
+}
+
+/** Supprime tout ce qu'une exécution identifiée par `runId` a pu créer. */
+async function sweepRunArtifacts(admin: Db, runId: string): Promise<void> {
+  const pattern = `${TEST_PREFIX}-%-${runId}@%`;
+
+  const { data: profiles } = await admin
+    .from('profiles')
+    .select('id, email')
+    .like('email', pattern);
+
+  for (const profile of profiles ?? []) {
+    await admin.auth.admin.deleteUser(profile.id);
+  }
+
+  await admin.from('platform_access').delete().like('email', pattern);
+  await admin.from('organizations').delete().like('slug', `${TEST_PREFIX}-%-${runId}`);
+}
+
+async function buildFixtures(admin: Db, runId: string): Promise<Fixtures> {
   // --- Acteurs -------------------------------------------------------------
   const [userA, userA2, userB, platformAdmin] = await Promise.all([
     createActor(admin, 'a-owner', runId),
@@ -157,9 +189,21 @@ export async function setupFixtures(): Promise<Fixtures> {
     createActor(admin, 'platform-admin', runId),
   ]);
 
-  // Promotion au rang de personnel plateforme. Passe par service_role : le
-  // trigger `guard_platform_role` refuserait cette écriture à tout autre
-  // appelant — ce que vérifie précisément 02-privilege-escalation.
+  // Promotion au rang de personnel plateforme.
+  //
+  // Depuis la migration 17, un rôle ne s'attribue qu'à une adresse inscrite
+  // dans `platform_access`, et cette règle s'impose même à service_role. Le
+  // jeu de test doit donc suivre le même chemin qu'une promotion réelle :
+  // inscrire l'adresse, puis appliquer le rôle.
+  const allow = await admin.from('platform_access').insert({
+    email: platformAdmin.email,
+    role: 'ADMIN',
+    note: 'Suite de tests RLS',
+  });
+  if (allow.error) {
+    throw new Error(`Ajout à la liste d'accès impossible : ${allow.error.message}`);
+  }
+
   const promote = await admin
     .from('profiles')
     .update({ platform_role: 'ADMIN' })
@@ -436,6 +480,10 @@ export async function teardownFixtures(f: Fixtures): Promise<void> {
     f.userB.userId,
     f.platformAdmin.userId,
   ]);
+
+  // L'adresse retirée de la liste d'accès : sans cela, elle s'y accumulerait
+  // à chaque exécution de la suite.
+  await admin.from('platform_access').delete().eq('email', f.platformAdmin.email);
 
   for (const actor of [f.userA, f.userA2, f.userB, f.platformAdmin]) {
     await actor.db.auth.signOut();

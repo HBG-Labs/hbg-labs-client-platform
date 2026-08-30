@@ -1,6 +1,6 @@
 # Schéma de données
 
-19 tables, 22 types énumérés, 30 fonctions, 16 migrations. Ordre d'application
+20 tables, 22 types énumérés, 32 fonctions, 17 migrations. Ordre d'application
 conforme à §45 ; la 16ᵉ est un correctif de privilèges décrit en
 [RLS.md §4bis](./RLS.md).
 
@@ -71,6 +71,7 @@ trigger `handle_new_user`.
 | `id` | = `auth.users.id`, cascade à la suppression du compte |
 | `email` | copie dénormalisée : évite d'ouvrir le schéma `auth` aux clients |
 | `platform_role` | **NULL = client.** Colonne la plus sensible du schéma |
+| `email` | immuable pour son porteur : la liste d'accès raisonne dessus |
 
 `handle_new_user` ne lit que `full_name` dans les métadonnées d'inscription et
 n'écrit **jamais** `platform_role` : `raw_user_meta_data` est entièrement

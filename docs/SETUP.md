@@ -180,23 +180,75 @@ production (§48).
 
 ---
 
-## 6. Promotion d'un compte au rang de personnel HBG Labs
+## 6. Accès à l'espace d'administration
 
-Aucun compte ne naît administrateur : le trigger `handle_new_user` ignore
-délibérément les métadonnées d'inscription, qui sont contrôlées par le client.
+L'accès repose sur une liste d'autorisation, `platform_access`, inaccessible
+depuis l'application. Une adresse ne peut détenir un rôle plateforme que si
+elle y figure, avec exactement ce rôle. La règle s'impose à tous, `service_role`
+compris.
 
-Cela vaut aussi pour votre propre compte : créez-le d'abord par le formulaire
-d'inscription, puis promouvez-le depuis le dashboard Supabase → **SQL Editor** :
+### 6.1 État actuel
 
-```sql
-update public.profiles
-   set platform_role = 'OWNER'
- where email = 'votre.email@exemple.fr';
+Une seule adresse est autorisée : **hbglabs@gmail.com**, avec le rôle OWNER.
+
+Le compte correspondant n'existe pas encore. Inscrivez-vous avec cette adresse
+sur `/inscription` et confirmez le courriel reçu : le rôle est appliqué
+automatiquement à la création du profil, et `/admin` devient accessible.
+
+Aucune manipulation SQL n'est nécessaire.
+
+### 6.2 Vérifier qui a accès
+
+```bash
+npm run check:access
 ```
 
-Cette requête s'exécute avec les droits d'administration, seuls capables de
-franchir le trigger `guard_platform_role`. Une fois ce premier OWNER en place,
-il promeut les suivants depuis l'application.
+Compare les rôles réellement détenus à la liste d'autorisation et signale toute
+divergence. Ce contrôle fait partie de `npm run verify`.
+
+### 6.3 Ajouter un collaborateur
+
+Depuis le SQL Editor Supabase. L'opération est délibérément hors de portée de
+l'application.
+
+```sql
+insert into public.platform_access (email, role, note)
+values ('collegue@exemple.fr', 'SUPPORT', 'Support client');
+```
+
+Si la personne n'a pas encore de compte, le rôle s'appliquera à son inscription.
+Si son compte existe déjà :
+
+```sql
+update public.profiles set platform_role = 'SUPPORT'
+ where email = 'collegue@exemple.fr';
+```
+
+Rôles disponibles : OWNER, ADMIN, STAFF, SUPPORT. Un membre SUPPORT lit les
+données clients sans pouvoir les modifier, la base le lui refuse.
+
+### 6.4 Retirer un accès
+
+Le retrait n'exige pas de toucher à la liste. Un verrou qui rendrait la
+révocation aussi difficile que l'attribution se retournerait contre vous le jour
+où il faut agir vite.
+
+```sql
+update public.profiles set platform_role = null
+ where email = 'collegue@exemple.fr';
+
+delete from public.platform_access where email = 'collegue@exemple.fr';
+```
+
+### 6.5 Ce que ce dispositif ne protège pas
+
+Qui détient la clé `service_role` détient la base : il peut modifier la liste ou
+supprimer le trigger. Aucune protection en base ne s'en prémunit.
+
+Ce que le dispositif apporte reste réel : une promotion silencieuse depuis
+l'application devient une intervention délibérée sur le schéma, qui demande un
+accès distinct et laisse une trace. Traitez la clé `service_role` en
+conséquence.
 
 ---
 

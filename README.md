@@ -31,12 +31,13 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 | `npm run dev` | serveur de développement |
 | `npm run verify` | schéma, privilèges, lint, types, tests, build, scan de secrets |
 | `npm test` | tests de rendu des pages publiques |
-| `npm run test:rls` | isolation multi-tenant (exige une base Supabase) |
+| `npm run test:rls` | isolation multi-tenant, 147 tests (exige une base Supabase) |
 | `npm run check:schema` | analyse statique des migrations, sans base |
 | `npm run check:privileges` | privilèges réels de la base vs. attendus |
 | `npm run db:push` | applique les migrations au projet lié |
 | `npm run db:seed` | insère la grille tarifaire |
 | `npm run db:types` | régénère les types TypeScript depuis la base |
+| `npm run check:access` | qui peut atteindre l'administration |
 | `npm run auth:check` | écarts de configuration Auth du projet distant |
 | `npm run auth:sync` | aligne la configuration Auth sur le dépôt |
 
@@ -53,6 +54,18 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 | [SETUP.md](./docs/SETUP.md) | installation, comptes externes, dépannage |
 
 ---
+
+## Accès à l'administration
+
+Une seule adresse est autorisée : **hbglabs@gmail.com**. Elle est inscrite dans
+`platform_access`, table verrouillée et inaccessible depuis l'application.
+
+Un rôle plateforme ne s'attribue qu'à une adresse figurant dans cette liste,
+avec exactement ce rôle. La règle s'impose à tous, `service_role` compris : même
+une session OWNER compromise ne peut promouvoir personne.
+
+Le compte n'existe pas encore. Inscrivez-vous avec cette adresse et le rôle
+s'appliquera automatiquement. Détail dans [SETUP.md §6](./docs/SETUP.md).
 
 ## Ce que contient le lot 4
 
@@ -155,6 +168,7 @@ Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
 | Écriture des formulaires depuis la clé anon | vérifiée contre la base réelle |
 | Parcours d'authentification, 13 contrôles | vérifié contre la base réelle |
 | Parcours administrateur, 19 contrôles | vérifié contre la base réelle |
+| Verrou d'accès à l'administration, 11 tests | vérifié contre la base réelle |
 | `npm run auth:check` | configuration Auth conforme |
 | `npm run check:privileges` | conforme, aucun surplus ni manque |
 | `npm run check:schema` | RLS activée et forcée sur 19/19 tables |

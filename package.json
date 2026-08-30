@@ -24,10 +24,11 @@
     "check:env": "node scripts/check-env.mjs",
     "check:schema": "node scripts/check-schema-coherence.mjs",
     "check:secrets": "node scripts/check-bundle-secrets.mjs",
-    "verify": "npm run check:schema && npm run check:privileges && npm run auth:check && npm run lint && npm run typecheck && npm run test && vite build && node scripts/generate-sitemap.mjs && npm run check:secrets",
+    "verify": "npm run check:schema && npm run check:privileges && npm run check:access && npm run auth:check && npm run lint && npm run typecheck && npm run test && vite build && node scripts/generate-sitemap.mjs && npm run check:secrets",
     "check:privileges": "node scripts/audit-privileges.mjs",
     "auth:sync": "node scripts/sync-auth-config.mjs",
-    "auth:check": "node scripts/sync-auth-config.mjs --check"
+    "auth:check": "node scripts/sync-auth-config.mjs --check",
+    "check:access": "node scripts/check-platform-access.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",

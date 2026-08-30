@@ -746,6 +746,27 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_access: {
+        Row: {
+          created_at: string
+          email: string
+          note: string | null
+          role: Database["public"]["Enums"]["platform_role"]
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          note?: string | null
+          role: Database["public"]["Enums"]["platform_role"]
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          note?: string | null
+          role?: Database["public"]["Enums"]["platform_role"]
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
