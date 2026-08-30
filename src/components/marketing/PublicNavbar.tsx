@@ -28,7 +28,7 @@ export function PublicNavbar() {
   const closeDrawer = () => setOpen(false);
 
   return (
-    <header className="sticky top-0 z-40 h-[72px] bg-background transition-colors duration-200">
+    <header className="sticky top-0 z-40 h-[52px] bg-background transition-colors duration-200">
       <Container width="wide" className="h-full">
         <nav
           className="flex h-full items-center justify-between gap-6"
