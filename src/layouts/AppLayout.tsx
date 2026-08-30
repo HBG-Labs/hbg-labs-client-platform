@@ -8,10 +8,11 @@ import {
   LogOut,
   MonitorSmartphone,
   Settings,
+  ShieldCheck,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/features/auth/auth-context';
-import { useProfile } from '@/features/auth/useProfile';
+import { useIsPlatformStaff, useProfile } from '@/features/auth/useProfile';
 import { Logo } from '@/components/marketing/Logo';
 import { Container } from '@/components/ui/Layout';
 import { LoadingState } from '@/components/ui/States';
@@ -40,6 +41,14 @@ export function AppLayout() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { data: profile } = useProfile();
+
+  // Affiche l'entrée vers l'administration au personnel HBG Labs.
+  //
+  // Ce lien MONTRE une entrée, il n'autorise rien. `RequirePlatformStaff`
+  // filtre la route, et les policies RLS protègent les données : un client qui
+  // forcerait l'URL serait redirigé, et n'obtiendrait de toute façon aucune
+  // ligne.
+  const isStaff = useIsPlatformStaff();
   const [signingOut, setSigningOut] = useState(false);
 
   const displayName = profile?.full_name || user?.email || 'Mon compte';
@@ -88,8 +97,24 @@ export function AppLayout() {
               </nav>
             </div>
 
-            <DropdownMenu.Root>
-              <DropdownMenu.Trigger asChild>
+            <div className="flex items-center gap-2">
+              {isStaff && (
+                <Link
+                  to="/admin"
+                  className={cn(
+                    'inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-3 text-sm font-medium',
+                    'text-primary hover:bg-surface-muted',
+                    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+                  )}
+                >
+                  <ShieldCheck className="size-4" aria-hidden="true" />
+                  <span className="hidden sm:inline">Administration</span>
+                  <span className="sr-only sm:hidden">Administration</span>
+                </Link>
+              )}
+
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger asChild>
                 <button
                   type="button"
                   className={cn(
@@ -151,7 +176,8 @@ export function AppLayout() {
                   </DropdownMenu.Item>
                 </DropdownMenu.Content>
               </DropdownMenu.Portal>
-            </DropdownMenu.Root>
+              </DropdownMenu.Root>
+            </div>
           </div>
         </Container>
       </header>
