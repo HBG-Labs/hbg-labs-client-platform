@@ -112,6 +112,7 @@ export const site: SiteConfig = {
     { name: 'Vercel', purpose: 'Hébergement et diffusion du site', location: 'États-Unis' },
     { name: 'Stripe', purpose: 'Traitement des paiements et facturation', location: 'États-Unis' },
     { name: 'Resend', purpose: 'Envoi des courriels transactionnels', location: 'États-Unis' },
+    { name: 'Sentry', purpose: 'Supervision technique des erreurs de l’application, sans donnée personnelle', location: 'États-Unis' },
   ],
 };
 

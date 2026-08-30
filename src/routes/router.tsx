@@ -3,6 +3,7 @@ import { RootLayout } from '@/layouts/RootLayout';
 import { PublicLayout } from '@/layouts/PublicLayout';
 import { HomePage } from '@/pages/public/HomePage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
+import { RouteErrorPage } from './RouteErrorPage';
 import { RequireAuth, RequireGuest, RequirePlatformStaff } from './guards';
 
 /**
@@ -46,7 +47,10 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout />,
-    errorElement: <NotFoundPage />,
+    // Distingue l'adresse inconnue de l'échec réel — le plus souvent un
+    // morceau de code introuvable après un déploiement. Les deux affichaient
+    // « page introuvable », ce qui envoyait à l'opposé du geste utile.
+    errorElement: <RouteErrorPage />,
     children: [
       // ---- Site public ----
       {

@@ -1,6 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { envIssues } from './lib/env';
+import { initMonitoring } from './lib/monitoring';
+import { AppErrorBoundary } from './components/AppErrorBoundary';
 import { ConfigurationRequiredPage } from './pages/ConfigurationRequiredPage';
 import './index.css';
 
@@ -13,6 +15,11 @@ import './index.css';
  *
  * L'ordre importe : un import statique de `App` serait résolu au chargement du
  * module, donc avant que la moindre ligne de ce fichier ne s'exécute.
+ *
+ * La supervision est lancée sans être attendue : elle observe l'application,
+ * elle ne conditionne pas son affichage. `await` retarderait le premier rendu
+ * d'un aller-retour réseau pour un bénéfice nul, et une panne de Sentry
+ * empêcherait la plateforme de démarrer.
  */
 
 const rootElement = document.getElementById('root');
@@ -21,6 +28,8 @@ if (!rootElement) {
 }
 
 const root = createRoot(rootElement);
+
+void initMonitoring();
 
 if (envIssues.length > 0) {
   root.render(
@@ -32,7 +41,9 @@ if (envIssues.length > 0) {
   void import('./App').then(({ App }) => {
     root.render(
       <StrictMode>
-        <App />
+        <AppErrorBoundary>
+          <App />
+        </AppErrorBoundary>
       </StrictMode>,
     );
   });

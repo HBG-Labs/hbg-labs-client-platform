@@ -584,7 +584,71 @@ souvent déjà close.
 ---
 
 
-## 10. Résolution de problèmes
+## 10. Supervision
+
+`VITE_SENTRY_DSN` vide — le cas par défaut — et **rien ne se charge** : le SDK
+n'est pas téléchargé, aucune requête ne part. La supervision est absente, et
+l'application ne prétend pas le contraire.
+
+### 10.1 Activer
+
+1. Créez un projet Sentry de type **React** ;
+2. copiez le DSN (`https://…@…ingest.sentry.io/…`) ;
+3. renseignez-le dans `.env`, puis sur Vercel :
+
+```bash
+npx vercel env add VITE_SENTRY_DSN production
+npx vercel env add VITE_SENTRY_DSN preview
+```
+
+Le DSN est **public par conception**, comme la clé `anon` : il désigne le projet
+qui reçoit, il n'ouvre aucun accès en lecture. Le préfixe `VITE_` est donc
+correct ici.
+
+### 10.2 Ce qui est envoyé, et ce qui ne l'est pas
+
+| Envoyé | Non envoyé |
+|---|---|
+| Type et message de l'erreur | Identifiant ou adresse de l'utilisateur |
+| Pile d'appels et pile de composants | Adresse IP (`sendDefaultPii: false`) |
+| Chemin de l'URL | Chaîne de requête, remplacée par `?…` |
+| Environnement (`development`, `staging`, `production`) | Contenu des formulaires |
+
+La chaîne de requête est retirée pour une raison précise : PostgREST porte ses
+filtres dans l'URL. `profiles?email=eq.…` suffirait à faire sortir une adresse
+client vers un prestataire américain, sans que personne ne l'ait décidé.
+
+Sentry figure dans la liste des sous-traitants publiée sur
+`/politique-confidentialite`. Une supervision active absente de cette liste
+rendrait la politique fausse.
+
+### 10.3 Poids
+
+Le SDK est chargé **à la demande**, dans un morceau de code séparé
+(≈ 155 Kio compressés). Le bundle initial n'augmente que de deux kilo-octets,
+et ce morceau n'est jamais téléchargé sans DSN.
+
+Contrepartie assumée : une erreur survenant dans les premières centaines de
+millisecondes, avant la fin du chargement du SDK, n'est pas remontée. Le
+chargement est lancé avant le premier rendu pour réduire cette fenêtre.
+
+### 10.4 Sans Sentry
+
+Deux écrans rattrapent les erreurs, DSN ou pas :
+
+- `AppErrorBoundary` remplace la page blanche d'un rendu échoué par un message
+  et un bouton de rechargement ;
+- `RouteErrorPage` distingue l'adresse inconnue de l'échec de chargement. Ce
+  second cas est le plus fréquent : après un déploiement, un onglet resté
+  ouvert demande un morceau de code qui n'existe plus. Annoncer « page
+  introuvable » enverrait à l'opposé du geste utile.
+
+`reportError` retombe alors sur la console du navigateur.
+
+---
+
+
+## 11. Résolution de problèmes
 
 | Symptôme | Cause | Correction |
 |---|---|---|

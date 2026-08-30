@@ -63,7 +63,7 @@ src/
   features/<domaine>/    hooks TanStack Query, logique d'écran
   services/              accès aux données, une fonction par requête
   pages/  layouts/  routes/
-  lib/                   env, client Supabase, query client, utilitaires
+  lib/                   env, client Supabase, query client, supervision, utilitaires
   types/                 domain.ts (manuel) · database.types.ts (généré)
   schemas/               schémas Zod des formulaires
 ```

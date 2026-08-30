@@ -76,7 +76,26 @@ s'appliquera automatiquement. Détail dans [SETUP.md §6](./docs/SETUP.md).
 
 ## Ce que contient le lot 9
 
-*En cours. Première partie livrée : les courriels transactionnels.*
+*En cours. Livrées : les courriels transactionnels, la supervision.*
+
+Supervision (§17) :
+
+- Sentry chargé **à la demande** : DSN vide, le SDK n'est même pas téléchargé,
+  et le bundle initial n'augmente que de deux kilo-octets
+- Aucune donnée personnelle : ni identifiant, ni adresse, ni IP. La chaîne de
+  requête des URL est retirée avant l'envoi — PostgREST porte ses filtres dans
+  l'URL, et `profiles?email=eq.…` ferait sortir une adresse client
+- Sentry est ajouté à la liste des sous-traitants publiée sur
+  `/politique-confidentialite` : une supervision active absente de cette liste
+  rendrait la politique fausse
+
+Deux écrans rattrapent les erreurs, avec ou sans Sentry. `AppErrorBoundary`
+remplace la page blanche d'un rendu échoué. `RouteErrorPage` corrige une
+confusion qui existait depuis le lot 2 : `errorElement` valait
+`<NotFoundPage />`, si bien que **tout** échec de routage s'annonçait « page
+introuvable ». Or le cas le plus fréquent n'est pas une adresse inconnue mais un
+morceau de code disparu après un déploiement — la page existe, un rechargement
+la ramène, et le message envoyait à l'opposé du geste utile.
 
 Courriels transactionnels (§26) :
 
@@ -332,7 +351,7 @@ Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
 |---|---|
 | Application des 21 migrations sur base vierge | sans erreur |
 | `npm run test:rls` : 182 tests, 9 fichiers | tous au vert |
-| `npm test` : 91 tests de rendu, de gardes et de confidentialité | tous au vert |
+| `npm test` : 97 tests de rendu, de gardes et de confidentialité | tous au vert |
 | Écriture des formulaires depuis la clé anon | vérifiée contre la base réelle |
 | Parcours d'authentification, 13 contrôles | vérifié contre la base réelle |
 | Parcours administrateur, 19 contrôles | vérifié contre la base réelle |
