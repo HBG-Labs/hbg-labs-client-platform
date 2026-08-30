@@ -5,10 +5,11 @@ maintenance, gestion des domaines, abonnements, facturation et support client.
 
 **En ligne : https://hbg-labs-client-platform.vercel.app**
 
-**Statut : lots 1 à 8 livrés, plateforme déployée.** Schéma multi-tenant vérifié sur Supabase, site
+**Statut : lots 1 à 9 livrés, plateforme déployée.** Schéma multi-tenant vérifié sur Supabase, site
 public complet, authentification réelle, espace d'administration permettant de
-créer un client de bout en bout, espace client affichant site et domaine, et
-facturation Stripe raccordée du Checkout au webhook.
+créer un client de bout en bout, espace client affichant site et domaine,
+facturation Stripe raccordée du Checkout au webhook, courriels transactionnels,
+supervision et état des sites lu chez Vercel.
 
 ---
 
@@ -34,7 +35,7 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 | `npm run dev` | serveur de développement |
 | `npm run verify` | schéma, privilèges, lint, types, tests, build, scan de secrets |
 | `npm test` | tests de rendu des pages publiques |
-| `npm run test:rls` | isolation multi-tenant, 182 tests (exige une base Supabase) |
+| `npm run test:rls` | isolation multi-tenant, 190 tests (exige une base Supabase) |
 | `npm run check:schema` | analyse statique des migrations, sans base |
 | `npm run check:privileges` | privilèges réels de la base vs. attendus |
 | `npm run db:push` | applique les migrations au projet lié |
@@ -76,7 +77,30 @@ s'appliquera automatiquement. Détail dans [SETUP.md §6](./docs/SETUP.md).
 
 ## Ce que contient le lot 9
 
-*En cours. Livrées : les courriels transactionnels, la supervision.*
+État réel des sites clients (§17, §33) :
+
+- Fonction Edge `vercel-refresh` : dernier déploiement de production, état du
+  certificat, configuration DNS de chaque domaine, lus chez Vercel
+- `verification_source` passe enfin de `NONE` à `VERCEL_API`, ce qui autorise
+  l'espace client à afficher un état plutôt que « Vérification non configurée »
+
+**Ce que la fonction n'écrit pas compte autant.** Le statut du site reste
+déclaré par HBG Labs — un déploiement réussi ne veut pas dire « en ligne » au
+sens commercial. L'URL de production reste celle qu'un opérateur a saisie, et
+non l'adresse technique d'un déploiement, qui change à chaque mise en ligne. La
+date d'expiration d'un domaine n'est écrite que si Vercel en est le registrar :
+lui seul la connaît alors, et pour un domaine acheté ailleurs `NULL` reste la
+seule réponse vraie.
+
+**Une panne de notre côté n'est pas un incident client.** Si l'API répond mal,
+la ligne n'est pas touchée : écrire `ssl_status = ERROR` parce que NOTRE appel a
+échoué afficherait une alerte rouge sur le site d'un client dont le certificat
+va très bien.
+
+Huit tests d'isolation supplémentaires portent sur le contrat lui-même : la base
+refuse un certificat « actif » sans source de vérification, une date de
+vérification sans source, et une source sans date — y compris à `service_role`,
+c'est-à-dire au rôle qu'emploie la fonction Edge.
 
 Supervision (§17) :
 
@@ -350,7 +374,7 @@ Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
 | Contrôle | Résultat |
 |---|---|
 | Application des 21 migrations sur base vierge | sans erreur |
-| `npm run test:rls` : 182 tests, 9 fichiers | tous au vert |
+| `npm run test:rls` : 190 tests, 10 fichiers | tous au vert |
 | `npm test` : 97 tests de rendu, de gardes et de confidentialité | tous au vert |
 | Écriture des formulaires depuis la clé anon | vérifiée contre la base réelle |
 | Parcours d'authentification, 13 contrôles | vérifié contre la base réelle |

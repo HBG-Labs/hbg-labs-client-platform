@@ -113,3 +113,16 @@ verify_jwt = false
 
 [functions.notifications-dispatch]
 verify_jwt = true
+
+# -----------------------------------------------------------------------------
+# Fonction Edge — état réel des sites clients (§17, §33)
+# -----------------------------------------------------------------------------
+# Même régime que la dépêche de courriels : jeton vérifié par le runtime, puis
+# `role = service_role` exigé par la fonction. Elle porte un jeton Vercel, qui
+# ouvre bien plus que la lecture d'un statut ; son déclenchement n'a rien d'un
+# geste d'utilisateur.
+#
+# Ordonnancement par pg_cron, toutes les quinze minutes. Voir docs/SETUP.md §11.
+
+[functions.vercel-refresh]
+verify_jwt = true

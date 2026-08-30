@@ -55,6 +55,7 @@ supabase/
     stripe-portal/       portail de facturation Stripe
     stripe-webhook/      miroir local, seul chemin d'écriture financier
     notifications-dispatch/  vidange de la file de courriels (Resend)
+    vercel-refresh/      état réel des sites et domaines (Vercel)
   seed.sql               grille tarifaire réelle — aucune donnée fictive
   config.toml
 tests/rls/               suite d'isolation multi-tenant (§47)
@@ -222,7 +223,7 @@ et cache long sur les assets versionnés.
 | **6, livré** | notifications en application | 16 |
 | **7, livré** | journal d'audit alimenté et consultable | 18 |
 | **8, livré** | Stripe : Checkout, portail, webhook, abonnements et facturation | 8-12 |
-| 9 | courriels transactionnels, intégration Vercel, supervision | 15, 17 |
+| **9, livré** | courriels transactionnels, supervision, intégration Vercel | 15, 17 |
 | 10 | préparation production | 19 |
 
 Les lots 6 et 7 ont précédé Stripe faute de compte Stripe, et les courriels ont

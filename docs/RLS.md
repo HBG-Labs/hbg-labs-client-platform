@@ -319,7 +319,7 @@ Les fichiers se servent par **URL signée**, jamais par URL publique (§35).
 
 ## 6. Vérification
 
-`npm run test:rls` — 9 fichiers, **182 tests**, exécutés contre une base réelle.
+`npm run test:rls` — 10 fichiers, **190 tests**, exécutés contre une base réelle.
 Tous passent sur le projet HBGLABS CLIENT PLATFORM.
 
 | Fichier | Objet |

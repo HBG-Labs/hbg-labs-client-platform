@@ -648,7 +648,97 @@ Deux écrans rattrapent les erreurs, DSN ou pas :
 ---
 
 
-## 11. Résolution de problèmes
+## 11. État réel des sites clients
+
+Sans cette intégration, `verification_source` vaut `NONE` partout et l'espace
+client affiche « Vérification non configurée ». Ce n'est pas une lacune
+d'affichage : les contraintes de la base imposent alors des statuts `UNKNOWN`,
+parce que c'est le seul état vrai.
+
+### 11.1 Jeton Vercel
+
+Vercel → Account Settings → Tokens → **Create Token**, portée limitée à
+l'équipe qui héberge les sites clients.
+
+```bash
+npx supabase secrets set VERCEL_TOKEN=...
+npx supabase secrets set VERCEL_TEAM_ID=team_...   # si les projets sont dans une équipe
+
+npx supabase functions deploy vercel-refresh
+```
+
+Le jeton donne aussi le droit de **supprimer** un projet. La fonction ne fait
+que lire — aucune méthode d'écriture n'est exposée dans `_shared/vercel.ts` —
+mais le secret, lui, ne doit vivre que côté Supabase.
+
+### 11.2 Rattacher un site à son projet
+
+Renseignez `websites.vercel_project_id` (et `vercel_team_id` si l'équipe diffère
+de celle par défaut) depuis `/admin/sites`. Un site sans identifiant de projet
+est ignoré par la fonction, et son affichage reste « non configuré ».
+
+### 11.3 Ordonnancement
+
+```sql
+select cron.schedule(
+  'vercel-refresh',
+  '*/15 * * * *',
+  $job$
+  select net.http_post(
+    url := 'https://<ref>.supabase.co/functions/v1/vercel-refresh',
+    headers := jsonb_build_object(
+      'Content-Type', 'application/json',
+      'Authorization', 'Bearer ' || (
+        select decrypted_secret from vault.decrypted_secrets
+         where name = 'service_role_key'
+      )
+    ),
+    body := '{}'::jsonb,
+    timeout_milliseconds := 60000
+  );
+  $job$
+);
+```
+
+Un déploiement ou un certificat changent rarement : un quart d'heure suffit.
+Vingt-cinq sites sont traités par exécution, les moins récemment vérifiés
+d'abord.
+
+Le secret Vault `service_role_key` est celui créé au §9.3 ; inutile de le
+recréer.
+
+### 11.4 Ce qui est écrit, et ce qui ne l'est pas
+
+| Écrit depuis Vercel | Laissé intact |
+|---|---|
+| `last_deployment_id`, `last_deployed_at` | `websites.status`, déclaré par HBG Labs |
+| `websites.ssl_status` | `production_url`, saisi par un opérateur |
+| `domains.dns_status`, `domains.ssl_status` | `domains.status` d'un domaine acheté ailleurs |
+| `verification_source`, `checked_at` | `expires_at`, `auto_renew` hors registrar Vercel |
+
+`EXPIRING` et `EXPIRED` ne sont jamais écrits pour un certificat : l'API ne
+donne pas sa date d'expiration, et Vercel le renouvelle seul. Les affirmer
+demanderait une information dont on ne dispose pas.
+
+Une date d'expiration de domaine n'est écrite que si **Vercel est le
+registrar** : lui seul la connaît alors. Pour un domaine acheté ailleurs,
+`expires_at` reste `NULL`, et l'interface n'affiche rien plutôt qu'une
+estimation.
+
+### 11.5 Quand l'API échoue
+
+La ligne n'est pas touchée, et l'échec est journalisé. Écrire `ssl_status =
+ERROR` parce que NOTRE appel a échoué afficherait une alerte rouge sur le site
+d'un client dont le certificat va très bien.
+
+```bash
+npx supabase functions logs vercel-refresh
+```
+
+---
+
+
+## 12. Résolution de problèmes
 
 | Symptôme | Cause | Correction |
 |---|---|---|
@@ -665,3 +755,5 @@ Deux écrans rattrapent les erreurs, DSN ou pas :
 | Aucun courriel, file vide | Canal fermé | `npm run email:on` (§9.4) |
 | File qui grossit sans envoi | Tâche pg_cron absente ou en échec | Rejouer §9.3, puis `supabase functions logs` |
 | Courriels `FAILED` : « domain is not verified » | `EMAIL_FROM` hors du domaine vérifié | Vérifier le domaine dans Resend (§9.1) |
+| Site toujours « Vérification non configurée » | `vercel_project_id` non renseigné | Le saisir depuis `/admin/sites` (§11.2) |
+| Journaux : « Projet Vercel introuvable » | Identifiant erroné, ou projet dans une autre équipe | Corriger l'identifiant ou `vercel_team_id` (§11.2) |
