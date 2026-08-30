@@ -1,0 +1,27 @@
+# Fins de ligne
+#
+# Le dépôt est développé sous Windows mais déployé sous Linux (Vercel,
+# PostgreSQL). Sans règle explicite, chaque outil impose la sienne : neuf
+# fichiers étaient en CRLF quand cent soixante-dix étaient en LF, et une
+# simple réécriture par un script produisait un diff de plusieurs centaines de
+# lignes pour un changement de quatre.
+#
+# `text=auto eol=lf` normalise à LF dans le dépôt. Les éditeurs modernes lisent
+# les deux ; ce sont les diffs qui ne s'en remettent pas.
+* text=auto eol=lf
+
+# Fichiers binaires : jamais de conversion.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.avif binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
+*.mp4 binary
+
+# Le verrou de dépendances est généré : son diff n'a pas à être relu.
+package-lock.json -diff linguist-generated
