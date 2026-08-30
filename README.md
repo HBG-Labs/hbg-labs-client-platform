@@ -3,7 +3,9 @@
 Plateforme SaaS multi-tenant de HBG Labs : création de sites web, hébergement,
 maintenance, gestion des domaines, abonnements, facturation et support client.
 
-**Statut : lots 1 à 4 livrés.** Schéma multi-tenant vérifié sur Supabase, site
+**En ligne : https://hbg-labs-client-platform.vercel.app**
+
+**Statut : lots 1 à 4 livrés, plateforme déployée.** Schéma multi-tenant vérifié sur Supabase, site
 public complet, authentification réelle, espace d'administration permettant de
 créer un client de bout en bout et espace client affichant site et domaine.
 
@@ -51,7 +53,7 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 | [DATABASE.md](./docs/DATABASE.md) | les 19 tables, leurs contraintes et le pourquoi |
 | [RLS.md](./docs/RLS.md) | modèle d'autorisation, matrice d'accès, gardes |
 | [CONTRACTS.md](./docs/CONTRACTS.md) | contrat backend ↔ frontend — **à lire avant de développer un écran** |
-| [SETUP.md](./docs/SETUP.md) | installation, comptes externes, dépannage |
+| [SETUP.md](./docs/SETUP.md) | installation, accès administrateur, déploiement, dépannage |
 
 ---
 

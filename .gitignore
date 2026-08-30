@@ -46,6 +46,7 @@ coverage/
 
 # Vercel
 .vercel/
+.env.local
 
 # OS
 Thumbs.db

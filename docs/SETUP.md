@@ -252,7 +252,86 @@ conséquence.
 
 ---
 
-## 7. Résolution de problèmes
+## 7. Déploiement
+
+Le site est en ligne sur **https://hbg-labs-client-platform.vercel.app**.
+
+### 7.1 Fonctionnement
+
+Le dépôt GitHub est connecté au projet Vercel `hbz2/hbg-labs-client-platform`.
+Chaque poussée sur `main` déclenche un déploiement en production, chaque branche
+obtient une adresse de prévisualisation.
+
+Aucune commande n'est donc nécessaire pour mettre en ligne : `git push` suffit.
+Un déploiement manuel reste possible depuis la machine :
+
+```bash
+npx vercel --prod
+```
+
+### 7.2 Variables d'environnement
+
+Quatre variables sont définies sur Vercel, en production et en prévisualisation.
+Toutes sont publiques : elles sont inscrites en clair dans le bundle.
+
+| Variable | Production | Prévisualisation |
+|---|---|---|
+| `VITE_SUPABASE_URL` | projet Supabase | idem |
+| `VITE_SUPABASE_ANON_KEY` | clé anon | idem |
+| `VITE_APP_ENV` | `production` | `staging` |
+| `VITE_APP_URL` | adresse de production | idem |
+
+Vercel refuse par défaut une valeur ressemblant à un secret dans une variable
+publique. La clé `anon` déclenche cette protection, à tort : elle est publique
+par conception, et son rôle JWT vaut bien `anon`. Le drapeau `--type config`
+lève l'objection.
+
+Aucun secret serveur n'est déposé sur Vercel : rien n'y tourne côté serveur pour
+l'instant. Les fonctions Edge vivent chez Supabase.
+
+### 7.3 Redirections d'authentification
+
+Les liens envoyés par courriel ne fonctionnent que si leur origine figure dans
+la liste d'autorisation Supabase. `npm run auth:sync` la maintient, et couvre à
+la fois la production, les prévisualisations Vercel et le développement local.
+
+`npm run auth:check` signale toute dérive, et fait partie de `npm run verify`.
+
+### 7.4 Rattacher un domaine
+
+```bash
+npx vercel domains add hbg-labs.fr
+```
+
+Vercel indique les enregistrements DNS à créer chez votre bureau
+d'enregistrement. Une fois le domaine actif, trois mises à jour suivent :
+
+1. `VITE_APP_URL` sur Vercel, en production et en prévisualisation ;
+2. `PRODUCTION_ORIGIN` dans `scripts/sync-auth-config.mjs`, puis
+   `npm run auth:sync` ;
+3. un redéploiement, pour que le sitemap et les balises canoniques portent la
+   nouvelle adresse.
+
+### 7.5 Un seul projet Supabase pour deux usages
+
+**À traiter avant d'accueillir un vrai client.**
+
+La production et le développement partagent aujourd'hui le même projet
+Supabase. La suite `npm run test:rls` crée et supprime des utilisateurs dans la
+base qui sert le site public.
+
+Le garde-fou existant refuse l'exécution si `VITE_APP_ENV` vaut `production`,
+mais en local cette variable vaut `development` tout en pointant vers la même
+base. La protection ne joue donc pas.
+
+C'est acceptable tant qu'aucun client n'est enregistré. Dès le premier, créez un
+second projet Supabase pour la production, et réservez celui-ci au
+développement (§48).
+
+---
+
+
+## 8. Résolution de problèmes
 
 | Symptôme | Cause | Correction |
 |---|---|---|

@@ -170,9 +170,18 @@ GitHub ──► Vercel ──► Production · Preview
               Stripe (checkout, billing, webhooks)
 ```
 
-Trois environnements (§48) : `development`, `staging`, `production`. Stripe reste
-en **mode test** hors production — `check-env.mjs` échoue sur une clé `sk_live_`
-avec `VITE_APP_ENV` ≠ `production`.
+En ligne sur **hbg-labs-client-platform.vercel.app**. Le dépôt GitHub est
+connecté : chaque poussée sur `main` déploie en production, chaque branche
+obtient une prévisualisation.
+
+Trois environnements applicatifs (§48) : `development`, `staging`, `production`.
+Stripe restera en **mode test** hors production, `check-env.mjs` échouant sur une
+clé `sk_live_` avec `VITE_APP_ENV` différent de `production`.
+
+**Réserve** : un seul projet Supabase sert aujourd'hui le développement et la
+production. À séparer avant le premier client réel, la suite de tests créant et
+supprimant des utilisateurs dans la base qui sert le site public. Détail dans
+[SETUP.md §7.5](./SETUP.md).
 
 Le SPA est réécrit vers `index.html` (`vercel.json`), avec en-têtes de sécurité
 et cache long sur les assets versionnés.

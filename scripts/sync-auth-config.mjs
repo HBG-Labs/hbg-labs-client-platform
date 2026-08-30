@@ -55,26 +55,51 @@ const RESET = '\x1b[0m';
  *
  * Les origines de production seront ajoutées ici au moment du déploiement.
  */
+/** Adresse de production, celle vers laquelle pointent les liens par defaut. */
+const PRODUCTION_ORIGIN = 'https://hbg-labs-client-platform.vercel.app';
+
+/**
+ * Configuration attendue.
+ *
+ * `site_url` est l'adresse de repli des liens envoyes par courriel. Elle vaut
+ * la production : c'est la seule qui ait du sens pour un client.
+ *
+ * `uri_allow_list` doit contenir chaque origine depuis laquelle un lien peut
+ * revenir. Une origine absente produit une redirection vers `site_url`, et
+ * l'utilisateur atterrit sur l'accueil sans comprendre pourquoi son lien n'a
+ * pas fonctionne.
+ *
+ * Les origines locales y figurent pour que le developpement reste possible :
+ * l'application transmet un `emailRedirectTo` construit depuis `VITE_APP_URL`,
+ * qui vaut localhost en local et la production en ligne.
+ *
+ * A RETIRER le jour ou un projet Supabase distinct servira la production.
+ * Tant qu'un seul projet sert les deux usages, ces origines doivent rester.
+ */
 const EXPECTED = {
-  site_url: 'http://localhost:5173',
+  site_url: PRODUCTION_ORIGIN,
   uri_allow_list: [
+    PRODUCTION_ORIGIN,
+    `${PRODUCTION_ORIGIN}/**`,
+    // Previsualisations Vercel : chaque branche recoit sa propre adresse.
+    'https://hbg-labs-client-platform-*-hbz2.vercel.app/**',
     'http://localhost:5173',
     'http://localhost:5173/**',
     'http://localhost:4173',
     'http://localhost:4173/**',
   ].join(','),
 
-  // Aligné sur supabase/config.toml. Un compte client donne accès aux données
-  // d'entreprise et à l'historique de facturation.
+  // Aligne sur supabase/config.toml. Un compte client donne acces aux donnees
+  // d'entreprise et a l'historique de facturation.
   password_min_length: 10,
   password_required_characters:
     'abcdefghijklmnopqrstuvwxyz:ABCDEFGHIJKLMNOPQRSTUVWXYZ:0123456789',
 
-  // Confirmation d'adresse exigée (§9). `true` désactiverait la vérification.
+  // Confirmation d'adresse exigee (§9). `true` desactiverait la verification.
   mailer_autoconfirm: false,
 
-  // Rotation des jetons de rafraîchissement : un jeton volé cesse de servir
-  // dès que le légitime propriétaire en obtient un nouveau.
+  // Rotation des jetons de rafraichissement : un jeton vole cesse de servir
+  // des que le legitime proprietaire en obtient un nouveau.
   refresh_token_rotation_enabled: true,
 };
 
