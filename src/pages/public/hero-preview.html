@@ -356,12 +356,14 @@
 
       /* Colonne texte mobile */
       .hero__text {
-        padding: 96px 24px 40px 24px;
-        justify-content: flex-start;
+        padding: 64px 24px 32px 24px;
+        min-height: calc(100svh - 52px);
+        justify-content: space-between;
+        width: 100%;
       }
 
       .hero__title {
-        font-size: clamp(48px, 13vw, 80px);
+        font-size: clamp(38px, 10vw, 72px);
       }
 
       .hero__subtitle { max-width: 100%; }
@@ -370,7 +372,12 @@
         object-position: 78% 38%;
       }
 
-      .hero__cta { padding: 18px 40px; }
+      .hero__cta {
+        margin-top: auto;
+        padding: 16px 36px;
+        width: 100%;
+        text-align: center;
+      }
     }
 
     /* ============================================================
