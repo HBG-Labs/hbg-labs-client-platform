@@ -52,29 +52,29 @@ export function HomePage() {
         />
 
         {/* Contenu textuel et boutons posés directement sur l'image */}
-        <Container width="wide" className="relative z-10 py-6 sm:py-20 lg:py-24 min-h-[calc(100svh-52px)] sm:min-h-0 flex flex-col justify-between sm:justify-center">
-          <div className="max-w-xl">
+        <Container width="wide" className="relative z-10 pt-8 pb-6 sm:py-20 lg:py-24 min-h-[calc(100svh-52px)] sm:min-h-0 flex flex-col justify-between sm:justify-center">
+          <div className="max-w-xl lg:max-w-2xl">
             <h1
               id="hero-heading"
-              className="text-balance font-serif font-normal text-accent text-[clamp(38px,8.5vw,96px)] leading-[1.05] tracking-[-0.01em]"
+              className="text-balance font-serif font-normal text-accent text-[clamp(48px,12vw,96px)] leading-[1.02] tracking-[-0.015em]"
             >
               Créer <br />l'impossible
             </h1>
 
-            <p className="mt-3 sm:mt-8 max-w-md font-sans text-[14px] sm:text-base leading-relaxed text-ink/85">
+            <p className="mt-4 sm:mt-8 max-w-sm sm:max-w-md font-sans text-[15px] sm:text-base leading-relaxed text-ink/90">
               On transforme vos idées les plus ambitieuses en sites web réels.
               Parce qu'«&nbsp;infaisable&nbsp;» n'est que le point de départ.
             </p>
           </div>
 
           {/* Boutons placés sous l'arbre sur mobile (en bas de l'écran), et à la suite sur grand écran */}
-          <div className="mt-auto pt-6 sm:mt-10 sm:pt-0 flex flex-col gap-3 sm:flex-row sm:items-center max-w-xl">
-            <Button asChild size="lg" variant="primary" className="w-full sm:w-auto px-8 sm:px-12 py-3.5 sm:py-5 text-[14px] sm:text-[15px] shadow-md justify-center text-center">
+          <div className="mt-auto pt-6 sm:mt-10 sm:pt-0 flex flex-col gap-3.5 sm:flex-row sm:items-center max-w-xl">
+            <Button asChild size="lg" variant="primary" className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 text-[15px] shadow-md justify-center text-center">
               <Link to="/devis">
                 Démarrer un projet
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-5 text-[14px] sm:text-[15px] bg-surface/90 backdrop-blur-sm hover:bg-surface border-ink/20 shadow-sm justify-center text-center">
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-6 sm:px-8 py-4 sm:py-5 text-[15px] bg-surface/90 backdrop-blur-sm hover:bg-surface border-ink/20 shadow-sm justify-center text-center">
               <Link to="/tarifs">Découvrir les offres</Link>
             </Button>
           </div>

@@ -356,17 +356,24 @@
 
       /* Colonne texte mobile */
       .hero__text {
-        padding: 64px 24px 32px 24px;
+        padding: 48px 24px 32px 24px;
         min-height: calc(100svh - 52px);
         justify-content: space-between;
         width: 100%;
       }
 
       .hero__title {
-        font-size: clamp(38px, 10vw, 72px);
+        font-size: clamp(48px, 12vw, 84px);
+        line-height: 1.02;
+        letter-spacing: -0.015em;
       }
 
-      .hero__subtitle { max-width: 100%; }
+      .hero__subtitle {
+        max-width: 100%;
+        font-size: 15px;
+        margin-top: 16px;
+        line-height: 1.6;
+      }
 
       .hero__image {
         object-position: 78% 38%;
