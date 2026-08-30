@@ -52,7 +52,7 @@ export function HomePage() {
         />
 
         {/* Contenu textuel et boutons posés directement sur l'image */}
-        <Container width="wide" className="relative z-10 pt-8 pb-6 sm:py-20 lg:py-24 min-h-[calc(100svh-52px)] sm:min-h-0 flex flex-col justify-between sm:justify-center">
+        <Container width="wide" className="relative z-10 pt-8 pb-12 sm:py-20 lg:py-24 min-h-[calc(100svh-52px)] sm:min-h-0 flex flex-col justify-between sm:justify-center">
           <div className="max-w-xl lg:max-w-2xl">
             <h1
               id="hero-heading"
@@ -67,8 +67,8 @@ export function HomePage() {
             </p>
           </div>
 
-          {/* Boutons placés sous l'arbre sur mobile (en bas de l'écran), et à la suite sur grand écran */}
-          <div className="mt-auto pt-6 sm:mt-10 sm:pt-0 flex flex-col gap-3.5 sm:flex-row sm:items-center max-w-xl">
+          {/* Boutons placés sous l'arbre sur mobile (en bas de l'écran), surélevés légèrement */}
+          <div className="mt-auto mb-3 sm:mb-0 pt-6 sm:mt-10 sm:pt-0 flex flex-col gap-3.5 sm:flex-row sm:items-center max-w-xl">
             <Button asChild size="lg" variant="primary" className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 text-[15px] shadow-md justify-center text-center">
               <Link to="/devis">
                 Démarrer un projet
