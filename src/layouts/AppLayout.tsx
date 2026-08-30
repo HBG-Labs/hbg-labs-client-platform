@@ -73,7 +73,7 @@ export function AppLayout() {
     <div className="flex min-h-screen flex-col bg-background">
       <header className="border-b border-border bg-surface/80 backdrop-blur-md">
         <Container>
-          <div className="flex h-[72px] items-center justify-between gap-4">
+          <div className="flex h-[56px] sm:h-[64px] items-center justify-between gap-4">
             <div className="flex items-center gap-10">
               <Logo />
 

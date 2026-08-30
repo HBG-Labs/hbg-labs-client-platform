@@ -93,7 +93,7 @@ export function PublicNavbar() {
                   'border-l border-border bg-background shadow-2xl md:hidden',
                 )}
               >
-                <div className="flex h-[72px] items-center justify-between border-b border-border px-6">
+                <div className="flex h-[52px] items-center justify-between border-b border-border px-6">
                   <Logo />
 
                   <Dialog.Close asChild>

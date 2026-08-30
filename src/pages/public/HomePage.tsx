@@ -41,7 +41,7 @@ export function HomePage() {
       />
 
       {/* ---- 1. Hero Éditorial Plein Cadre Immersion ---- */}
-      <section className="relative min-h-[calc(100vh-52px)] w-full overflow-hidden flex items-center bg-background">
+      <section className="relative min-h-[calc(100vh-52px)] min-h-[calc(100svh-52px)] w-full overflow-hidden flex items-center bg-background">
         {/* Image de fond plein cadre */}
         <img
           src="/images/hero-editorial.jpg"
@@ -52,27 +52,27 @@ export function HomePage() {
         />
 
         {/* Contenu textuel et boutons posés directement sur l'image */}
-        <Container width="wide" className="relative z-10 py-16 sm:py-24">
+        <Container width="wide" className="relative z-10 py-12 sm:py-20 lg:py-24">
           <div className="max-w-xl">
             <h1
               id="hero-heading"
-              className="text-balance font-serif font-normal text-accent text-[clamp(56px,7.5vw,104px)] leading-[1.05] tracking-[-0.01em]"
+              className="text-balance font-serif font-normal text-accent text-[clamp(44px,9vw,96px)] leading-[1.05] tracking-[-0.01em]"
             >
               Créer <br />l'impossible
             </h1>
 
-            <p className="mt-8 max-w-md font-sans text-[15px] sm:text-base leading-relaxed text-ink/80">
+            <p className="mt-6 sm:mt-8 max-w-md font-sans text-[15px] sm:text-base leading-relaxed text-ink/80">
               On transforme vos idées les plus ambitieuses en sites web réels.
               Parce qu'«&nbsp;infaisable&nbsp;» n'est que le point de départ.
             </p>
 
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <Button asChild size="lg" variant="primary" className="px-12 py-5 text-[15px] shadow-sm">
+            <div className="mt-8 sm:mt-10 flex flex-col gap-3.5 sm:flex-row sm:items-center">
+              <Button asChild size="lg" variant="primary" className="w-full sm:w-auto px-10 sm:px-12 py-4 sm:py-5 text-[15px] shadow-sm justify-center text-center">
                 <Link to="/devis">
                   Démarrer un projet
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="px-8 py-5 text-[15px] bg-surface/80 backdrop-blur-sm hover:bg-surface border-ink/20">
+              <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-6 sm:px-8 py-4 sm:py-5 text-[15px] bg-surface/80 backdrop-blur-sm hover:bg-surface border-ink/20 justify-center text-center">
                 <Link to="/tarifs">Découvrir les offres</Link>
               </Button>
             </div>

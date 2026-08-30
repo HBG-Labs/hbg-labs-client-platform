@@ -144,7 +144,7 @@ export function AdminLayout() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         {/* ---- En-tête mobile ---- */}
-        <header className="flex h-[72px] items-center justify-between border-b border-border bg-surface px-6 lg:hidden">
+        <header className="flex h-[56px] sm:h-[64px] items-center justify-between border-b border-border bg-surface px-4 sm:px-6 lg:hidden">
           <Logo />
 
           <div className="flex items-center gap-2">
