@@ -33,7 +33,8 @@
     "stripe:check": "node scripts/sync-stripe-catalog.mjs --check",
     "email:status": "node scripts/email-delivery.mjs",
     "email:on": "node scripts/email-delivery.mjs --on",
-    "email:off": "node scripts/email-delivery.mjs --off"
+    "email:off": "node scripts/email-delivery.mjs --off",
+    "preflight": "node scripts/preflight.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",

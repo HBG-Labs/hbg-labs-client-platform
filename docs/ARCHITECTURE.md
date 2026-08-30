@@ -45,7 +45,7 @@ webhook Stripe, création de session Checkout, envoi d'emails.
 ## 2. Structure du dépôt
 
 ```
-docs/                    architecture, base, RLS, contrats, installation
+docs/                    architecture, base, RLS, contrats, installation, exploitation
 scripts/                 gardes exécutées au build et en CI
 supabase/
   migrations/            21 fichiers, ordre §45
@@ -132,7 +132,7 @@ visible et contrainte, plutôt que de compter sur le frontend pour s'en souvenir
 
 | Barrière | Rôle |
 |---|---|
-| RLS `ENABLE` + `FORCE` sur les 19 tables | isolation par ligne |
+| RLS `ENABLE` + `FORCE` sur les 21 tables | isolation par ligne |
 | Privilèges retirés à `anon` | seconde barrière, indépendante des policies |
 | Triggers de garde | protection au niveau colonne |
 | Contraintes CHECK | cohérence — y compris contre `service_role` |
@@ -175,7 +175,14 @@ révoquez-le, ne vous contentez pas de le retirer.
 ```bash
 npm run verify      # schéma, privilèges, lint, types, tests, build, secrets
 npm run test:rls    # isolation multi-tenant (exige une base Supabase)
+npm run preflight   # les deux, plus la configuration réelle et ce qui reste manuel
 ```
+
+`preflight` distingue quatre issues et non deux : vérifié, faux, connu et non
+bloquant, et **manuel**. La quatrième porte tout le reste — sauvegardes,
+séparation des projets, validation de la politique de contenu sur une
+prévisualisation. Un contrôle qui les afficherait « vérifiées » ajouterait la
+certitude à l'ignorance. Détail dans [RUNBOOK.md](./RUNBOOK.md).
 
 `verify` tourne sans aucun compte externe, hormis l'audit de privilèges qui
 s'abstient proprement en l'absence de jeton. `test:rls` exige une base
@@ -224,7 +231,7 @@ et cache long sur les assets versionnés.
 | **7, livré** | journal d'audit alimenté et consultable | 18 |
 | **8, livré** | Stripe : Checkout, portail, webhook, abonnements et facturation | 8-12 |
 | **9, livré** | courriels transactionnels, supervision, intégration Vercel | 15, 17 |
-| 10 | préparation production | 19 |
+| **10, livré** | préparation production : contrôle avant déploiement, en-têtes, exploitation | 19 |
 
 Les lots 6 et 7 ont précédé Stripe faute de compte Stripe, et les courriels ont
 été séparés des notifications faute de service d'envoi : la partie en

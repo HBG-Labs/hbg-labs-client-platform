@@ -1,6 +1,6 @@
 # Schéma de données
 
-20 tables, 22 types énumérés, 32 fonctions, 17 migrations. Ordre d'application
+21 tables, 22 types énumérés, 40 fonctions, 22 migrations. Ordre d'application
 conforme à §45 ; la 16ᵉ est un correctif de privilèges décrit en
 [RLS.md §4bis](./RLS.md).
 

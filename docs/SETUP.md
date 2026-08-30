@@ -320,13 +320,26 @@ La production et le développement partagent aujourd'hui le même projet
 Supabase. La suite `npm run test:rls` crée et supprime des utilisateurs dans la
 base qui sert le site public.
 
-Le garde-fou existant refuse l'exécution si `VITE_APP_ENV` vaut `production`,
-mais en local cette variable vaut `development` tout en pointant vers la même
-base. La protection ne joue donc pas.
-
 C'est acceptable tant qu'aucun client n'est enregistré. Dès le premier, créez un
 second projet Supabase pour la production, et réservez celui-ci au
 développement (§48).
+
+**Deux garde-fous, et pourquoi il en faut deux.** Le premier refuse l'exécution
+si `VITE_APP_ENV` vaut `production`. Il ne suffit pas : cette variable décrit
+l'intention du poste de travail, pas l'identité de la base visée. Copier l'URL
+et la clé de service de la production dans un `.env` resté en `development`
+passerait à travers, et la suite balaierait la production.
+
+Le second garde-fou est posé **dans la base** et voyage avec elle. Sur le projet
+de production, à exécuter une fois :
+
+```sql
+update platform_settings set value = 'production' where key = 'environment';
+```
+
+Quelle que soit la machine, quel que soit le `.env`, `npm run test:rls` refuse
+alors de démarrer contre cette base. `npm run preflight` signale par ailleurs
+toute incohérence entre le marqueur et l'environnement visé.
 
 ---
 

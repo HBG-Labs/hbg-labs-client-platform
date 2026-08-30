@@ -17,7 +17,7 @@ import { createClient } from '@supabase/supabase-js';
 /** Préfixe de toutes les données de test. Doit rester aligné sur fixtures.ts. */
 const TEST_PREFIX = 'rlstest';
 
-export default function globalSetup(): () => Promise<void> {
+export default async function globalSetup(): Promise<() => Promise<void>> {
   loadEnv({ path: resolve(process.cwd(), '.env') });
 
   const missing = [
@@ -54,7 +54,63 @@ export default function globalSetup(): () => Promise<void> {
     );
   }
 
+  await refuseProductionDatabase();
+
   return sweepTestArtifacts;
+}
+
+/**
+ * Second garde-fou, posé DANS la base visée.
+ *
+ * `VITE_APP_ENV` décrit l'intention du poste de travail, pas l'identité de la
+ * base. Copier l'URL et la clé de service du projet de production dans un
+ * `.env` resté en « development » suffirait à faire passer le contrôle
+ * précédent — et la suite balaierait la production.
+ *
+ * `platform_settings.environment` voyage avec la base (migration 22). Quelle
+ * que soit la machine, quel que soit le fichier `.env`, une base marquée
+ * « production » refuse ces tests.
+ *
+ * Le réglage absent n'est pas bloquant : une base qui n'a pas encore reçu la
+ * migration 22 est forcément une base de développement.
+ */
+async function refuseProductionDatabase(): Promise<void> {
+  const supabase = createClient(
+    process.env.VITE_SUPABASE_URL as string,
+    process.env.SUPABASE_SERVICE_ROLE_KEY as string,
+    { auth: { persistSession: false } },
+  );
+
+  const { data, error } = await supabase
+    .from('platform_settings')
+    .select('value')
+    .eq('key', 'environment')
+    .maybeSingle();
+
+  if (error) {
+    // Une base injoignable se signalera d'elle-même au premier test. Ce
+    // contrôle ne doit pas transformer une panne de réseau en message
+    // trompeur sur l'environnement.
+    console.warn(`Marqueur d'environnement illisible : ${error.message}`);
+    return;
+  }
+
+  const environment = (data as { value: string } | null)?.value;
+
+  if (environment === 'production') {
+    throw new Error(
+      [
+        '',
+        'REFUS D’EXÉCUTION : la base visée se déclare « production ».',
+        '',
+        `Cible : ${process.env.VITE_SUPABASE_URL}`,
+        '',
+        'Ces tests créent et suppriment des utilisateurs et des organisations.',
+        'Vérifiez VITE_SUPABASE_URL et SUPABASE_SERVICE_ROLE_KEY dans .env.',
+        '',
+      ].join('\n'),
+    );
+  }
 }
 
 /**

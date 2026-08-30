@@ -5,11 +5,11 @@ maintenance, gestion des domaines, abonnements, facturation et support client.
 
 **En ligne : https://hbg-labs-client-platform.vercel.app**
 
-**Statut : lots 1 à 9 livrés, plateforme déployée.** Schéma multi-tenant vérifié sur Supabase, site
+**Statut : les dix lots sont livrés, plateforme déployée.** Schéma multi-tenant vérifié sur Supabase, site
 public complet, authentification réelle, espace d'administration permettant de
 créer un client de bout en bout, espace client affichant site et domaine,
 facturation Stripe raccordée du Checkout au webhook, courriels transactionnels,
-supervision et état des sites lu chez Vercel.
+supervision, état des sites lu chez Vercel, et contrôle avant mise en production.
 
 ---
 
@@ -33,6 +33,7 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 | Commande | Effet |
 |---|---|
 | `npm run dev` | serveur de développement |
+| `npm run preflight` | **contrôle avant mise en production** — suites, configuration, points manuels |
 | `npm run verify` | schéma, privilèges, lint, types, tests, build, scan de secrets |
 | `npm test` | tests de rendu des pages publiques |
 | `npm run test:rls` | isolation multi-tenant, 190 tests (exige une base Supabase) |
@@ -56,10 +57,11 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 | Document | Contenu |
 |---|---|
 | [ARCHITECTURE.md](./docs/ARCHITECTURE.md) | vue d'ensemble, décisions structurantes, feuille de route |
-| [DATABASE.md](./docs/DATABASE.md) | les 19 tables, leurs contraintes et le pourquoi |
+| [DATABASE.md](./docs/DATABASE.md) | les 21 tables, leurs contraintes et le pourquoi |
 | [RLS.md](./docs/RLS.md) | modèle d'autorisation, matrice d'accès, gardes |
 | [CONTRACTS.md](./docs/CONTRACTS.md) | contrat backend ↔ frontend — **à lire avant de développer un écran** |
 | [SETUP.md](./docs/SETUP.md) | installation, accès administrateur, déploiement, dépannage |
+| [RUNBOOK.md](./docs/RUNBOOK.md) | **exploitation** — incidents, retour arrière, rotation des secrets |
 
 ---
 
@@ -74,6 +76,40 @@ une session OWNER compromise ne peut promouvoir personne.
 
 Le compte n'existe pas encore. Inscrivez-vous avec cette adresse et le rôle
 s'appliquera automatiquement. Détail dans [SETUP.md §6](./docs/SETUP.md).
+
+## Ce que contient le lot 10
+
+Préparation à la production (§48, §50) :
+
+- `npm run preflight` : la checklist de déploiement devient exécutable — suites
+  automatisées, configuration réelle, et **énumération de ce que le script ne
+  peut pas voir**
+- Politique de sécurité du contenu ajoutée aux en-têtes, avec un contrôle qui
+  vérifie qu'elle autorise bien l'origine de la base
+- `docs/RUNBOOK.md` : que faire quand quelque chose ne va pas, par symptôme
+- Marqueur d'environnement en base, qui ferme la réserve ouverte depuis le lot 1
+
+**La quatrième issue compte autant que les trois autres.** Le contrôle distingue
+« vérifié et vrai », « vérifié et faux », « connu et non bloquant » — et
+**« manuel »**. Une checklist qui afficherait « vérifié » sur ce qu'elle n'a pas
+vu vaudrait moins que pas de checklist : elle ajouterait la certitude à
+l'ignorance. Les sauvegardes, la séparation des projets Supabase, la validation
+de la politique de contenu sur une prévisualisation restent listées comme telles.
+
+**Une base de production refuse désormais les tests destructifs.** La réserve
+tenait depuis le premier jour : un seul projet Supabase sert le développement et
+la production, et `npm run test:rls` y crée puis détruit des comptes. Le
+garde-fou existant lisait `VITE_APP_ENV`, c'est-à-dire l'intention du poste, pas
+l'identité de la base — copier l'URL de production dans un `.env` resté en
+développement passait à travers. Le marqueur est maintenant posé dans la base et
+voyage avec elle. Il a été vérifié dans les deux sens : basculé sur
+« production », la suite refuse de démarrer et nomme la cible.
+
+**La politique de contenu demande une validation humaine.** Elle est écrite,
+elle couvre les origines réellement contactées, et `preflight` vérifie qu'elle
+n'oublie pas la base. Mais un en-tête trop strict casse une application sans
+message au build : la vérification sur une URL de prévisualisation reste au
+programme, et le contrôle la réclame explicitement.
 
 ## Ce que contient le lot 9
 
@@ -331,7 +367,7 @@ témoignages, et mentions légales en attente de vos informations d'entreprise.
 
 - Projet Vite · React 19 · TypeScript · Tailwind 4, arborescence modulaire (§38)
 - 16 migrations SQL : 19 tables, 22 types, 30 fonctions (§45)
-  — 21 migrations et 40 fonctions aujourd'hui, lots 3 à 9 compris
+  — 22 migrations et 40 fonctions aujourd'hui, lots 3 à 10 compris
   (le lot 8 n'a demandé aucune migration : le schéma financier l'attendait)
 - RLS activée **et forcée** sur toutes les tables, 11 gardes par trigger
 - Suite de 136 tests d'isolation multi-tenant (§47), tous au vert
@@ -373,7 +409,7 @@ Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
 
 | Contrôle | Résultat |
 |---|---|
-| Application des 21 migrations sur base vierge | sans erreur |
+| Application des 22 migrations sur base vierge | sans erreur |
 | `npm run test:rls` : 190 tests, 10 fichiers | tous au vert |
 | `npm test` : 97 tests de rendu, de gardes et de confidentialité | tous au vert |
 | Écriture des formulaires depuis la clé anon | vérifiée contre la base réelle |
@@ -388,6 +424,8 @@ Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
 | `npm run check:privileges` | conforme, aucun surplus ni manque |
 | `npm run check:schema` | RLS activée et forcée sur 21/21 tables |
 | `npm run verify` | lint, types, build, aucun secret dans le bundle |
+| `npm run preflight` | aucun point bloquant hors comptes externes à ouvrir |
+| Garde-fou de base de production | dégradé volontairement, refus confirmé |
 
 ### Un défaut trouvé et corrigé
 

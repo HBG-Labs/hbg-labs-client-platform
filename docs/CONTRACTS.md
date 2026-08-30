@@ -141,6 +141,7 @@ Signalez plutôt que d'inventer (§51). État après le lot 9 :
 | Envoi d'emails (Resend) | **livré**, canal fermé par défaut | 9 |
 | Intégration Vercel (statut réel des sites) | **livré**, exige `vercel_project_id` | 9 |
 | Upload de pièces jointes | schéma et buckets prêts, pas de composant | 4 |
+| Contrôle avant déploiement, exploitation | **livré** — `npm run preflight`, [RUNBOOK.md](./RUNBOOK.md) | 10 |
 | Catalogue Stripe (`stripe_price_id`) | **dépend de `npm run stripe:sync`** | 8 |
 
 **Conséquence du dernier point :** une offre n'est souscriptible que si son prix
