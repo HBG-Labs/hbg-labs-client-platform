@@ -99,3 +99,17 @@ verify_jwt = true
 
 [functions.stripe-webhook]
 verify_jwt = false
+
+# -----------------------------------------------------------------------------
+# Fonction Edge — courriels transactionnels (§26)
+# -----------------------------------------------------------------------------
+# `verify_jwt = true` : le runtime valide le jeton, et la fonction exige ensuite
+# que ce jeton soit celui du backend (`role = service_role`). Sans ce second
+# contrôle, tout client connecté pourrait déclencher la vidange de la file de
+# courriels — l'appel est authentifié, il n'est pas pour autant légitime.
+#
+# L'ordonnancement est assuré par pg_cron, à l'intérieur de Supabase. Voir
+# docs/SETUP.md §9.
+
+[functions.notifications-dispatch]
+verify_jwt = true

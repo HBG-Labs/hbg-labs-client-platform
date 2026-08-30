@@ -289,6 +289,41 @@ Une **note interne ne produit aucune notification**, pour personne. Un titre
 dans la cloche du client trahirait l'existence d'une note que la policy
 `support_messages_select_member` lui cache.
 
+**Le canal EMAIL, et son interrupteur.** Depuis la migration 20,
+`emit_notification` crée une seconde ligne — `channel = 'EMAIL'`, `status =
+'PENDING'` — que la fonction Edge `notifications-dispatch` envoie via Resend et
+fait passer à `SENT`. Le statut ne bascule qu'après acceptation par Resend :
+« envoyé » ne doit pas vouloir dire « tenté ».
+
+Cette seconde ligne n'est créée que si `platform_settings.email_delivery` vaut
+`on`. Sans cet interrupteur, appliquer les migrations sans avoir configuré
+Resend ferait s'accumuler des lignes en attente, et leur envoi le jour du
+raccordement expédierait un arriéré : « vous avez un nouveau message » pour une
+demande close depuis des mois. Un courriel exact dans son contenu, faux dans son
+propos. Le répartiteur applique la même règle en aval — au-delà de vingt-quatre
+heures d'attente, la ligne passe à `FAILED` sans partir.
+
+Le titre, le corps et le lien sont ceux de la notification en application : une
+seule formulation, donc aucun risque que le courriel raconte autre chose que la
+cloche. La garde sur les notes internes est héritée sans être réécrite, puisque
+`notify_ticket_message` les écarte avant tout appel à `emit_notification`.
+
+### `platform_settings`
+
+Réglages d'exploitation — ce qui commande un comportement du serveur et doit
+rester vérifiable après coup. Ni préférences utilisateur, ni configuration
+applicative.
+
+Table **fermée**, comme `platform_access` et `stripe_webhook_events` : aucun
+privilège pour `anon` ni `authenticated`, RLS activée sans policy. Un réglage
+qui déclenche des envois vers des adresses réelles n'a pas à être basculable
+depuis un navigateur, fût-ce celui d'un administrateur plateforme. La bascule se
+fait par `npm run email:on` / `email:off`, qui passe par `service_role`.
+
+Une clé aujourd'hui : `email_delivery`, à `off` par défaut. La ligne existe dès
+la migration plutôt que d'être absente : un réglage présent s'inspecte, et sa
+valeur par défaut se lit sans ouvrir le code.
+
 ### `audit_logs` (§44)
 
 **Ajout seul.** Un journal modifiable ne prouve rien. Aucune policy INSERT,

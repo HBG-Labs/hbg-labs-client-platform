@@ -171,7 +171,7 @@ Aucun n'est nécessaire au lot 1.
 | **Stripe** (test mode) | Checkout, abonnements, webhooks (§19-23) | 8 — voir §8 |
 | **Vercel** | Hébergement de la plateforme et des sites clients (§33) | 2 puis 9 |
 | **GitHub** | Dépôt et déploiement continu | 2 |
-| **Resend** | Emails transactionnels (§26) | 9 |
+| **Resend** | Emails transactionnels (§26) | 9 — voir §9 |
 | **Sentry** | Supervision (§17) | 9 |
 
 Lors de la création du compte Stripe : rester en **mode test** (`sk_test_…`).
@@ -461,7 +461,130 @@ Carte refusée pour tester un échec : `4000 0000 0000 0002`.
 ---
 
 
-## 9. Résolution de problèmes
+## 9. Courriels transactionnels
+
+Les notifications en application fonctionnent sans rien de tout ceci (lot 6).
+Cette section ajoute le second canal : le courriel.
+
+Le canal est **fermé par défaut**, et il le reste tant que vous ne l'ouvrez pas
+explicitement à l'étape 9.4. Fermé, aucune ligne EMAIL n'est créée : rien ne
+s'accumule en attente d'un service qui n'est pas raccordé, et l'ouverture ne
+déclenche pas l'envoi d'un arriéré de messages périmés.
+
+### 9.1 Compte Resend
+
+1. Créez un compte sur resend.com ;
+2. **Vérifiez un domaine** (Domains → Add domain, puis les enregistrements DNS
+   qu'il indique). Sans domaine vérifié, Resend n'accepte d'envoyer qu'à votre
+   propre adresse, depuis `onboarding@resend.dev` : de quoi tester, pas de quoi
+   écrire à un client ;
+3. Créez une clé d'API (`re_…`).
+
+### 9.2 Secrets et déploiement
+
+```bash
+npx supabase secrets set RESEND_API_KEY=re_...
+npx supabase secrets set EMAIL_FROM="HBG Labs <notifications@votre-domaine.fr>"
+npx supabase secrets set APP_URL=https://hbg-labs-client-platform.vercel.app
+
+npx supabase functions deploy notifications-dispatch
+```
+
+`EMAIL_FROM` doit appartenir au domaine vérifié à l'étape précédente. `APP_URL`
+sert à construire les liens des courriels : les notifications ne stockent qu'un
+chemin (`/dashboard/demandes/…`), la contrainte
+`notifications_action_url_relative` interdisant une URL absolue en base — le
+domaine change d'un environnement à l'autre.
+
+### 9.3 Ordonnancement
+
+La fonction vide la file ; encore faut-il l'appeler. `pg_cron` s'en charge,
+depuis Supabase, sans service tiers. À exécuter une fois dans le SQL Editor :
+
+```sql
+create extension if not exists pg_cron;
+create extension if not exists pg_net;
+
+-- La clé service_role est déposée dans Vault, jamais écrite en clair dans une
+-- tâche : `cron.job` est lisible par tout rôle capable d'interroger le schéma.
+select vault.create_secret(
+  '<SUPABASE_SERVICE_ROLE_KEY>',
+  'service_role_key',
+  'Appel des fonctions Edge par pg_cron'
+);
+
+select cron.schedule(
+  'notifications-dispatch',
+  '* * * * *',
+  $job$
+  select net.http_post(
+    url := 'https://<ref>.supabase.co/functions/v1/notifications-dispatch',
+    headers := jsonb_build_object(
+      'Content-Type', 'application/json',
+      'Authorization', 'Bearer ' || (
+        select decrypted_secret from vault.decrypted_secrets
+         where name = 'service_role_key'
+      )
+    ),
+    body := '{}'::jsonb,
+    timeout_milliseconds := 25000
+  );
+  $job$
+);
+```
+
+Remplacez `<ref>` par la référence du projet (`SUPABASE_PROJECT_REF` dans
+`.env`).
+
+La fonction exige que l'appelant soit `service_role` : un utilisateur connecté
+qui atteindrait l'URL obtiendrait un 403. Vider une file d'envoi n'est pas un
+geste d'utilisateur.
+
+Pour arrêter la tâche : `select cron.unschedule('notifications-dispatch');`
+
+### 9.4 Ouvrir le canal
+
+```bash
+npm run email:status    # état, file d'attente, derniers motifs d'échec
+npm run email:on        # les notifications produisent désormais un courriel
+npm run email:off
+```
+
+L'interrupteur vit dans `platform_settings`, table fermée : ni `anon` ni
+`authenticated` n'y ont le moindre privilège, et aucune policy n'existe. Un
+réglage qui commande des envois vers des adresses réelles n'a pas à être
+basculable depuis une session de navigateur, fût-elle celle d'un administrateur.
+
+### 9.5 Vérifier
+
+1. `npm run email:on` ;
+2. répondez à une demande depuis `/admin/tickets/…` ;
+3. `npm run email:status` : une ligne apparaît « en file » ;
+4. moins d'une minute plus tard, elle passe dans « envoyés » et le courriel
+   arrive.
+
+Si la file ne se vide pas :
+
+```bash
+npx supabase functions logs notifications-dispatch
+```
+
+```sql
+select id, title, status, failure_reason, created_at
+  from notifications
+ where channel = 'EMAIL'
+ order by created_at desc
+ limit 20;
+```
+
+Un message resté plus de vingt-quatre heures en file passe à `FAILED` sans être
+envoyé : passé ce délai, « vous avez un nouveau message » désigne une demande
+souvent déjà close.
+
+---
+
+
+## 10. Résolution de problèmes
 
 | Symptôme | Cause | Correction |
 |---|---|---|
@@ -475,3 +598,6 @@ Carte refusée pour tester un échec : `4000 0000 0000 0002`.
 | Webhook en 400 chez Stripe | `STRIPE_WEBHOOK_SECRET` erroné | Redéfinir le secret, redéployer (§8.3) |
 | « La confirmation tarde » sur la facturation | Webhook non livré ou en échec | Journal des livraisons Stripe, puis `stripe_webhook_events` (§8.6) |
 | Portail « momentanément indisponible » | Customer portal non configuré | Activer la configuration par défaut (§8.4) |
+| Aucun courriel, file vide | Canal fermé | `npm run email:on` (§9.4) |
+| File qui grossit sans envoi | Tâche pg_cron absente ou en échec | Rejouer §9.3, puis `supabase functions logs` |
+| Courriels `FAILED` : « domain is not verified » | `EMAIL_FROM` hors du domaine vérifié | Vérifier le domaine dans Resend (§9.1) |

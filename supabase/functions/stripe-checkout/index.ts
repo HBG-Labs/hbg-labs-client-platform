@@ -1,5 +1,6 @@
 import { handleRequest, jsonResponse, HttpError } from '../_shared/http.ts';
-import { stripeClient, requireEnv } from '../_shared/stripe.ts';
+import { stripeClient } from '../_shared/stripe.ts';
+import { requireEnv } from '../_shared/env.ts';
 import {
   adminClient,
   callerClient,

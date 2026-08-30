@@ -30,7 +30,10 @@
     "auth:check": "node scripts/sync-auth-config.mjs --check",
     "check:access": "node scripts/check-platform-access.mjs",
     "stripe:sync": "node scripts/sync-stripe-catalog.mjs",
-    "stripe:check": "node scripts/sync-stripe-catalog.mjs --check"
+    "stripe:check": "node scripts/sync-stripe-catalog.mjs --check",
+    "email:status": "node scripts/email-delivery.mjs",
+    "email:on": "node scripts/email-delivery.mjs --on",
+    "email:off": "node scripts/email-delivery.mjs --off"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",

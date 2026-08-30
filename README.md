@@ -34,7 +34,7 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 | `npm run dev` | serveur de développement |
 | `npm run verify` | schéma, privilèges, lint, types, tests, build, scan de secrets |
 | `npm test` | tests de rendu des pages publiques |
-| `npm run test:rls` | isolation multi-tenant, 172 tests (exige une base Supabase) |
+| `npm run test:rls` | isolation multi-tenant, 182 tests (exige une base Supabase) |
 | `npm run check:schema` | analyse statique des migrations, sans base |
 | `npm run check:privileges` | privilèges réels de la base vs. attendus |
 | `npm run db:push` | applique les migrations au projet lié |
@@ -43,6 +43,8 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 | `npm run check:access` | qui peut atteindre l'administration |
 | `npm run stripe:check` | écarts entre le catalogue en base et Stripe |
 | `npm run stripe:sync` | publie les offres chez Stripe et écrit les identifiants |
+| `npm run email:status` | canal courriel : état, file d'attente, échecs |
+| `npm run email:on` / `email:off` | ouvre ou ferme le canal courriel |
 | `npm run auth:check` | écarts de configuration Auth du projet distant |
 | `npm run auth:sync` | aligne la configuration Auth sur le dépôt |
 
@@ -71,6 +73,46 @@ une session OWNER compromise ne peut promouvoir personne.
 
 Le compte n'existe pas encore. Inscrivez-vous avec cette adresse et le rôle
 s'appliquera automatiquement. Détail dans [SETUP.md §6](./docs/SETUP.md).
+
+## Ce que contient le lot 9
+
+*En cours. Première partie livrée : les courriels transactionnels.*
+
+Courriels transactionnels (§26) :
+
+- Fonction Edge `notifications-dispatch` : vide la file d'envoi via Resend,
+  ordonnancée par `pg_cron` à l'intérieur de Supabase
+- Les triggers de notification produisent une seconde ligne, canal EMAIL, dont
+  le titre, le corps et le lien sont ceux de la cloche — une seule formulation,
+  donc aucun risque que le courriel raconte autre chose
+- `npm run email:status` montre l'état du canal, la file et les motifs d'échec
+
+**Le canal est fermé par défaut, et l'interrupteur est en base.** La migration 18
+refusait de créer des lignes EMAIL faute de service d'envoi : « laisserait croire
+à des envois qui n'auront pas lieu ». Appliquer les migrations et configurer
+Resend restent deux gestes distincts, parfois séparés de plusieurs semaines.
+Tant que `platform_settings.email_delivery` vaut `off`, aucune ligne n'existe :
+rien ne s'accumule, et l'ouverture n'expédie pas un arriéré de messages périmés.
+
+`platform_settings` est une table fermée — aucun privilège pour `anon` ni
+`authenticated`, RLS activée sans policy. Un réglage qui déclenche des envois
+vers des adresses réelles n'a pas à être basculable depuis un navigateur, fût-ce
+celui d'un administrateur.
+
+**« Envoyé » ne veut pas dire « tenté ».** Le statut ne passe à `SENT` qu'après
+acceptation par Resend. Un échec laisse une ligne `FAILED` avec son motif, et
+`npm run email:status` en affiche les derniers.
+
+**Un courriel périmé ne part pas.** Au-delà de vingt-quatre heures d'attente, la
+ligne passe à `FAILED` sans être envoyée. Une panne de trois jours suivie d'une
+reprise expédierait sinon « vous avez un nouveau message » pour des demandes
+déjà closes : exact dans le contenu, faux dans le propos.
+
+Un `revoke` qui ne révoquait rien a été trouvé en vérifiant plutôt qu'en
+relisant, et corrigé par la migration 21 : sur PostgreSQL, retirer un privilège
+à `PUBLIC` ne retire rien à un rôle qui le détient nommément — ce que font les
+privilèges par défaut de Supabase pour `anon` et `authenticated`. Le `revoke`
+n'échouait pas ; il ne faisait simplement rien.
 
 ## Ce que contient le lot 8
 
@@ -246,7 +288,7 @@ témoignages, et mentions légales en attente de vos informations d'entreprise.
 
 - Projet Vite · React 19 · TypeScript · Tailwind 4, arborescence modulaire (§38)
 - 16 migrations SQL : 19 tables, 22 types, 30 fonctions (§45)
-  — 19 migrations et 39 fonctions aujourd'hui, lots 3 à 7 compris
+  — 21 migrations et 40 fonctions aujourd'hui, lots 3 à 9 compris
   (le lot 8 n'a demandé aucune migration : le schéma financier l'attendait)
 - RLS activée **et forcée** sur toutes les tables, 11 gardes par trigger
 - Suite de 136 tests d'isolation multi-tenant (§47), tous au vert
@@ -288,8 +330,8 @@ Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
 
 | Contrôle | Résultat |
 |---|---|
-| Application des 19 migrations sur base vierge | sans erreur |
-| `npm run test:rls` : 172 tests, 8 fichiers | tous au vert |
+| Application des 21 migrations sur base vierge | sans erreur |
+| `npm run test:rls` : 182 tests, 9 fichiers | tous au vert |
 | `npm test` : 91 tests de rendu, de gardes et de confidentialité | tous au vert |
 | Écriture des formulaires depuis la clé anon | vérifiée contre la base réelle |
 | Parcours d'authentification, 13 contrôles | vérifié contre la base réelle |
@@ -301,7 +343,7 @@ Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
 | Parcours des demandes, 25 contrôles | vérifié contre la base réelle |
 | `npm run auth:check` | configuration Auth conforme |
 | `npm run check:privileges` | conforme, aucun surplus ni manque |
-| `npm run check:schema` | RLS activée et forcée sur 19/19 tables |
+| `npm run check:schema` | RLS activée et forcée sur 21/21 tables |
 | `npm run verify` | lint, types, build, aucun secret dans le bundle |
 
 ### Un défaut trouvé et corrigé

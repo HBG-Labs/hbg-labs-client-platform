@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@^2.112.4';
-import { requireEnv } from './stripe.ts';
+import { requireEnv } from './env.ts';
 import { HttpError } from './http.ts';
 
 /**
@@ -30,6 +30,42 @@ export function adminClient(): SupabaseClient {
   return createClient(requireEnv('SUPABASE_URL'), requireEnv('SUPABASE_SERVICE_ROLE_KEY'), {
     auth: { persistSession: false, autoRefreshToken: false },
   });
+}
+
+/**
+ * Exige que l'appelant soit le backend lui-même, et non un utilisateur.
+ *
+ * Le runtime a déjà vérifié la signature du jeton (`verify_jwt = true`) : il
+ * reste à savoir QUI il désigne. Sans ce contrôle, n'importe quel client
+ * connecté pourrait déclencher une tâche d'exploitation — ici, vider la file
+ * de courriels — avec les droits de `service_role`.
+ *
+ * Deux formes de clé coexistent chez Supabase : le JWT historique, dont la
+ * charge utile porte `role`, et les clés `sb_secret_…`, qui n'en sont pas. Les
+ * deux sont acceptées, la seconde par comparaison directe avec le secret dont
+ * la fonction dispose déjà.
+ */
+export function requireServiceRole(request: Request): void {
+  const token = request.headers.get('Authorization')?.replace(/^Bearer\s+/i, '');
+
+  if (!token) {
+    throw new HttpError(401, 'Authentification requise.');
+  }
+
+  if (token === Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')) return;
+
+  const segments = token.split('.');
+
+  if (segments.length === 3 && segments[1]) {
+    try {
+      const payload = JSON.parse(atob(segments[1].replace(/-/g, '+').replace(/_/g, '/')));
+      if (payload.role === 'service_role') return;
+    } catch {
+      // Jeton illisible : traité comme non autorisé, ci-dessous.
+    }
+  }
+
+  throw new HttpError(403, 'Réservé au backend.');
 }
 
 export function callerClient(request: Request): SupabaseClient {

@@ -1,4 +1,5 @@
 import Stripe from 'npm:stripe@^18.0.0';
+import { requireEnv } from './env.ts';
 
 /**
  * Client Stripe partagé par les fonctions Edge.
@@ -50,19 +51,6 @@ export function stripeClient(): Stripe {
  * webhook Stripe dans ce runtime.
  */
 export const cryptoProvider = Stripe.createSubtleCryptoProvider();
-
-export function requireEnv(name: string): string {
-  const value = Deno.env.get(name);
-
-  if (!value) {
-    // Message explicite plutôt qu'une erreur réseau incompréhensible plus
-    // loin : la cause est un secret manquant, elle doit se lire comme telle
-    // dans les journaux de la fonction.
-    throw new Error(`Secret manquant : ${name}. Voir docs/SETUP.md §8.`);
-  }
-
-  return value;
-}
 
 /**
  * Un montant Stripe peut être `null` (facture sans total, essai gratuit).

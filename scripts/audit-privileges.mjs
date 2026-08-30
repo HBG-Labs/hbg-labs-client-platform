@@ -90,6 +90,8 @@ const EXPECTED = {
     quote_requests: ['SELECT', 'INSERT', 'UPDATE'],
     contact_messages: ['SELECT', 'INSERT', 'UPDATE'],
     // stripe_webhook_events : volontairement absente — aucun privilège (§21).
+    // platform_settings : idem — réglage d'exploitation, hors de portée de
+    // l'application, écriture réservée à service_role (migration 20).
   },
 };
 

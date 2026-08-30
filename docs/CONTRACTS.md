@@ -126,7 +126,7 @@ Ne cherchez jamais à lire `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`,
 
 ## 4. Ce qui n'existe pas encore
 
-Signalez plutôt que d'inventer (§51). État après le lot 8 :
+Signalez plutôt que d'inventer (§51). État après le lot 8, lot 9 en cours :
 
 | Besoin | État | Lot |
 |---|---|---|
@@ -138,7 +138,7 @@ Signalez plutôt que d'inventer (§51). État après le lot 8 :
 | Journal d'audit | **livré** | 7 |
 | Checkout Stripe, portail de facturation, webhook | **livré** | 8 |
 | Abonnement et facturation côté client | **livré** | 8 |
-| Envoi d'emails (Resend) | **absent** | 9 |
+| Envoi d'emails (Resend) | **livré**, canal fermé par défaut | 9 |
 | Intégration Vercel (statut réel des sites) | **absent** | 9 |
 | Upload de pièces jointes | schéma et buckets prêts, pas de composant | 4 |
 | Catalogue Stripe (`stripe_price_id`) | **dépend de `npm run stripe:sync`** | 8 |

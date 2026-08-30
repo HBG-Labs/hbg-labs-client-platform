@@ -48,12 +48,13 @@ webhook Stripe, création de session Checkout, envoi d'emails.
 docs/                    architecture, base, RLS, contrats, installation
 scripts/                 gardes exécutées au build et en CI
 supabase/
-  migrations/            19 fichiers, ordre §45
-  functions/             fonctions Edge Deno — Stripe uniquement
-    _shared/             clients Stripe et Supabase, HTTP, Customer
+  migrations/            21 fichiers, ordre §45
+  functions/             fonctions Edge Deno
+    _shared/             env, HTTP, clients Stripe et Supabase, gabarit courriel
     stripe-checkout/     ouverture d'une session de paiement
     stripe-portal/       portail de facturation Stripe
     stripe-webhook/      miroir local, seul chemin d'écriture financier
+    notifications-dispatch/  vidange de la file de courriels (Resend)
   seed.sql               grille tarifaire réelle — aucune donnée fictive
   config.toml
 tests/rls/               suite d'isolation multi-tenant (§47)
@@ -160,7 +161,7 @@ SERVEUR — Edge Functions, variables Vercel
   SUPABASE_SERVICE_ROLE_KEY     ← contourne TOUTE la RLS
   STRIPE_SECRET_KEY · STRIPE_WEBHOOK_SECRET
   VERCEL_TOKEN · VERCEL_TEAM_ID
-  RESEND_API_KEY · SENTRY_DSN
+  RESEND_API_KEY · EMAIL_FROM · APP_URL · SENTRY_DSN
 ```
 
 Un secret déployé dans un bundle doit être considéré comme compromis :

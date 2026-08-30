@@ -767,6 +767,27 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_settings: {
+        Row: {
+          description: string | null
+          key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          description?: string | null
+          key: string
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          description?: string | null
+          key?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -1346,6 +1367,20 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["platform_role"]
       }
+      email_delivery_enabled: { Args: never; Returns: boolean }
+      emit_notification: {
+        Args: {
+          p_action_url: string
+          p_body: string
+          p_organization_id: string
+          p_resource_id: string
+          p_resource_type: string
+          p_title: string
+          p_type: string
+          p_user_id: string
+        }
+        Returns: undefined
+      }
       is_org_manager: { Args: { p_organization_id: string }; Returns: boolean }
       is_org_member: { Args: { p_organization_id: string }; Returns: boolean }
       is_org_owner: { Args: { p_organization_id: string }; Returns: boolean }
@@ -1369,6 +1404,17 @@ export type Database = {
         Returns: boolean
       }
       ticket_organization_id: { Args: { p_ticket_id: string }; Returns: string }
+      write_audit_log: {
+        Args: {
+          p_action: string
+          p_actor_id: string
+          p_metadata: Json
+          p_organization_id: string
+          p_resource_id: string
+          p_resource_type: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       billing_interval: "day" | "week" | "month" | "year"

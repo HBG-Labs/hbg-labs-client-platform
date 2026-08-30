@@ -1,5 +1,6 @@
 import type Stripe from 'npm:stripe@^18.0.0';
-import { cryptoProvider, requireEnv, stripeClient, stripeDate } from '../_shared/stripe.ts';
+import { cryptoProvider, stripeClient, stripeDate } from '../_shared/stripe.ts';
+import { requireEnv } from '../_shared/env.ts';
 import { adminClient } from '../_shared/supabase.ts';
 import { IgnoredEvent, type MirrorContext } from './context.ts';
 import { linkCustomerIfMissing, resolveOrganizationId } from './organizations.ts';
