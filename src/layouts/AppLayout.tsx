@@ -16,6 +16,7 @@ import { useAuth } from '@/features/auth/auth-context';
 import { useIsPlatformStaff, useProfile } from '@/features/auth/useProfile';
 import { Logo } from '@/components/marketing/Logo';
 import { Container } from '@/components/ui/Layout';
+import { NotificationBell } from '@/components/notifications/NotificationBell';
 import { LoadingState } from '@/components/ui/States';
 
 /**
@@ -96,6 +97,8 @@ export function AppLayout() {
             </div>
 
             <div className="flex items-center gap-2">
+              <NotificationBell />
+
               {isStaff && (
                 <Link
                   to="/admin"

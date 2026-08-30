@@ -267,7 +267,27 @@ Valeurs en usage : `PAYMENT_RECEIVED`, `INVOICE_AVAILABLE`, `TICKET_UPDATED`,
 `INCIDENT_REPORTED`, `SUBSCRIPTION_CHANGED`, `PAYMENT_FAILED`.
 
 `action_url` est un chemin interne, jamais une URL absolue : le domaine diffère
-entre environnements.
+entre environnements. Il mène à `/admin/tickets/<id>` pour le personnel, à
+`/dashboard/demandes/<id>` pour le client : la même ressource, vue depuis deux
+espaces.
+
+**Qui écrit dans cette table.** Personne, depuis le navigateur. Les
+notifications naissent de trois triggers posés par la migration 18 sur
+`support_tickets` et `support_messages`, qui appellent `emit_notification`.
+L'application ne fait que lire et marquer « lu ».
+
+Cet INSERT passe malgré `force row level security` et une policy d'insertion
+réservée aux administrateurs, parce que `emit_notification` est SECURITY
+DEFINER et que son propriétaire `postgres` porte l'attribut BYPASSRLS. FORCE RLS
+soumet le propriétaire d'une table à ses policies ; BYPASSRLS l'en exempte, et
+l'emporte. Cette dépendance ne se lit dans aucun fichier du dépôt et elle est
+vitale : si elle disparaissait, l'écriture du message elle-même échouerait, le
+trigger appartenant à la même transaction. `tests/rls/07-notifications.test.ts`
+la vérifie contre une vraie base.
+
+Une **note interne ne produit aucune notification**, pour personne. Un titre
+dans la cloche du client trahirait l'existence d'une note que la policy
+`support_messages_select_member` lui cache.
 
 ### `audit_logs` (§44)
 

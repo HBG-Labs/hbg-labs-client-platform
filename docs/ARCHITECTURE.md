@@ -197,6 +197,11 @@ et cache long sur les assets versionnés.
 | **3, livré** | authentification Supabase, gardes de route, changement de mot de passe | 3 |
 | **4, livré** | espace d'administration, écrans client site et domaine | 6, 7 |
 | **5, livré** | demandes d'assistance et de modification | 13 |
-| 6 | Stripe : Checkout, webhooks, abonnements, facturation | 8-12 |
-| 7 | notifications et courriels, intégration Vercel, supervision | 15-17 |
-| 8 | audit complet, préparation production | 18, 19 |
+| **6, livré** | notifications en application | 16 |
+| 7 | Stripe : Checkout, webhooks, abonnements, facturation | 8-12 |
+| 8 | courriels transactionnels, intégration Vercel, supervision | 15, 17 |
+| 9 | audit complet, préparation production | 18, 19 |
+
+Le lot 6 a précédé Stripe faute de compte Stripe, et les courriels ont été
+séparés des notifications faute de service d'envoi : la partie en application
+ne dépend d'aucun des deux.

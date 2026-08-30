@@ -69,6 +69,33 @@ une session OWNER compromise ne peut promouvoir personne.
 Le compte n'existe pas encore. Inscrivez-vous avec cette adresse et le rôle
 s'appliquera automatiquement. Détail dans [SETUP.md §6](./docs/SETUP.md).
 
+## Ce que contient le lot 6
+
+Notifications en application (§26) :
+
+- Cloche dans l'espace client et dans l'administration, avec compteur de non
+  lues, panneau des vingt dernières et marquage « tout lu »
+- Une demande ouverte, une réponse reçue, un statut qui change : chacun
+  prévient la bonne personne, et personne d'autre
+- Une **note interne ne notifie personne**. Le titre d'une notification
+  apparaîtrait dans la cloche du client et trahirait l'existence d'une note que
+  la policy lui cache : la confidentialité se perdrait par un canal détourné,
+  sans qu'aucune policy soit violée
+- Un émetteur ne se notifie jamais lui-même
+
+Les notifications naissent de triggers PostgreSQL, non du navigateur. La policy
+d'insertion réserve l'écriture aux administrateurs plateforme — un client ne
+peut pas créer de notification pour HBG Labs, et c'est voulu. Émettre côté
+serveur, à partir de l'événement lui-même, respecte cette règle et rend le
+déclenchement impossible à oublier.
+
+Le canal EMAIL reste inutilisé : aucun service d'envoi n'est raccordé. Créer des
+lignes en attente laisserait croire à des envois qui n'auront pas lieu.
+
+Dix tests d'isolation supplémentaires vérifient l'émission contre la vraie base,
+dont la garde des notes internes — dégradée volontairement une fois pour
+confirmer que le test la détecte.
+
 ## Ce que contient le lot 5
 
 Demandes d'assistance et de modification (§24, §25, §31), de bout en bout :
@@ -139,16 +166,18 @@ témoignages, et mentions légales en attente de vos informations d'entreprise.
 
 - Projet Vite · React 19 · TypeScript · Tailwind 4, arborescence modulaire (§38)
 - 16 migrations SQL : 19 tables, 22 types, 30 fonctions (§45)
+  — 18 migrations et 36 fonctions aujourd'hui, lots 3 à 6 compris
 - RLS activée **et forcée** sur toutes les tables, 11 gardes par trigger
 - Suite de 136 tests d'isolation multi-tenant (§47), tous au vert
+  — 157 aujourd'hui, avec le verrou d'accès et les notifications
 - Design system : jetons de couleur, `Button`, `Card`, `StatusBadge`, états
 - Quatre gardes automatiques : secrets, environnement, schéma, privilèges (§36)
 - Grille tarifaire réelle en base, jamais codée en dur (§7)
 
 ## Ce qu'il ne contient pas
 
-Abonnements et facturation (Stripe), intégration Vercel, notifications, journal
-d'audit alimenté. Rien de tout cela n'est esquissé ni simulé : conformément au §57,
+Abonnements et facturation (Stripe), intégration Vercel, notifications par
+courriel, journal d'audit alimenté. Rien de tout cela n'est esquissé ni simulé : conformément au §57,
 une fonctionnalité absente est déclarée absente plutôt que maquettée.
 
 ## Trois points en attente de votre part
@@ -179,12 +208,13 @@ Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
 | Contrôle | Résultat |
 |---|---|
 | Application des 16 migrations sur base vierge | sans erreur |
-| `npm run test:rls` : 136 tests, 5 fichiers | tous au vert |
-| `npm test` : 49 tests de rendu, de gardes et de confidentialité | tous au vert |
+| `npm run test:rls` : 157 tests, 7 fichiers | tous au vert |
+| `npm test` : 60 tests de rendu, de gardes et de confidentialité | tous au vert |
 | Écriture des formulaires depuis la clé anon | vérifiée contre la base réelle |
 | Parcours d'authentification, 13 contrôles | vérifié contre la base réelle |
 | Parcours administrateur, 19 contrôles | vérifié contre la base réelle |
 | Verrou d'accès à l'administration, 11 tests | vérifié contre la base réelle |
+| Émission des notifications, 37 contrôles | vérifiée contre la base réelle |
 | Parcours des demandes, 25 contrôles | vérifié contre la base réelle |
 | `npm run auth:check` | configuration Auth conforme |
 | `npm run check:privileges` | conforme, aucun surplus ni manque |

@@ -156,6 +156,39 @@ retiré aussitôt après. Un client ne peut pas le poser lui-même : PostgREST
 n'expose que les paramètres `request.*` qu'il contrôle, et aucune fonction
 publiée n'appelle `set_config`.
 
+### Émettre pour autrui : `emit_notification`
+
+Une notification doit atteindre **quelqu'un d'autre** que son émetteur. Or
+`notifications_insert_admin` réserve l'insertion aux administrateurs
+plateforme — un client ne peut pas créer de notification pour HBG Labs, et
+c'est exactement ce qu'on veut.
+
+Les trois triggers de la migration 18 émettent donc côté serveur, depuis
+`emit_notification`, SECURITY DEFINER dont `EXECUTE` est révoqué de `public`,
+`anon` et `authenticated`.
+
+Ce qui fait passer cet INSERT n'est pas une policy. C'est que le propriétaire
+de la fonction, `postgres`, porte l'attribut **BYPASSRLS**. `force row level
+security` soumet le propriétaire d'une table à ses policies ; BYPASSRLS l'en
+exempte, et l'emporte.
+
+| Mécanisme | Effet |
+|---|---|
+| `security definer` | la fonction s'exécute sous `postgres`, non sous l'appelant |
+| `postgres` a `BYPASSRLS` | les policies de `notifications` ne s'appliquent pas |
+| `revoke execute` | aucun rôle applicatif ne peut l'appeler directement |
+
+Cette dépendance ne se lit dans aucun fichier du dépôt : elle tient à un
+attribut de rôle posé par Supabase. Si elle disparaissait, ce n'est pas
+seulement la notification qui manquerait — c'est l'écriture du message qui
+échouerait, le trigger appartenant à la même transaction.
+`tests/rls/07-notifications.test.ts` la vérifie à chaque exécution de la suite.
+
+**Une note interne ne notifie personne.** Le titre d'une notification
+apparaîtrait dans la cloche du client et trahirait l'existence d'une note que
+`support_messages_select_member` lui cache. La confidentialité se perdrait par
+un canal détourné, sans qu'aucune policy soit violée.
+
 ---
 
 ## 3bis. Qui peut atteindre l'administration

@@ -102,7 +102,7 @@ La suite crée deux organisations, quatre utilisateurs et un jeu complet de
 données métier, exécute la matrice de §47 sur chaque table, puis détruit tout.
 Compter deux à trois minutes selon la latence réseau.
 
-Résultat attendu : **136 tests au vert**, 5 fichiers.
+Résultat attendu : **157 tests au vert**, 7 fichiers.
 
 Enchaînez avec `npm run check:privileges`, qui compare les privilèges réels de
 la base aux privilèges attendus. Les deux sont complémentaires : les tests

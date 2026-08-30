@@ -18,6 +18,7 @@ import { useProfile } from '@/features/auth/useProfile';
 import { PLATFORM_ROLE_LABELS } from '@/types/domain';
 import { Logo } from '@/components/marketing/Logo';
 import { StatusBadge } from '@/components/ui/StatusBadge';
+import { NotificationBell } from '@/components/notifications/NotificationBell';
 import { LoadingState } from '@/components/ui/States';
 
 /**
@@ -119,10 +120,18 @@ export function AdminLayout() {
       {/* ---- Barre latérale, grand écran ---- */}
       <aside className="hidden w-64 shrink-0 flex-col border-r border-border bg-surface lg:flex">
         <div className="border-b border-border p-4">
-          <Logo />
-          <p className="mt-2 text-xs uppercase tracking-wider text-muted">
-            Administration
-          </p>
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <Logo />
+              <p className="mt-2 text-xs uppercase tracking-wider text-muted">
+                Administration
+              </p>
+            </div>
+
+            {/* La cloche vit dans l'en-tête de la barre latérale : c'est le seul
+                élément permanent de l'administration sur grand écran. */}
+            <NotificationBell align="start" />
+          </div>
         </div>
 
         <nav aria-label="Administration" className="flex-1 overflow-y-auto p-3">
@@ -137,47 +146,51 @@ export function AdminLayout() {
         <header className="flex h-16 items-center justify-between border-b border-border bg-surface px-4 lg:hidden">
           <Logo />
 
-          <Dialog.Root open={open} onOpenChange={setOpen}>
-            <Dialog.Trigger asChild>
-              <button
-                type="button"
-                className="inline-flex size-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                aria-label="Ouvrir le menu d’administration"
-              >
-                <Menu className="size-6" aria-hidden="true" />
-              </button>
-            </Dialog.Trigger>
+          <div className="flex items-center gap-1">
+            <NotificationBell />
 
-            <Dialog.Portal>
-              <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50 lg:hidden" />
-              <Dialog.Content className="fixed inset-y-0 left-0 z-50 flex w-[85%] max-w-xs flex-col border-r border-border bg-surface shadow-xl lg:hidden">
-                <div className="flex h-16 items-center justify-between border-b border-border px-4">
-                  <Dialog.Title className="text-sm font-medium text-muted">
-                    Administration
-                  </Dialog.Title>
-                  <Dialog.Close asChild>
-                    <button
-                      type="button"
-                      className="inline-flex size-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                      aria-label="Fermer le menu"
-                    >
-                      <X className="size-6" aria-hidden="true" />
-                    </button>
-                  </Dialog.Close>
-                </div>
+            <Dialog.Root open={open} onOpenChange={setOpen}>
+              <Dialog.Trigger asChild>
+                <button
+                  type="button"
+                  className="inline-flex size-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  aria-label="Ouvrir le menu d’administration"
+                >
+                  <Menu className="size-6" aria-hidden="true" />
+                </button>
+              </Dialog.Trigger>
 
-                <Dialog.Description className="sr-only">
-                  Navigation de l’espace d’administration
-                </Dialog.Description>
+              <Dialog.Portal>
+                <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50 lg:hidden" />
+                <Dialog.Content className="fixed inset-y-0 left-0 z-50 flex w-[85%] max-w-xs flex-col border-r border-border bg-surface shadow-xl lg:hidden">
+                  <div className="flex h-16 items-center justify-between border-b border-border px-4">
+                    <Dialog.Title className="text-sm font-medium text-muted">
+                      Administration
+                    </Dialog.Title>
+                    <Dialog.Close asChild>
+                      <button
+                        type="button"
+                        className="inline-flex size-11 items-center justify-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                        aria-label="Fermer le menu"
+                      >
+                        <X className="size-6" aria-hidden="true" />
+                      </button>
+                    </Dialog.Close>
+                  </div>
 
-                <nav aria-label="Administration" className="flex-1 overflow-y-auto p-3">
-                  <NavigationList onNavigate={() => setOpen(false)} />
-                </nav>
+                  <Dialog.Description className="sr-only">
+                    Navigation de l’espace d’administration
+                  </Dialog.Description>
 
-                {sidebarFooter}
-              </Dialog.Content>
-            </Dialog.Portal>
-          </Dialog.Root>
+                  <nav aria-label="Administration" className="flex-1 overflow-y-auto p-3">
+                    <NavigationList onNavigate={() => setOpen(false)} />
+                  </nav>
+
+                  {sidebarFooter}
+                </Dialog.Content>
+              </Dialog.Portal>
+            </Dialog.Root>
+          </div>
         </header>
 
         <main id="contenu-principal" className="min-w-0 flex-1">

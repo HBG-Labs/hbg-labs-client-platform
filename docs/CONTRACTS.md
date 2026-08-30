@@ -167,6 +167,7 @@ Réutilisez ces briques plutôt que d'en écrire de nouvelles.
 | `Dialog`, `DialogContent` | `components/ui/Dialog` | modale Radix, focus piégé |
 | `AdminPageHeader` | `layouts/AdminLayout` | en-tête d'écran d'administration |
 | `TicketConversation` | `components/tickets/` | fil de demande, client et admin |
+| `NotificationBell` | `components/notifications/` | cloche, compteur et panneau |
 
 ### Un service, deux publics
 
@@ -177,6 +178,26 @@ notes internes parce que `support_messages_select_member` impose
 
 Reprenez ce modèle. Écrire deux services aurait dupliqué la logique et créé un
 endroit où l'oubli d'un filtre exposerait une note interne.
+
+### Notifications : l'application lit, elle n'écrit pas
+
+`notifications.service.ts` expose la lecture, le compteur de non lues et le
+marquage « lu ». Il n'y a **pas de fonction d'émission**, et il ne doit pas y
+en avoir : les notifications naissent de triggers PostgreSQL, à partir de
+l'événement lui-même.
+
+Deux raisons. La policy d'insertion réserve l'écriture aux administrateurs
+plateforme, ce qui interdit à un client de notifier HBG Labs. Et un
+déclenchement côté serveur ne s'oublie pas : toute écriture dans
+`support_messages`, d'où qu'elle vienne, produit sa notification.
+
+Pour notifier sur une nouvelle ressource, ajoutez un trigger dans une
+migration. N'appelez jamais `emit_notification` depuis le navigateur :
+`EXECUTE` en est révoqué, l'appel échouera.
+
+Le canal EMAIL existe dans le schéma mais reste inutilisé tant qu'aucun service
+d'envoi n'est raccordé. `fetchNotifications` filtre donc sur `IN_APP` : afficher
+une ligne EMAIL en attente laisserait croire à un envoi qui n'aura pas lieu.
 
 ### Formulaires : le piège de la chaîne vide
 
