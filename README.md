@@ -69,6 +69,37 @@ une session OWNER compromise ne peut promouvoir personne.
 Le compte n'existe pas encore. Inscrivez-vous avec cette adresse et le rôle
 s'appliquera automatiquement. Détail dans [SETUP.md §6](./docs/SETUP.md).
 
+## Ce que contient le lot 7
+
+Journal d'audit alimenté (§44) :
+
+- Dix-neuf triggers PostgreSQL consignent les actions sensibles : connexions,
+  accès à l'administration, rôles plateforme, clients, adhésions, sites,
+  domaines, demandes, abonnements
+- Écran `/admin/journal` avec filtre par type d'action et par auteur ; les
+  gestes qui ouvrent l'accès aux données de tous les clients y sont signalés
+- Chaque entrée porte l'auteur, son rôle et son organisation au moment de
+  l'action, ainsi que la valeur d'avant et celle d'après
+
+La table existait depuis le lot 1, protégée et documentée. Elle était vide.
+Un journal inviolable qui n'enregistre rien offre exactement les mêmes
+garanties que pas de journal, en donnant l'impression du contraire.
+
+Les entrées naissent de triggers, non d'appels applicatifs. Un appel s'oublie,
+se contourne, et surtout peut réussir l'action en ratant la trace : le trigger
+vit dans la même transaction, si le journal échoue le changement échoue avec
+lui.
+
+**Pas d'adresse IP.** La colonne existe, §44 la demande « si légalement
+approprié », mais un trigger ne connaît pas l'adresse de l'appelant et la
+faire remonter par le navigateur reviendrait à journaliser une valeur
+falsifiable. Une IP forgeable donnerait au journal une autorité qu'il n'a pas.
+
+Trois défauts ont été trouvés en vérifiant plutôt qu'en relisant, tous
+corrigés : les triggers rendaient toute suppression d'organisation impossible,
+le balayage des tests annonçait des suppressions qui échouaient, et le
+démontage nettoyait le journal après avoir perdu le moyen de le retrouver.
+
 ## Ce que contient le lot 6
 
 Notifications en application (§26) :
@@ -169,7 +200,7 @@ témoignages, et mentions légales en attente de vos informations d'entreprise.
   — 18 migrations et 36 fonctions aujourd'hui, lots 3 à 6 compris
 - RLS activée **et forcée** sur toutes les tables, 11 gardes par trigger
 - Suite de 136 tests d'isolation multi-tenant (§47), tous au vert
-  — 157 aujourd'hui, avec le verrou d'accès et les notifications
+  — 172 aujourd'hui, avec le verrou d'accès, les notifications et le journal
 - Design system : jetons de couleur, `Button`, `Card`, `StatusBadge`, états
 - Quatre gardes automatiques : secrets, environnement, schéma, privilèges (§36)
 - Grille tarifaire réelle en base, jamais codée en dur (§7)
@@ -208,13 +239,15 @@ Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
 | Contrôle | Résultat |
 |---|---|
 | Application des 16 migrations sur base vierge | sans erreur |
-| `npm run test:rls` : 157 tests, 7 fichiers | tous au vert |
-| `npm test` : 60 tests de rendu, de gardes et de confidentialité | tous au vert |
+| `npm run test:rls` : 172 tests, 8 fichiers | tous au vert |
+| `npm test` : 72 tests de rendu, de gardes et de confidentialité | tous au vert |
 | Écriture des formulaires depuis la clé anon | vérifiée contre la base réelle |
 | Parcours d'authentification, 13 contrôles | vérifié contre la base réelle |
 | Parcours administrateur, 19 contrôles | vérifié contre la base réelle |
 | Verrou d'accès à l'administration, 11 tests | vérifié contre la base réelle |
 | Émission des notifications, 37 contrôles | vérifiée contre la base réelle |
+| Journal d'audit : émission, contenu et surface d'écriture | vérifiés contre la base réelle |
+| Aucun résidu laissé par la suite en base | vérifié après exécution |
 | Parcours des demandes, 25 contrôles | vérifié contre la base réelle |
 | `npm run auth:check` | configuration Auth conforme |
 | `npm run check:privileges` | conforme, aucun surplus ni manque |

@@ -462,6 +462,12 @@ async function buildFixtures(admin: Db, runId: string): Promise<Fixtures> {
 export async function teardownFixtures(f: Fixtures): Promise<void> {
   const { admin } = f;
   const orgs = [f.orgA, f.orgB];
+  const actors = [
+    f.userA.userId,
+    f.userA2.userId,
+    f.userB.userId,
+    f.platformAdmin.userId,
+  ];
 
   await admin.from('payments').delete().in('organization_id', orgs);
   await admin.from('invoices').delete().in('organization_id', orgs);
@@ -470,16 +476,23 @@ export async function teardownFixtures(f: Fixtures): Promise<void> {
   // support_messages, ticket_attachments, domains et websites partent en
   // cascade avec les tickets puis l'organisation.
   await admin.from('support_tickets').delete().in('organization_id', orgs);
+
+  // Journal d'audit, PREMIÈRE passe — impérativement avant la suppression des
+  // organisations.
+  //
+  // `audit_logs.organization_id` est en ON DELETE SET NULL : la trace d'une
+  // action survit à l'organisation qu'elle visait, et c'est voulu. Mais elle
+  // devient alors introuvable par ce critère. Nettoyer après aurait laissé
+  // derrière soi tout ce que le montage a journalisé — quatre-vingt-dix-sept
+  // lignes lors de la première tentative.
+  await admin.from('audit_logs').delete().in('organization_id', orgs);
+
   await admin.from('organizations').delete().in('id', orgs);
 
-  // Les journaux d'audit référencent l'organisation en ON DELETE SET NULL :
-  // ils survivent, à dessein. On retire ceux produits par ces tests.
-  await admin.from('audit_logs').delete().in('actor_user_id', [
-    f.userA.userId,
-    f.userA2.userId,
-    f.userB.userId,
-    f.platformAdmin.userId,
-  ]);
+  // La suppression ci-dessus a fait tomber les adhésions, donc écrit de
+  // nouvelles lignes MEMBER_REMOVED. Leur rattachement a migré dans `metadata`,
+  // la colonne ne pouvant plus référencer une organisation disparue.
+  await admin.from('audit_logs').delete().in('metadata->>organization_id', orgs);
 
   // L'adresse retirée de la liste d'accès : sans cela, elle s'y accumulerait
   // à chaque exécution de la suite.
@@ -489,4 +502,18 @@ export async function teardownFixtures(f: Fixtures): Promise<void> {
     await actor.db.auth.signOut();
     await admin.auth.admin.deleteUser(actor.userId);
   }
+
+  // Journal d'audit, SECONDE passe : ce qui n'a jamais eu d'organisation.
+  // Connexions, rôles plateforme, liste d'accès — y compris les lignes que le
+  // démontage vient lui-même de produire.
+  await admin.from('audit_logs').delete().in('actor_user_id', actors);
+  await admin.from('audit_logs').delete().in('resource_id', actors);
+  await admin.from('audit_logs').delete().eq('resource_id', f.platformAdmin.email);
+  await admin.from('audit_logs').delete().like('actor_email', `${TEST_PREFIX}-%`);
+
+  // Dernier filet : une adhésion retirée est identifiée par son propre
+  // identifiant, non par celui de son titulaire. Si elle échappe aux passes
+  // ci-dessus — l'ordre exact des cascades n'est pas garanti — c'est le seul
+  // critère qui la rattrape encore.
+  await admin.from('audit_logs').delete().in('metadata->>user_id', actors);
 }

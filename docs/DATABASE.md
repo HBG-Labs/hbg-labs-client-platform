@@ -305,10 +305,30 @@ un collègue.
 `ip_address` est une donnée personnelle sous RGPD : nullable, renseignée
 seulement pour les événements de sécurité, jamais exposée au client.
 
-Actions en usage : `USER_SIGNED_IN`, `USER_SIGNED_OUT`, `PROFILE_UPDATED`,
-`ORGANIZATION_UPDATED`, `MEMBER_INVITED`, `MEMBER_REMOVED`, `MEMBER_ROLE_CHANGED`,
-`WEBSITE_CREATED`, `WEBSITE_UPDATED`, `DOMAIN_UPDATED`, `SUBSCRIPTION_CHANGED`,
-`TICKET_CREATED`, `TICKET_STATUS_CHANGED`, `ADMIN_ACTION`.
+**Qui écrit.** Dix-neuf triggers posés par la migration 19, jamais
+l'application. Un appel applicatif s'oublie, se contourne, et peut réussir
+l'action en ratant la trace ; un trigger vit dans la transaction du changement.
+
+Actions émises : `USER_SIGNED_IN`, `PROFILE_UPDATED`, `PLATFORM_ROLE_CHANGED`,
+`PLATFORM_ACCESS_GRANTED`, `PLATFORM_ACCESS_REVOKED`, `ORGANIZATION_CREATED`,
+`ORGANIZATION_UPDATED`, `MEMBER_INVITED`, `MEMBER_ROLE_CHANGED`,
+`MEMBER_REMOVED`, `WEBSITE_CREATED`, `WEBSITE_UPDATED`,
+`WEBSITE_STATUS_CHANGED`, `DOMAIN_CREATED`, `DOMAIN_UPDATED`,
+`DOMAIN_STATUS_CHANGED`, `TICKET_CREATED`, `TICKET_UPDATED`,
+`TICKET_STATUS_CHANGED`, `SUBSCRIPTION_CHANGED`.
+
+`metadata` ne contient que les colonnes énumérées par le trigger : sur une
+modification, sous la forme `{ "colonne": { "avant": …, "apres": … } }`. Rien
+n'est repris par défaut, ce qui évite qu'une colonne ajoutée demain se retrouve
+journalisée sans qu'on l'ait voulu. Le contenu des messages n'y figure jamais :
+une note interne recopiée dans le journal échapperait à la policy qui la
+protège.
+
+**Suppression d'une organisation.** Retirer une organisation fait tomber ses
+adhésions, ce qui journalise `MEMBER_REMOVED` — dont la ligne référencerait une
+organisation qui n'existe déjà plus. Le rattachement passe alors dans
+`metadata.organization_id` et la colonne reste nulle. Sans cela, la contrainte
+de clé étrangère rendrait toute suppression d'organisation impossible.
 
 ### `stripe_webhook_events` (§21)
 

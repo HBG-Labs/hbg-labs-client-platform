@@ -221,6 +221,10 @@ export const router = createBrowserRouter([
                   'TicketDetailPage',
                 ),
               },
+              {
+                path: 'admin/journal',
+                lazy: lazyRoute(() => import('@/pages/admin/JournalPage'), 'JournalPage'),
+              },
             ],
           },
         ],

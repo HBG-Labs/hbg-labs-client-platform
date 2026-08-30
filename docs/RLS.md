@@ -156,6 +156,31 @@ retiré aussitôt après. Un client ne peut pas le poser lui-même : PostgREST
 n'expose que les paramètres `request.*` qu'il contrôle, et aucune fonction
 publiée n'appelle `set_config`.
 
+### Journaliser pour autrui : `write_audit_log`
+
+`log_audit_event` impose l'auteur depuis `auth.uid()` — un paramètre `actor_id`
+permettrait d'attribuer une suppression à un collègue. Deux appelants ne
+peuvent pas s'en contenter :
+
+- les triggers, qui journalisent le retrait d'une adhésion. À cet instant
+  l'auteur n'est plus membre, et la vérification d'appartenance ferait échouer
+  la suppression elle-même ;
+- le trigger de connexion, exécuté par GoTrue sans revendication JWT :
+  `auth.uid()` y vaut NULL et la ligne serait anonyme.
+
+D'où `write_audit_log`, à auteur explicite, dont `EXECUTE` est révoqué de
+**tous** les rôles applicatifs, `service_role` compris. Elle n'affaiblit pas la
+garantie de `log_audit_event` : ce qui la protège n'est pas l'absence de
+paramètre, c'est l'impossibilité de l'appeler.
+
+Le trigger de connexion porte un bloc `exception` qui avale ses erreurs. C'est
+le seul du dépôt. Un trigger sur `auth.users` qui échoue empêche de se
+connecter : entre perdre une ligne de journal et verrouiller tout le monde
+dehors, la connexion l'emporte. Ailleurs, l'échec du journal DOIT annuler
+l'action.
+
+---
+
 ### Émettre pour autrui : `emit_notification`
 
 Une notification doit atteindre **quelqu'un d'autre** que son émetteur. Or

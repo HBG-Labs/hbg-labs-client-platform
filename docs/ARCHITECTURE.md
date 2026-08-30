@@ -198,9 +198,10 @@ et cache long sur les assets versionnés.
 | **4, livré** | espace d'administration, écrans client site et domaine | 6, 7 |
 | **5, livré** | demandes d'assistance et de modification | 13 |
 | **6, livré** | notifications en application | 16 |
-| 7 | Stripe : Checkout, webhooks, abonnements, facturation | 8-12 |
-| 8 | courriels transactionnels, intégration Vercel, supervision | 15, 17 |
-| 9 | audit complet, préparation production | 18, 19 |
+| **7, livré** | journal d'audit alimenté et consultable | 18 |
+| 8 | Stripe : Checkout, webhooks, abonnements, facturation | 8-12 |
+| 9 | courriels transactionnels, intégration Vercel, supervision | 15, 17 |
+| 10 | préparation production | 19 |
 
 Le lot 6 a précédé Stripe faute de compte Stripe, et les courriels ont été
 séparés des notifications faute de service d'envoi : la partie en application

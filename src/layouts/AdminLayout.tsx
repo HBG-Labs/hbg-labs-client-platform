@@ -10,6 +10,7 @@ import {
   Menu,
   MessageSquare,
   MonitorSmartphone,
+  ScrollText,
   X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -42,6 +43,7 @@ const navigation = [
   { to: '/admin/domaines', label: 'Domaines', icon: Globe },
   { to: '/admin/tickets', label: 'Demandes clients', icon: MessageSquare },
   { to: '/admin/demandes', label: 'Prospects', icon: Inbox },
+  { to: '/admin/journal', label: 'Journal', icon: ScrollText },
 ];
 
 function NavigationList({ onNavigate }: { onNavigate?: () => void }) {

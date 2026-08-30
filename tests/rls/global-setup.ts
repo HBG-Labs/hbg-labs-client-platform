@@ -71,6 +71,20 @@ export default function globalSetup(): () => Promise<void> {
  * Le filtre porte sur le préfixe `rlstest`, jamais sur une date ou un compteur :
  * une donnée réelle ne peut pas porter ce préfixe, un critère temporel finirait
  * par emporter autre chose.
+ *
+ *
+ * L'ORDRE N'EST PAS INDIFFÉRENT
+ *
+ * Supprimer les comptes d'abord ÉCHOUE. La suppression d'un profil fait tomber
+ * ses adhésions en cascade, et `guard_last_org_owner` refuse de laisser une
+ * organisation sans OWNER : GoTrue répond « Database error deleting user » et
+ * le compte reste.
+ *
+ * Ce défaut est resté invisible parce que le balayage annonçait le nombre de
+ * comptes TROUVÉS, non supprimés. Quatorze comptes et quinze organisations
+ * s'étaient accumulés pendant que la console affichait des suppressions
+ * réussies. Les organisations partent donc en premier, et l'issue réelle de
+ * chaque suppression est désormais rapportée.
  */
 async function sweepTestArtifacts(): Promise<void> {
   const supabase = createClient(
@@ -80,24 +94,80 @@ async function sweepTestArtifacts(): Promise<void> {
   );
 
   const pattern = `${TEST_PREFIX}-%`;
+  const failures: string[] = [];
 
+  const { data: organizations } = await supabase
+    .from('organizations')
+    .select('id')
+    .like('slug', pattern);
+  const orgIds = (organizations ?? []).map((o) => (o as { id: string }).id);
+
+  // Les comptes sont relevés AVANT toute suppression : le journal d'audit garde
+  // trace d'actions qui n'ont ni organisation ni auteur survivant, et seul
+  // l'identifiant du profil permet encore de les retrouver.
   const { data: profiles } = await supabase
     .from('profiles')
-    .select('id')
+    .select('id, email')
     .like('email', pattern);
+  const profileIds = (profiles ?? []).map((p) => (p as { id: string }).id);
 
+  if (orgIds.length > 0) {
+    // `invoices` et `payments` référencent l'organisation en ON DELETE RESTRICT
+    // — conservation légale des pièces comptables (migration 08). Ils doivent
+    // partir avant elle.
+    await supabase.from('payments').delete().in('organization_id', orgIds);
+    await supabase.from('invoices').delete().in('organization_id', orgIds);
+    await supabase.from('subscriptions').delete().in('organization_id', orgIds);
+    await supabase.from('notifications').delete().in('organization_id', orgIds);
+    await supabase.from('support_tickets').delete().in('organization_id', orgIds);
+
+    // Journal d'audit, avant l'organisation : la référence est en ON DELETE
+    // SET NULL, et une trace orpheline n'est plus retrouvable par ce critère.
+    await supabase.from('audit_logs').delete().in('organization_id', orgIds);
+
+    const { error } = await supabase.from('organizations').delete().in('id', orgIds);
+    if (error) failures.push(`organisations : ${error.message}`);
+
+    // La suppression fait tomber les adhésions et journalise MEMBER_REMOVED,
+    // dont le rattachement a migré dans `metadata` (migration 19).
+    await supabase.from('audit_logs').delete().in('metadata->>organization_id', orgIds);
+  }
+
+  let deleted = 0;
   for (const profile of profiles ?? []) {
-    await supabase.auth.admin.deleteUser((profile as { id: string }).id);
+    const { id, email } = profile as { id: string; email: string };
+    const { error } = await supabase.auth.admin.deleteUser(id);
+    if (error) failures.push(`compte ${email} : ${error.message}`);
+    else deleted += 1;
   }
 
   await supabase.from('platform_access').delete().like('email', pattern);
   await supabase.from('quote_requests').delete().like('email', pattern);
   await supabase.from('contact_messages').delete().like('email', pattern);
-  await supabase.from('organizations').delete().like('slug', pattern);
 
-  if ((profiles ?? []).length > 0) {
+  // Journal d'audit, ce qui n'a jamais eu d'organisation : connexions, rôles
+  // plateforme, liste d'accès. `actor_email` est figé au moment de l'action et
+  // survit à la suppression du compte ; `resource_id` rattrape les lignes
+  // écrites par `service_role`, qui n'ont pas d'auteur du tout.
+  await supabase.from('audit_logs').delete().like('actor_email', pattern);
+  await supabase.from('audit_logs').delete().like('resource_id', pattern);
+  if (profileIds.length > 0) {
+    await supabase.from('audit_logs').delete().in('resource_id', profileIds);
+  }
+
+  if (deleted > 0 || orgIds.length > 0) {
     console.log(
-      `\nBalayage : ${(profiles ?? []).length} compte(s) de test supprimé(s).`,
+      `\nBalayage : ${deleted} compte(s) et ${orgIds.length} organisation(s) supprimés.`,
+    );
+  }
+
+  // Un échec est dit, jamais avalé : c'est précisément le silence qui avait
+  // laissé les résidus s'accumuler.
+  if (failures.length > 0) {
+    console.error(
+      [`\nBalayage INCOMPLET — ${failures.length} suppression(s) en échec :`, ...failures]
+        .map((line) => `  ${line}`)
+        .join('\n'),
     );
   }
 }

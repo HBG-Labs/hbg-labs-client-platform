@@ -81,6 +81,8 @@ beforeAll(async () => {
 afterAll(async () => {
   if (!admin) return;
 
+  const ids = [allowedActor, outsider].filter(Boolean).map((a) => a.id);
+
   for (const actor of [allowedActor, outsider]) {
     if (!actor) continue;
     await actor.db.auth.signOut();
@@ -88,6 +90,15 @@ afterAll(async () => {
   }
 
   await admin.from('platform_access').delete().like('email', `${TEST_PREFIX}-%`);
+
+  // Ces tests attribuent et retirent des rôles plateforme : les gestes les plus
+  // journalisés du système (migration 19). Sans ce nettoyage, chaque exécution
+  // laisserait ses PLATFORM_ROLE_CHANGED derrière elle.
+  await admin.from('audit_logs').delete().like('actor_email', `${TEST_PREFIX}-%`);
+  await admin.from('audit_logs').delete().like('resource_id', `${TEST_PREFIX}-%`);
+  if (ids.length > 0) {
+    await admin.from('audit_logs').delete().in('resource_id', ids);
+  }
 }, 120_000);
 
 describe('Attribution automatique à l’inscription', () => {

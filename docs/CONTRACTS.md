@@ -168,6 +168,7 @@ Réutilisez ces briques plutôt que d'en écrire de nouvelles.
 | `AdminPageHeader` | `layouts/AdminLayout` | en-tête d'écran d'administration |
 | `TicketConversation` | `components/tickets/` | fil de demande, client et admin |
 | `NotificationBell` | `components/notifications/` | cloche, compteur et panneau |
+| `JournalPage` | `pages/admin/` | consultation du journal d'audit |
 
 ### Un service, deux publics
 
@@ -178,6 +179,27 @@ notes internes parce que `support_messages_select_member` impose
 
 Reprenez ce modèle. Écrire deux services aurait dupliqué la logique et créé un
 endroit où l'oubli d'un filtre exposerait une note interne.
+
+### Journal d'audit : ne l'appelez pas, il vous appelle
+
+Même principe que les notifications, poussé plus loin. `audit.service.ts` ne
+sait que lire : `audit_logs` n'a aucune policy INSERT, UPDATE ni DELETE, et
+`authenticated` n'en détient pas les privilèges. Il n'y a rien d'autre à
+exposer.
+
+N'ajoutez jamais un appel de journalisation dans un écran. Pour tracer une
+nouvelle action, posez un trigger dans une migration, avec
+`public.journal_change()` :
+
+```sql
+create trigger ma_table_journal_updated
+  after update of colonne_a, colonne_b on public.ma_table
+  for each row execute function public.journal_change(
+    'ma_ressource', 'MA_RESSOURCE_MODIFIEE', 'colonne_a', 'colonne_b');
+```
+
+Les colonnes citées sont les SEULES consignées. N'y mettez ni secret, ni jeton,
+ni contenu de message : le journal est conservé longtemps et lu largement.
 
 ### Notifications : l'application lit, elle n'écrit pas
 
