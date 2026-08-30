@@ -2,7 +2,7 @@ import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import type { AuthContextValue } from '@/features/auth/auth-context';
-import { RequireAuth, RequireGuest } from './guards';
+import { RequireAuth, RequireGuest, RequirePlatformStaff } from './guards';
 
 /**
  * Gardes de route (§9).
@@ -30,6 +30,15 @@ vi.mock('@/features/auth/auth-context', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/features/auth/auth-context')>();
   return { ...actual, useAuth: () => authState.current };
 });
+
+/** Etat du profil, source du role plateforme. */
+const profileState: {
+  current: { data: { platform_role: string | null } | null; isPending: boolean };
+} = { current: { data: null, isPending: false } };
+
+vi.mock('@/features/auth/useProfile', () => ({
+  useProfile: () => profileState.current,
+}));
 
 /**
  * Monte une garde avec sa cible de redirection EN DEHORS d'elle.
@@ -73,6 +82,7 @@ beforeEach(() => {
     isLoading: false,
     signOut: async () => undefined,
   };
+  profileState.current = { data: null, isPending: false };
 });
 
 describe('RequireAuth', () => {
@@ -120,5 +130,60 @@ describe('RequireGuest', () => {
     renderGuard('guest', '/connexion');
 
     expect(screen.getByRole('status')).toBeInTheDocument();
+  });
+});
+
+describe('RequirePlatformStaff', () => {
+  function renderStaffGuard() {
+    return render(
+      <MemoryRouter initialEntries={['/admin']}>
+        <Routes>
+          <Route element={<RequirePlatformStaff />}>
+            <Route path="/admin" element={<p>Espace administration</p>} />
+          </Route>
+          <Route path="/dashboard" element={<p>Espace client</p>} />
+          <Route path="/connexion" element={<p>Formulaire de connexion</p>} />
+        </Routes>
+      </MemoryRouter>,
+    );
+  }
+
+  it('laisse passer un membre du personnel', () => {
+    authState.current = { ...authState.current, user: fakeUser };
+    profileState.current = { data: { platform_role: 'ADMIN' }, isPending: false };
+    renderStaffGuard();
+
+    expect(screen.getByText('Espace administration')).toBeInTheDocument();
+  });
+
+  it('renvoie un client vers son propre espace', () => {
+    // platform_role NULL identifie un client. Il ne doit pas voir
+    // l'administration, meme si les policies RLS lui renverraient de toute
+    // facon des tableaux vides.
+    authState.current = { ...authState.current, user: fakeUser };
+    profileState.current = { data: { platform_role: null }, isPending: false };
+    renderStaffGuard();
+
+    expect(screen.getByText('Espace client')).toBeInTheDocument();
+    expect(screen.queryByText('Espace administration')).not.toBeInTheDocument();
+  });
+
+  it('renvoie un visiteur non connecte vers la connexion', () => {
+    profileState.current = { data: null, isPending: false };
+    renderStaffGuard();
+
+    expect(screen.getByText('Formulaire de connexion')).toBeInTheDocument();
+  });
+
+  it('attend le chargement du profil avant de decider', () => {
+    // Le role vient du profil : rediriger avant sa reception ejecterait le
+    // personnel vers l'espace client a chaque rechargement de page.
+    authState.current = { ...authState.current, user: fakeUser };
+    profileState.current = { data: null, isPending: true };
+    renderStaffGuard();
+
+    expect(screen.getByRole('status')).toBeInTheDocument();
+    expect(screen.queryByText('Espace client')).not.toBeInTheDocument();
+    expect(screen.queryByText('Espace administration')).not.toBeInTheDocument();
   });
 });

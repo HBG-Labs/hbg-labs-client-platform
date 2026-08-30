@@ -132,7 +132,8 @@ Signalez plutôt que d'inventer (§51). État après le lot 2 :
 |---|---|---|
 | Site public, formulaires devis et contact | **livré** | 2 |
 | Authentification, session, garde de routes | **livré** | 3 |
-| Espace client complet, espace administrateur | **absent** | 4 |
+| Espace d'administration, écrans site et domaine | **livré** | 4 |
+| Abonnement et facturation côté client | **absent** | 5 |
 | Checkout Stripe, Customer Portal | **absent** | 5 |
 | Webhook Stripe | **absent** | 5 |
 | Envoi d'emails (Resend) | **absent** | 6 |
@@ -161,6 +162,9 @@ Réutilisez ces briques plutôt que d'en écrire de nouvelles.
 | `localBusinessSchema`, `faqSchema` | `lib/structured-data` | données structurées schema.org |
 | `site`, `missingLegalFields` | `config/site` | identité et mentions légales |
 | `mainNav`, `footerNav` | `config/navigation` | structure de navigation |
+| `DataTable` et ses cellules | `components/ui/Table` | tableau devenant cartes sous 768 px |
+| `Dialog`, `DialogContent` | `components/ui/Dialog` | modale Radix, focus piégé |
+| `AdminPageHeader` | `layouts/AdminLayout` | en-tête d'écran d'administration |
 
 ### Formulaires : le piège de la chaîne vide
 

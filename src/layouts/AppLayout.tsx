@@ -1,7 +1,14 @@
 import { Suspense, useState } from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { ChevronDown, LogOut, Settings, LayoutDashboard } from 'lucide-react';
+import {
+  ChevronDown,
+  Globe,
+  LayoutDashboard,
+  LogOut,
+  MonitorSmartphone,
+  Settings,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/features/auth/auth-context';
 import { useProfile } from '@/features/auth/useProfile';
@@ -12,15 +19,21 @@ import { LoadingState } from '@/components/ui/States';
 /**
  * Mise en page de l'espace connecté.
  *
- * Volontairement réduite au lot 3 : en-tête, menu utilisateur et déconnexion.
- * La barre latérale du §15, avec ses dix entrées, arrivera avec les écrans
- * qu'elle dessert. Afficher dès maintenant « Facturation » ou « Domaine » vers
- * des pages inexistantes donnerait l'illusion d'un espace livré.
+ * En-tête, navigation et menu utilisateur. Les rubriques Abonnement,
+ * Facturation et Demandes du §15 apparaîtront avec les écrans qu'elles
+ * desservent : un lien vers une page inexistante donne l'illusion d'une
+ * fonctionnalité livrée.
  */
 
+// Chaque entree mene a un ecran existant. Les rubriques Abonnement,
+// Facturation et Demandes du §15 apparaitront avec les ecrans qu'elles
+// desservent : un lien vers une page absente donne l'illusion d'une
+// fonctionnalite livree.
 const navigation = [
-  { to: '/dashboard', label: 'Tableau de bord', icon: LayoutDashboard },
-  { to: '/parametres', label: 'Paramètres', icon: Settings },
+  { to: '/dashboard', label: 'Tableau de bord', icon: LayoutDashboard, end: true },
+  { to: '/dashboard/site', label: 'Mon site', icon: MonitorSmartphone, end: false },
+  { to: '/dashboard/domaine', label: 'Domaine', icon: Globe, end: false },
+  { to: '/parametres', label: 'Paramètres', icon: Settings, end: false },
 ];
 
 export function AppLayout() {
@@ -56,6 +69,7 @@ export function AppLayout() {
                     <li key={item.to}>
                       <NavLink
                         to={item.to}
+                        end={item.end}
                         className={({ isActive }) =>
                           cn(
                             'inline-flex h-10 items-center gap-2 rounded-md px-3 text-sm font-medium transition-colors',

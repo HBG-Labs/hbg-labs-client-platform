@@ -3,7 +3,7 @@ import { RootLayout } from '@/layouts/RootLayout';
 import { PublicLayout } from '@/layouts/PublicLayout';
 import { HomePage } from '@/pages/public/HomePage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
-import { RequireAuth, RequireGuest } from './guards';
+import { RequireAuth, RequireGuest, RequirePlatformStaff } from './guards';
 
 /**
  * Table de routage.
@@ -172,6 +172,49 @@ export const router = createBrowserRouter([
         ],
       },
 
+      // ---- Espace d'administration, reserve au personnel HBG Labs ----
+      // La garde masque l'interface ; les policies RLS protegent les donnees.
+      {
+        element: <RequirePlatformStaff />,
+        children: [
+          {
+            lazy: lazyRoute(() => import('@/layouts/AdminLayout'), 'AdminLayout'),
+            children: [
+              {
+                path: 'admin',
+                lazy: lazyRoute(
+                  () => import('@/pages/admin/AdminDashboardPage'),
+                  'AdminDashboardPage',
+                ),
+              },
+              {
+                path: 'admin/clients',
+                lazy: lazyRoute(() => import('@/pages/admin/ClientsPage'), 'ClientsPage'),
+              },
+              {
+                path: 'admin/clients/:id',
+                lazy: lazyRoute(
+                  () => import('@/pages/admin/ClientDetailPage'),
+                  'ClientDetailPage',
+                ),
+              },
+              {
+                path: 'admin/sites',
+                lazy: lazyRoute(() => import('@/pages/admin/WebsitesPage'), 'WebsitesPage'),
+              },
+              {
+                path: 'admin/domaines',
+                lazy: lazyRoute(() => import('@/pages/admin/DomainsPage'), 'DomainsPage'),
+              },
+              {
+                path: 'admin/demandes',
+                lazy: lazyRoute(() => import('@/pages/admin/LeadsPage'), 'LeadsPage'),
+              },
+            ],
+          },
+        ],
+      },
+
       // ---- Espace client, réservé aux utilisateurs connectés ----
       {
         element: <RequireAuth />,
@@ -182,6 +225,17 @@ export const router = createBrowserRouter([
               {
                 path: 'dashboard',
                 lazy: lazyRoute(() => import('@/pages/app/DashboardPage'), 'DashboardPage'),
+              },
+              {
+                path: 'dashboard/site',
+                lazy: lazyRoute(() => import('@/pages/app/MonSitePage'), 'MonSitePage'),
+              },
+              {
+                path: 'dashboard/domaine',
+                lazy: lazyRoute(
+                  () => import('@/pages/app/MonDomainePage'),
+                  'MonDomainePage',
+                ),
               },
               {
                 path: 'parametres',

@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/features/auth/auth-context';
+import { useProfile } from '@/features/auth/useProfile';
 import { LoadingState } from '@/components/ui/States';
 
 /**
@@ -49,6 +50,39 @@ export function RequireGuest() {
   }
 
   if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <Outlet />;
+}
+
+/**
+ * Accès réservé au personnel HBG Labs.
+ *
+ * Le rôle vient de `profiles.platform_role`, colonne que seul un OWNER
+ * plateforme peut écrire et que le trigger `guard_platform_role` protège
+ * (migration 03).
+ *
+ * Rappel : cette garde masque l'interface, elle ne protège pas les données.
+ * Un client qui forcerait la route obtiendrait des écrans vides, les policies
+ * RLS ne lui renvoyant aucune ligne des tables d'administration. C'est
+ * exactement le comportement voulu, et c'est ce que vérifie tests/rls/.
+ */
+export function RequirePlatformStaff() {
+  const { user, isLoading } = useAuth();
+  const profile = useProfile();
+
+  // Le profil porte le rôle : rediriger avant sa réception renverrait le
+  // personnel vers l'espace client à chaque rechargement.
+  if (isLoading || (user && profile.isPending)) {
+    return <LoadingState fullPage label="Vérification de vos accès…" />;
+  }
+
+  if (!user) {
+    return <Navigate to="/connexion" replace />;
+  }
+
+  if (profile.data?.platform_role == null) {
     return <Navigate to="/dashboard" replace />;
   }
 

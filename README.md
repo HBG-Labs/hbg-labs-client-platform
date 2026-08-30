@@ -3,9 +3,9 @@
 Plateforme SaaS multi-tenant de HBG Labs : création de sites web, hébergement,
 maintenance, gestion des domaines, abonnements, facturation et support client.
 
-**Statut : lots 1 à 3 livrés.** Fondations et schéma multi-tenant vérifiés sur
-Supabase, site public complet avec formulaires opérationnels, authentification
-réelle avec confirmation d'adresse et réinitialisation de mot de passe.
+**Statut : lots 1 à 4 livrés.** Schéma multi-tenant vérifié sur Supabase, site
+public complet, authentification réelle, espace d'administration permettant de
+créer un client de bout en bout et espace client affichant site et domaine.
 
 ---
 
@@ -54,6 +54,25 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 
 ---
 
+## Ce que contient le lot 4
+
+Espace d'administration (§27 à §32) et premiers écrans client (§16, §17) :
+
+- Vue globale avec compteurs réels, et mention explicite là où un zéro traduit
+  l'absence de Stripe plutôt qu'une absence de clients
+- Clients : création, fiche détaillée, rattachement d'utilisateurs par adresse
+- Sites et domaines : création et modification, avec sélection des sites
+  restreinte au client concerné pour éviter tout rattachement inter-tenant
+- Demandes reçues : les formulaires publics étaient jusqu'ici lisibles
+  uniquement en SQL, cet écran les expose enfin
+- Côté client, « Mon site » et « Domaine », où aucun voyant ne passe au vert
+  sans vérification réelle
+- Tableaux transformés en cartes sous 768 pixels (§40)
+
+Le parcours complet est vérifié contre la base : un administrateur crée une
+organisation, y rattache un utilisateur, ajoute un site et un domaine ; le
+client les voit, un autre client ne les voit pas.
+
 ## Ce que contient le lot 3
 
 Authentification Supabase (§9), sans aucune session simulée :
@@ -99,8 +118,8 @@ témoignages, et mentions légales en attente de vos informations d'entreprise.
 
 ## Ce qu'il ne contient pas
 
-Espace client complet (site, domaine, abonnement, demandes), espace
-administrateur, Stripe, intégration Vercel, notifications. Rien de tout cela n'est esquissé ni simulé : conformément au §57,
+Abonnements et facturation (Stripe), tickets de support, intégration Vercel,
+notifications. Rien de tout cela n'est esquissé ni simulé : conformément au §57,
 une fonctionnalité absente est déclarée absente plutôt que maquettée.
 
 ## Trois points en attente de votre part
@@ -132,9 +151,10 @@ Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
 |---|---|
 | Application des 16 migrations sur base vierge | sans erreur |
 | `npm run test:rls` : 136 tests, 5 fichiers | tous au vert |
-| `npm test` : 30 tests de rendu et de gardes | tous au vert |
+| `npm test` : 39 tests de rendu, de gardes et de la règle du voyant | tous au vert |
 | Écriture des formulaires depuis la clé anon | vérifiée contre la base réelle |
 | Parcours d'authentification, 13 contrôles | vérifié contre la base réelle |
+| Parcours administrateur, 19 contrôles | vérifié contre la base réelle |
 | `npm run auth:check` | configuration Auth conforme |
 | `npm run check:privileges` | conforme, aucun surplus ni manque |
 | `npm run check:schema` | RLS activée et forcée sur 19/19 tables |

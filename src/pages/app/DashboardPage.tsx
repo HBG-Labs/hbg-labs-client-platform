@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Building2, ShieldCheck } from 'lucide-react';
+import { Building2, Globe, MonitorSmartphone, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/features/auth/auth-context';
 import { useMyOrganizations, useProfile } from '@/features/auth/useProfile';
 import { ORG_ROLE_LABELS, PLATFORM_ROLE_LABELS } from '@/types/domain';
@@ -15,16 +15,14 @@ import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
 /**
  * Tableau de bord client.
  *
- * PÉRIMÈTRE DU LOT 3, ET RIEN DE PLUS.
- *
  * Le §14 décrit un tableau de bord affichant le site, le domaine, l'abonnement,
- * la prochaine échéance et les demandes en cours. Ces écrans arrivent au lot 4,
- * et les données Stripe au lot 5.
+ * la prochaine échéance et les demandes en cours. Le site et le domaine ont
+ * désormais leurs écrans ; l'abonnement et la facturation dépendent de Stripe,
+ * qui n'écrit pas encore.
  *
- * Cette page ne montre donc que ce qui existe réellement en base aujourd'hui :
- * le profil et les rattachements aux organisations. Poser des tuiles « Site :
- * en ligne » ou « Abonnement : Pro » avec des valeurs inventées reviendrait à
- * livrer une maquette en la présentant comme un produit (§57).
+ * Cette page ne montre donc que ce qui existe réellement en base. Poser une
+ * tuile « Abonnement : Pro » avec une valeur inventée reviendrait à livrer une
+ * maquette en la présentant comme un produit (§57).
  */
 export function DashboardPage() {
   const { user } = useAuth();
@@ -129,18 +127,57 @@ export function DashboardPage() {
           )}
         </section>
 
+        {/* ---- Accès rapides ---- */}
+        <section aria-labelledby="titre-acces" className="mb-10">
+          <h2 id="titre-acces" className="mb-4 text-lg font-semibold">
+            Votre site
+          </h2>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Card className="transition-colors hover:border-primary">
+              <Link
+                to="/dashboard/site"
+                className="block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                <CardContent className="pt-6">
+                  <MonitorSmartphone className="size-5 text-primary" aria-hidden="true" />
+                  <p className="mt-3 font-medium">Mon site</p>
+                  <p className="mt-1 text-sm text-muted">
+                    Adresse, hébergement, dernier déploiement.
+                  </p>
+                </CardContent>
+              </Link>
+            </Card>
+
+            <Card className="transition-colors hover:border-primary">
+              <Link
+                to="/dashboard/domaine"
+                className="block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                <CardContent className="pt-6">
+                  <Globe className="size-5 text-primary" aria-hidden="true" />
+                  <p className="mt-3 font-medium">Domaine</p>
+                  <p className="mt-1 text-sm text-muted">
+                    Nom de domaine, DNS et certificat.
+                  </p>
+                </CardContent>
+              </Link>
+            </Card>
+          </div>
+        </section>
+
         {/* ---- Ce qui n'existe pas encore ---- */}
         <section aria-labelledby="titre-suite">
           <h2 id="titre-suite" className="mb-4 text-lg font-semibold">
             La suite de votre espace
           </h2>
 
-          <Alert tone="info" title="Espace en cours de construction">
+          <Alert tone="info" title="Abonnement et facturation à venir">
             <p>
-              Le suivi de votre site, de votre domaine, de votre abonnement et de vos
-              demandes arrive prochainement. Ces sections ne sont pas affichées tant
-              qu’elles ne sont pas réellement alimentées : mieux vaut une page honnête
-              qu’un tableau de bord qui affiche des informations invérifiables.
+              Le suivi de votre abonnement, vos factures et vos demandes de modification
+              arrivent prochainement. Ces sections ne sont pas affichées tant qu’elles ne
+              sont pas réellement alimentées : mieux vaut une page honnête qu’un tableau
+              de bord qui montre des informations invérifiables.
             </p>
             <p className="mt-2">
               En attendant, écrivez-nous pour toute demande concernant votre site.
