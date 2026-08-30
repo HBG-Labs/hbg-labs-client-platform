@@ -41,7 +41,7 @@ export function HomePage() {
       />
 
       {/* ---- 1. Hero Éditorial Plein Cadre Immersion ---- */}
-      <section className="relative min-h-[calc(100vh-72px)] w-full overflow-hidden flex items-center bg-background">
+      <section className="relative min-h-screen w-full overflow-hidden flex items-center bg-background pt-[72px]">
         {/* Image de fond plein cadre */}
         <img
           src="/images/hero-editorial.jpg"
