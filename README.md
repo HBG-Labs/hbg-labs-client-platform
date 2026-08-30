@@ -5,7 +5,7 @@ maintenance, gestion des domaines, abonnements, facturation et support client.
 
 **En ligne : https://hbg-labs-client-platform.vercel.app**
 
-**Statut : lots 1 à 4 livrés, plateforme déployée.** Schéma multi-tenant vérifié sur Supabase, site
+**Statut : lots 1 à 5 livrés, plateforme déployée.** Schéma multi-tenant vérifié sur Supabase, site
 public complet, authentification réelle, espace d'administration permettant de
 créer un client de bout en bout et espace client affichant site et domaine.
 
@@ -68,6 +68,20 @@ une session OWNER compromise ne peut promouvoir personne.
 
 Le compte n'existe pas encore. Inscrivez-vous avec cette adresse et le rôle
 s'appliquera automatiquement. Détail dans [SETUP.md §6](./docs/SETUP.md).
+
+## Ce que contient le lot 5
+
+Demandes d'assistance et de modification (§24, §25, §31), de bout en bout :
+
+- Côté client : liste des demandes, création avec les exemples du §25, fil de
+  conversation, clôture et réouverture
+- Côté HBG Labs : file de traitement signalant les demandes sans première
+  réponse, fil de conversation, notes internes, priorité et statut
+- Un seul service pour les deux côtés : c'est la RLS qui décide de ce que
+  chacun reçoit, pas le code
+
+Les notes internes ne peuvent pas fuir : la policy les écarte avant que la
+réponse ne quitte PostgreSQL, et aucun filtre applicatif n'intervient.
 
 ## Ce que contient le lot 4
 
@@ -133,8 +147,8 @@ témoignages, et mentions légales en attente de vos informations d'entreprise.
 
 ## Ce qu'il ne contient pas
 
-Abonnements et facturation (Stripe), tickets de support, intégration Vercel,
-notifications. Rien de tout cela n'est esquissé ni simulé : conformément au §57,
+Abonnements et facturation (Stripe), intégration Vercel, notifications, journal
+d'audit alimenté. Rien de tout cela n'est esquissé ni simulé : conformément au §57,
 une fonctionnalité absente est déclarée absente plutôt que maquettée.
 
 ## Trois points en attente de votre part
@@ -166,11 +180,12 @@ Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
 |---|---|
 | Application des 16 migrations sur base vierge | sans erreur |
 | `npm run test:rls` : 136 tests, 5 fichiers | tous au vert |
-| `npm test` : 39 tests de rendu, de gardes et de la règle du voyant | tous au vert |
+| `npm test` : 49 tests de rendu, de gardes et de confidentialité | tous au vert |
 | Écriture des formulaires depuis la clé anon | vérifiée contre la base réelle |
 | Parcours d'authentification, 13 contrôles | vérifié contre la base réelle |
 | Parcours administrateur, 19 contrôles | vérifié contre la base réelle |
 | Verrou d'accès à l'administration, 11 tests | vérifié contre la base réelle |
+| Parcours des demandes, 25 contrôles | vérifié contre la base réelle |
 | `npm run auth:check` | configuration Auth conforme |
 | `npm run check:privileges` | conforme, aucun surplus ni manque |
 | `npm run check:schema` | RLS activée et forcée sur 19/19 tables |

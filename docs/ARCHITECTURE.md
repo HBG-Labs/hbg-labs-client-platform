@@ -196,7 +196,7 @@ et cache long sur les assets versionnés.
 | **2, livré** | site public, référencement, formulaires devis et contact | 2 |
 | **3, livré** | authentification Supabase, gardes de route, changement de mot de passe | 3 |
 | **4, livré** | espace d'administration, écrans client site et domaine | 6, 7 |
-| 5 | Stripe : Checkout, webhooks, abonnements, facturation | 8-12 |
-| 6 | tickets, notifications, emails | 13, 16 |
-| 7 | intégration Vercel, supervision | 15, 17 |
+| **5, livré** | demandes d'assistance et de modification | 13 |
+| 6 | Stripe : Checkout, webhooks, abonnements, facturation | 8-12 |
+| 7 | notifications et courriels, intégration Vercel, supervision | 15-17 |
 | 8 | audit complet, préparation production | 18, 19 |

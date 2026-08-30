@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  MessageSquare,
   MonitorSmartphone,
   X,
 } from 'lucide-react';
@@ -26,6 +27,9 @@ import { LoadingState } from '@/components/ui/States';
  * correspondent toutes à un écran existant : « Abonnements » et « Facturation »
  * n'y figurent pas, leurs tables restant vides tant que Stripe n'écrit pas.
  *
+ * « Demandes clients » désigne les tickets de support, « Prospects » les
+ * formulaires du site public. Deux flux distincts, deux entrées distinctes.
+ *
  * La mise en page ne vérifie aucun droit : c'est la garde `RequirePlatformStaff`
  * qui filtre l'accès, et les policies RLS qui protègent réellement les données.
  */
@@ -35,7 +39,8 @@ const navigation = [
   { to: '/admin/clients', label: 'Clients', icon: Building2 },
   { to: '/admin/sites', label: 'Sites', icon: MonitorSmartphone },
   { to: '/admin/domaines', label: 'Domaines', icon: Globe },
-  { to: '/admin/demandes', label: 'Demandes reçues', icon: Inbox },
+  { to: '/admin/tickets', label: 'Demandes clients', icon: MessageSquare },
+  { to: '/admin/demandes', label: 'Prospects', icon: Inbox },
 ];
 
 function NavigationList({ onNavigate }: { onNavigate?: () => void }) {

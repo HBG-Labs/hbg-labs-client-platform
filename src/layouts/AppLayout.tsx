@@ -6,6 +6,7 @@ import {
   Globe,
   LayoutDashboard,
   LogOut,
+  MessageSquare,
   MonitorSmartphone,
   Settings,
   ShieldCheck,
@@ -20,20 +21,17 @@ import { LoadingState } from '@/components/ui/States';
 /**
  * Mise en page de l'espace connecté.
  *
- * En-tête, navigation et menu utilisateur. Les rubriques Abonnement,
- * Facturation et Demandes du §15 apparaîtront avec les écrans qu'elles
- * desservent : un lien vers une page inexistante donne l'illusion d'une
- * fonctionnalité livrée.
+ * En-tête, navigation et menu utilisateur.
+ *
+ * Chaque entrée mène à un écran existant. Les rubriques Abonnement et
+ * Facturation du §15 apparaîtront avec les écrans qu'elles desservent : un lien
+ * vers une page inexistante donne l'illusion d'une fonctionnalité livrée.
  */
-
-// Chaque entree mene a un ecran existant. Les rubriques Abonnement,
-// Facturation et Demandes du §15 apparaitront avec les ecrans qu'elles
-// desservent : un lien vers une page absente donne l'illusion d'une
-// fonctionnalite livree.
 const navigation = [
   { to: '/dashboard', label: 'Tableau de bord', icon: LayoutDashboard, end: true },
   { to: '/dashboard/site', label: 'Mon site', icon: MonitorSmartphone, end: false },
   { to: '/dashboard/domaine', label: 'Domaine', icon: Globe, end: false },
+  { to: '/dashboard/demandes', label: 'Demandes', icon: MessageSquare, end: false },
   { to: '/parametres', label: 'Paramètres', icon: Settings, end: false },
 ];
 

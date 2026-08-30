@@ -210,6 +210,17 @@ export const router = createBrowserRouter([
                 path: 'admin/demandes',
                 lazy: lazyRoute(() => import('@/pages/admin/LeadsPage'), 'LeadsPage'),
               },
+              {
+                path: 'admin/tickets',
+                lazy: lazyRoute(() => import('@/pages/admin/TicketsPage'), 'TicketsPage'),
+              },
+              {
+                path: 'admin/tickets/:id',
+                lazy: lazyRoute(
+                  () => import('@/pages/admin/TicketDetailPage'),
+                  'TicketDetailPage',
+                ),
+              },
             ],
           },
         ],
@@ -235,6 +246,17 @@ export const router = createBrowserRouter([
                 lazy: lazyRoute(
                   () => import('@/pages/app/MonDomainePage'),
                   'MonDomainePage',
+                ),
+              },
+              {
+                path: 'dashboard/demandes',
+                lazy: lazyRoute(() => import('@/pages/app/DemandesPage'), 'DemandesPage'),
+              },
+              {
+                path: 'dashboard/demandes/:id',
+                lazy: lazyRoute(
+                  () => import('@/pages/app/DemandeDetailPage'),
+                  'DemandeDetailPage',
                 ),
               },
               {
