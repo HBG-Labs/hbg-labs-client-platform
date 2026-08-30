@@ -77,14 +77,25 @@ enabled = true
 policy = "oneshot"
 
 # -----------------------------------------------------------------------------
-# Fonctions Edge
+# Fonctions Edge — Stripe (§19, §21)
 # -----------------------------------------------------------------------------
-# Le webhook Stripe (§21) sera implémenté en phase 10.
+# Trois points d'entrée, deux régimes d'authentification.
 #
-# `verify_jwt = false` sera indispensable : Stripe appelle ce point d'entrée
-# sans jeton Supabase. L'authentification ne repose PAS sur un JWT mais sur la
-# vérification de la signature `stripe-signature`, à effectuer avant toute
-# lecture de la charge utile.
+# `stripe-checkout` et `stripe-portal` agissent AU NOM D'UN UTILISATEUR : le
+# runtime vérifie son jeton, puis la fonction demande à PostgreSQL, par
+# `is_org_owner`, s'il a le droit de gérer la facturation de cette entreprise.
 #
-# [functions.stripe-webhook]
-# verify_jwt = false
+# `stripe-webhook` n'a pas d'utilisateur. Stripe appelle sans jeton Supabase :
+# `verify_jwt = true` rejetterait tous les événements avec un 401 que Stripe
+# signalerait comme une panne de notre côté. L'authentification repose ici sur
+# la signature `stripe-signature`, vérifiée avant toute lecture de la charge
+# utile — c'est la seule preuve que l'appel vient bien de Stripe.
+
+[functions.stripe-checkout]
+verify_jwt = true
+
+[functions.stripe-portal]
+verify_jwt = true
+
+[functions.stripe-webhook]
+verify_jwt = false

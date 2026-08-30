@@ -48,7 +48,12 @@ webhook Stripe, création de session Checkout, envoi d'emails.
 docs/                    architecture, base, RLS, contrats, installation
 scripts/                 gardes exécutées au build et en CI
 supabase/
-  migrations/            16 fichiers, ordre §45
+  migrations/            19 fichiers, ordre §45
+  functions/             fonctions Edge Deno — Stripe uniquement
+    _shared/             clients Stripe et Supabase, HTTP, Customer
+    stripe-checkout/     ouverture d'une session de paiement
+    stripe-portal/       portail de facturation Stripe
+    stripe-webhook/      miroir local, seul chemin d'écriture financier
   seed.sql               grille tarifaire réelle — aucune donnée fictive
   config.toml
 tests/rls/               suite d'isolation multi-tenant (§47)
@@ -96,6 +101,22 @@ falsification d'auteur. Liste dans [RLS.md §4](./RLS.md).
 `subscriptions`, `invoices`, `payments` n'ont **aucune policy d'écriture**, pour
 aucun rôle. Seul le webhook écrit, sous `service_role`. Corriger un abonnement
 se fait dans Stripe (§20, §22).
+
+### 3.4bis Trois fonctions Edge, deux régimes d'authentification
+
+`stripe-checkout` et `stripe-portal` agissent au nom d'un utilisateur : le
+runtime vérifie son jeton, puis la fonction demande à PostgreSQL — par
+`is_org_owner`, la fonction qui fonde déjà les policies de facturation — s'il a
+le droit d'engager la facturation de cette entreprise. L'autorisation n'est
+jamais réimplémentée en TypeScript.
+
+`stripe-webhook` n'a pas d'utilisateur et tourne avec `verify_jwt = false` :
+Stripe n'a pas de session Supabase. Son authentification est la signature HMAC,
+vérifiée avant toute lecture de la charge utile.
+
+Le montant facturé n'est jamais transmis par le navigateur : le Checkout ne
+reçoit qu'un identifiant de prix, relu en base à travers la RLS. Laisser le
+client choisir le montant reviendrait à le laisser fixer le prix.
 
 ### 3.5 L'ignorance est explicite en base
 
@@ -199,10 +220,10 @@ et cache long sur les assets versionnés.
 | **5, livré** | demandes d'assistance et de modification | 13 |
 | **6, livré** | notifications en application | 16 |
 | **7, livré** | journal d'audit alimenté et consultable | 18 |
-| 8 | Stripe : Checkout, webhooks, abonnements, facturation | 8-12 |
+| **8, livré** | Stripe : Checkout, portail, webhook, abonnements et facturation | 8-12 |
 | 9 | courriels transactionnels, intégration Vercel, supervision | 15, 17 |
 | 10 | préparation production | 19 |
 
-Le lot 6 a précédé Stripe faute de compte Stripe, et les courriels ont été
-séparés des notifications faute de service d'envoi : la partie en application
-ne dépend d'aucun des deux.
+Les lots 6 et 7 ont précédé Stripe faute de compte Stripe, et les courriels ont
+été séparés des notifications faute de service d'envoi : la partie en
+application ne dépend d'aucun des deux.

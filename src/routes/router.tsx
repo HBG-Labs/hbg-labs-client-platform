@@ -207,6 +207,13 @@ export const router = createBrowserRouter([
                 lazy: lazyRoute(() => import('@/pages/admin/DomainsPage'), 'DomainsPage'),
               },
               {
+                path: 'admin/abonnements',
+                lazy: lazyRoute(
+                  () => import('@/pages/admin/SubscriptionsPage'),
+                  'SubscriptionsPage',
+                ),
+              },
+              {
                 path: 'admin/demandes',
                 lazy: lazyRoute(() => import('@/pages/admin/LeadsPage'), 'LeadsPage'),
               },
@@ -250,6 +257,13 @@ export const router = createBrowserRouter([
                 lazy: lazyRoute(
                   () => import('@/pages/app/MonDomainePage'),
                   'MonDomainePage',
+                ),
+              },
+              {
+                path: 'dashboard/facturation',
+                lazy: lazyRoute(
+                  () => import('@/pages/app/FacturationPage'),
+                  'FacturationPage',
                 ),
               },
               {

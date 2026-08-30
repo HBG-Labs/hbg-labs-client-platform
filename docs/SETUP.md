@@ -168,11 +168,11 @@ Aucun n'est nécessaire au lot 1.
 
 | Service | Utilité | Lot |
 |---|---|---|
-| **Stripe** (test mode) | Checkout, abonnements, webhooks (§19-23) | 5 |
-| **Vercel** | Hébergement de la plateforme et des sites clients (§33) | 2 puis 7 |
+| **Stripe** (test mode) | Checkout, abonnements, webhooks (§19-23) | 8 — voir §8 |
+| **Vercel** | Hébergement de la plateforme et des sites clients (§33) | 2 puis 9 |
 | **GitHub** | Dépôt et déploiement continu | 2 |
-| **Resend** | Emails transactionnels (§26) | 6 |
-| **Sentry** | Supervision (§17) | 7 |
+| **Resend** | Emails transactionnels (§26) | 9 |
+| **Sentry** | Supervision (§17) | 9 |
 
 Lors de la création du compte Stripe : rester en **mode test** (`sk_test_…`).
 `scripts/check-env.mjs` échoue si une clé `sk_live_` est présente hors
@@ -331,7 +331,137 @@ développement (§48).
 ---
 
 
-## 8. Résolution de problèmes
+## 8. Stripe
+
+Le lot 8 apporte le Checkout, le portail de facturation et le webhook. Tant que
+les clés ci-dessous sont absentes, la plateforme fonctionne : aucune offre n'est
+souscriptible, et les écrans le disent au lieu de proposer un bouton qui
+échouerait.
+
+### 8.1 Clés
+
+Tableau de bord Stripe, **en mode test** (l'interrupteur en haut à droite) :
+
+| Clé | Où la lire | Où la mettre |
+|---|---|---|
+| `STRIPE_SECRET_KEY` (`sk_test_…`) | Developers → API keys | `.env` local, secrets Supabase |
+| `STRIPE_WEBHOOK_SECRET` (`whsec_…`) | créé en §8.3 | secrets Supabase |
+
+Ces deux valeurs sont des **secrets serveur**. Elles ne portent jamais le
+préfixe `VITE_` et n'apparaissent pas dans `src/` : `check-env.mjs` refuse le
+build si l'une d'elles est exposée, et `check-bundle-secrets.mjs` inspecte le
+bundle produit.
+
+### 8.2 Déploiement des fonctions Edge
+
+Trois fonctions : `stripe-checkout`, `stripe-portal`, `stripe-webhook`.
+
+```bash
+npx supabase secrets set STRIPE_SECRET_KEY=sk_test_...
+npx supabase secrets set APP_URL=https://hbg-labs-client-platform.vercel.app
+
+npx supabase functions deploy stripe-checkout
+npx supabase functions deploy stripe-portal
+npx supabase functions deploy stripe-webhook
+```
+
+`SUPABASE_URL`, `SUPABASE_ANON_KEY` et `SUPABASE_SERVICE_ROLE_KEY` sont fournies
+automatiquement au runtime : ne les redéfinissez pas.
+
+`stripe-webhook` est déployée avec `verify_jwt = false`
+(`supabase/config.toml`) : Stripe n'a pas de session Supabase, et
+l'authentification repose ici sur la signature `stripe-signature`.
+
+### 8.3 Point d'entrée du webhook
+
+Stripe → Developers → Webhooks → **Add endpoint**.
+
+URL : `https://<ref>.supabase.co/functions/v1/stripe-webhook`
+
+Événements à cocher :
+
+```text
+checkout.session.completed
+customer.subscription.created
+customer.subscription.updated
+customer.subscription.deleted
+customer.subscription.paused
+customer.subscription.resumed
+invoice.created
+invoice.finalized
+invoice.updated
+invoice.paid
+invoice.payment_failed
+invoice.marked_uncollectible
+invoice.voided
+payment_intent.succeeded
+payment_intent.processing
+payment_intent.canceled
+payment_intent.payment_failed
+charge.refunded
+```
+
+Stripe affiche alors un **signing secret** (`whsec_…`) :
+
+```bash
+npx supabase secrets set STRIPE_WEBHOOK_SECRET=whsec_...
+npx supabase functions deploy stripe-webhook
+```
+
+Un événement non coché n'est pas une erreur : il est acquitté et consigné dans
+`stripe_webhook_events` avec la mention « type non traité ».
+
+### 8.4 Portail de facturation
+
+Stripe → Settings → Billing → **Customer portal** → activer la configuration par
+défaut. Sans elle, l'API refuse de créer une session et le bouton « Gérer mon
+abonnement » affiche « momentanément indisponible ».
+
+Cochez au minimum : mise à jour du moyen de paiement, historique des factures,
+et résiliation si vous l'autorisez.
+
+### 8.5 Publier le catalogue
+
+Les offres vivent en base (§7). Stripe ne sait facturer que ses propres objets :
+
+```bash
+npm run stripe:check    # écarts, sans rien écrire
+npm run stripe:sync     # crée Products et Prices, écrit les identifiants en base
+```
+
+Le script ne publie ni les offres `requires_quote`, ni les prix « à partir de » :
+ce sont des montants non fermes, et un Price Stripe est toujours ferme.
+
+Tant qu'un `stripe_price_id` est NULL, `isPurchasable` renvoie `false` et
+l'interface propose « Demander un devis ».
+
+### 8.6 Vérifier de bout en bout
+
+1. Connectez-vous comme dirigeant d'une entreprise cliente ;
+2. `/dashboard/facturation` → **Souscrire** ;
+3. carte de test `4242 4242 4242 4242`, date future, CVC quelconque ;
+4. au retour, l'écran affiche « Confirmation en cours » — c'est le comportement
+   attendu, le webhook n'est pas encore arrivé ;
+5. quelques secondes plus tard, l'abonnement apparaît.
+
+S'il n'apparaît pas : Stripe → Webhooks → l'endpoint → onglet des livraisons.
+Une réponse 400 signale une signature invalide (mauvais `whsec_`), une 500 un
+échec de traitement dont le motif est consigné dans
+`stripe_webhook_events.error`.
+
+```sql
+select event_type, processed, attempts, error, created_at
+  from stripe_webhook_events
+ order by created_at desc
+ limit 20;
+```
+
+Carte refusée pour tester un échec : `4000 0000 0000 0002`.
+
+---
+
+
+## 9. Résolution de problèmes
 
 | Symptôme | Cause | Correction |
 |---|---|---|
@@ -341,3 +471,7 @@ développement (§48).
 | `db push` : mot de passe refusé | Mot de passe de base perdu | Dashboard → Settings → Database → Reset |
 | `check:secrets` échoue | Un secret a atteint `dist/` | Ne pas déployer ; révoquer la clé, corriger le préfixe |
 | Build : « clé Stripe LIVE hors production » | `sk_live_` avec `VITE_APP_ENV` ≠ production | Utiliser une clé de test (§48) |
+| « Souscription en ligne indisponible » | `stripe_price_id` NULL en base | `npm run stripe:sync` (§8.5) |
+| Webhook en 400 chez Stripe | `STRIPE_WEBHOOK_SECRET` erroné | Redéfinir le secret, redéployer (§8.3) |
+| « La confirmation tarde » sur la facturation | Webhook non livré ou en échec | Journal des livraisons Stripe, puis `stripe_webhook_events` (§8.6) |
+| Portail « momentanément indisponible » | Customer portal non configuré | Activer la configuration par défaut (§8.4) |

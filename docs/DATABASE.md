@@ -338,11 +338,12 @@ rejoue le traitement — deux enregistrements de paiement pour un encaissement,
 deux emails, et une comptabilité qui diverge sans que personne ne s'en aperçoive
 avant le rapprochement bancaire.
 
-Séquence attendue de la fonction Edge (phase 10) :
+Séquence de la fonction Edge, implémentée au lot 8
+(`supabase/functions/stripe-webhook/`) :
 
 1. **Vérifier la signature `stripe-signature`.** Sans signature valide : 400, et
    rien n'est écrit. N'importe qui connaît l'URL du webhook.
-2. INSERT de l'événement. Conflit sur la clé primaire ⇒ déjà reçu ⇒ 200.
+2. INSERT de l'événement, **avant** tout traitement.
 3. Traiter, puis `processed = true`.
 4. En cas d'échec : renseigner `error`, incrémenter `attempts`, répondre 500 pour
    que Stripe rejoue.
@@ -350,6 +351,21 @@ Séquence attendue de la fonction Edge (phase 10) :
 La ligne est écrite **avant** le traitement : un enregistrement après coup ne
 laisserait aucune trace des événements qui échouent — les seuls qui méritent
 d'être examinés.
+
+**Un écart assumé à l'étape 2.** La spécification concluait « conflit sur la clé
+primaire ⇒ déjà reçu ⇒ 200 ». Le conflit ne prouve pourtant que la réception,
+pas le traitement : quand le premier passage a échoué, Stripe rejoue précisément
+pour cela, et répondre 200 condamnerait l'événement à ne jamais aboutir. La
+fonction relit donc la ligne — acquittée, elle répond 200 sans rien refaire ; en
+échec, elle retente et incrémente `attempts`.
+
+**`error` porte aussi les non-traitements.** Un événement peut être acquitté sans
+être reflété : Customer inconnu de la base, événement plus ancien que l'état
+enregistré, type non souscrit, facture à montant négatif que le schéma refuse.
+Répondre 500 provoquerait des relivraisons indéfinies pour un événement qui
+n'aboutira jamais. La raison est écrite dans `error` avec `processed = true` :
+ces cas restent dénombrables, alors qu'un silence ne se découvrirait que le jour
+où quelqu'un cherche une facture manquante.
 
 Table fermée : aucun accès applicatif, la charge utile contient des données
 financières.

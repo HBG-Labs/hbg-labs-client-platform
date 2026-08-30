@@ -198,6 +198,17 @@ export const INVOICE_STATUS_LABELS: Record<InvoiceStatus, string> = {
   void: 'Annulée',
 };
 
+export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
+  requires_payment_method: 'Moyen de paiement attendu',
+  requires_action: 'Action requise',
+  processing: 'En cours',
+  succeeded: 'Encaissé',
+  failed: 'Échec',
+  canceled: 'Annulé',
+  refunded: 'Remboursé',
+  partially_refunded: 'Remboursé en partie',
+};
+
 export const TICKET_STATUS_LABELS: Record<TicketStatus, string> = {
   OPEN: 'Ouverte',
   IN_PROGRESS: 'En cours',

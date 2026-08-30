@@ -126,7 +126,7 @@ Ne cherchez jamais à lire `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`,
 
 ## 4. Ce qui n'existe pas encore
 
-Signalez plutôt que d'inventer (§51). État après le lot 2 :
+Signalez plutôt que d'inventer (§51). État après le lot 8 :
 
 | Besoin | État | Lot |
 |---|---|---|
@@ -134,18 +134,24 @@ Signalez plutôt que d'inventer (§51). État après le lot 2 :
 | Authentification, session, garde de routes | **livré** | 3 |
 | Espace d'administration, écrans site et domaine | **livré** | 4 |
 | Demandes d'assistance et de modification | **livré** | 5 |
-| Abonnement et facturation côté client | **absent** | 5 |
-| Checkout Stripe, Customer Portal | **absent** | 5 |
-| Webhook Stripe | **absent** | 5 |
-| Envoi d'emails (Resend) | **absent** | 6 |
-| Intégration Vercel (statut réel des sites) | **absent** | 7 |
+| Notifications en application | **livré** | 6 |
+| Journal d'audit | **livré** | 7 |
+| Checkout Stripe, portail de facturation, webhook | **livré** | 8 |
+| Abonnement et facturation côté client | **livré** | 8 |
+| Envoi d'emails (Resend) | **absent** | 9 |
+| Intégration Vercel (statut réel des sites) | **absent** | 9 |
 | Upload de pièces jointes | schéma et buckets prêts, pas de composant | 4 |
-| Catalogue Stripe (`stripe_price_id`) | **NULL en base** | 5 |
+| Catalogue Stripe (`stripe_price_id`) | **dépend de `npm run stripe:sync`** | 8 |
 
-**Conséquence immédiate du dernier point :** aucune offre n'est souscriptible en
-ligne aujourd'hui. `isPurchasable(plan)` renvoie `false` partout. Un bouton
-« Souscrire » mènerait à une erreur Stripe. Afficher « Demander un devis » tant
-que la fonction renvoie `false`.
+**Conséquence du dernier point :** une offre n'est souscriptible que si son prix
+existe des DEUX côtés — en base et chez Stripe. `isPurchasable(plan)` répond à
+cette question ; l'interface DOIT s'y fier plutôt que d'afficher un bouton
+« Souscrire » qui mènerait à une erreur Stripe. Tant que le catalogue n'est pas
+publié, l'appel à l'action reste « Demander un devis ».
+
+Le serveur applique la même règle : `stripe-checkout` refuse un prix sur devis,
+un prix « à partir de » et un prix sans `stripe_price_id`. Le navigateur choisit
+l'identifiant du prix, il ne choisit pas le montant.
 
 ---
 
@@ -168,6 +174,9 @@ Réutilisez ces briques plutôt que d'en écrire de nouvelles.
 | `AdminPageHeader` | `layouts/AdminLayout` | en-tête d'écran d'administration |
 | `TicketConversation` | `components/tickets/` | fil de demande, client et admin |
 | `NotificationBell` | `components/notifications/` | cloche, compteur et panneau |
+| `useMySubscriptions`, `useMyInvoices` | `features/billing/useBilling` | abonnement et factures du client |
+| `useStartCheckout`, `useBillingPortal` | `features/billing/useBilling` | souscription et portail Stripe |
+| `SUBSCRIPTION_STATUS_TONES`, `renewalNotice` | `features/billing/billing-display` | couleurs et échéances, communes aux deux espaces |
 | `JournalPage` | `pages/admin/` | consultation du journal d'audit |
 
 ### Un service, deux publics

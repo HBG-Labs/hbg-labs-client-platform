@@ -6,7 +6,11 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'node_modules', 'supabase/.temp', 'coverage'],
+    // `supabase/functions` s'exécute sous Deno, pas sous Node ni dans le
+    // navigateur : `Deno.env`, les imports `npm:` et les URL de modules y sont
+    // légitimes et seraient signalés comme des erreurs par la configuration
+    // ci-dessous. Ce code est vérifié par `deno check` et par le déploiement.
+    ignores: ['dist', 'node_modules', 'supabase/.temp', 'supabase/functions', 'coverage'],
   },
 
   // Code applicatif (navigateur)

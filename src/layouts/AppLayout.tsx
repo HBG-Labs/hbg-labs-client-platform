@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import {
   ChevronDown,
+  CreditCard,
   Globe,
   LayoutDashboard,
   LogOut,
@@ -24,15 +25,20 @@ import { LoadingState } from '@/components/ui/States';
  *
  * En-tête, navigation et menu utilisateur.
  *
- * Chaque entrée mène à un écran existant. Les rubriques Abonnement et
- * Facturation du §15 apparaîtront avec les écrans qu'elles desservent : un lien
- * vers une page inexistante donne l'illusion d'une fonctionnalité livrée.
+ * Chaque entrée mène à un écran existant : un lien vers une page inexistante
+ * donne l'illusion d'une fonctionnalité livrée.
+ *
+ * « Facturation » réunit l'abonnement et les factures que le §15 énumère
+ * séparément. Les scinder produirait deux écrans dont l'un ne porterait qu'une
+ * carte, et obligerait le client à passer de l'un à l'autre pour comprendre ce
+ * qui lui est prélevé.
  */
 const navigation = [
   { to: '/dashboard', label: 'Tableau de bord', icon: LayoutDashboard, end: true },
   { to: '/dashboard/site', label: 'Mon site', icon: MonitorSmartphone, end: false },
   { to: '/dashboard/domaine', label: 'Domaine', icon: Globe, end: false },
   { to: '/dashboard/demandes', label: 'Demandes', icon: MessageSquare, end: false },
+  { to: '/dashboard/facturation', label: 'Facturation', icon: CreditCard, end: false },
   { to: '/parametres', label: 'Paramètres', icon: Settings, end: false },
 ];
 

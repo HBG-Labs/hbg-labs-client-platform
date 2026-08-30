@@ -5,9 +5,10 @@ maintenance, gestion des domaines, abonnements, facturation et support client.
 
 **En ligne : https://hbg-labs-client-platform.vercel.app**
 
-**Statut : lots 1 à 5 livrés, plateforme déployée.** Schéma multi-tenant vérifié sur Supabase, site
+**Statut : lots 1 à 8 livrés, plateforme déployée.** Schéma multi-tenant vérifié sur Supabase, site
 public complet, authentification réelle, espace d'administration permettant de
-créer un client de bout en bout et espace client affichant site et domaine.
+créer un client de bout en bout, espace client affichant site et domaine, et
+facturation Stripe raccordée du Checkout au webhook.
 
 ---
 
@@ -33,13 +34,15 @@ Marche à suivre complète : [docs/SETUP.md](./docs/SETUP.md).
 | `npm run dev` | serveur de développement |
 | `npm run verify` | schéma, privilèges, lint, types, tests, build, scan de secrets |
 | `npm test` | tests de rendu des pages publiques |
-| `npm run test:rls` | isolation multi-tenant, 147 tests (exige une base Supabase) |
+| `npm run test:rls` | isolation multi-tenant, 172 tests (exige une base Supabase) |
 | `npm run check:schema` | analyse statique des migrations, sans base |
 | `npm run check:privileges` | privilèges réels de la base vs. attendus |
 | `npm run db:push` | applique les migrations au projet lié |
 | `npm run db:seed` | insère la grille tarifaire |
 | `npm run db:types` | régénère les types TypeScript depuis la base |
 | `npm run check:access` | qui peut atteindre l'administration |
+| `npm run stripe:check` | écarts entre le catalogue en base et Stripe |
+| `npm run stripe:sync` | publie les offres chez Stripe et écrit les identifiants |
 | `npm run auth:check` | écarts de configuration Auth du projet distant |
 | `npm run auth:sync` | aligne la configuration Auth sur le dépôt |
 
@@ -68,6 +71,52 @@ une session OWNER compromise ne peut promouvoir personne.
 
 Le compte n'existe pas encore. Inscrivez-vous avec cette adresse et le rôle
 s'appliquera automatiquement. Détail dans [SETUP.md §6](./docs/SETUP.md).
+
+## Ce que contient le lot 8
+
+Facturation Stripe (§19 à §23, §30), de bout en bout :
+
+- Trois fonctions Edge : ouverture d'une session Checkout, portail de
+  facturation Stripe, et webhook qui alimente le miroir local
+- Côté client, `/dashboard/facturation` : abonnement, prochaine échéance,
+  factures téléchargeables et historique des paiements
+- Côté HBG Labs, `/admin/abonnements` : contrats en cours, MRR et incidents de
+  paiement
+- `npm run stripe:sync` publie le catalogue en base vers Stripe, et écrit les
+  identifiants en retour
+
+**Le webhook est le seul chemin d'écriture.** `subscriptions`, `invoices` et
+`payments` n'ont aucune policy d'écriture, pas même pour un OWNER plateforme :
+c'était déjà vrai au lot 1, et rien n'a été assoupli pour livrer celui-ci. Une
+correction se fait dans Stripe, jamais dans la base.
+
+**L'écran ne conclut rien à la place de Stripe.** Au retour du paiement, le
+webhook n'est pas encore arrivé : l'interface affiche « confirmation en cours »
+et interroge la base jusqu'à ce que l'abonnement existe. Passé quatre-vingt-dix
+secondes, elle cesse d'attendre et le dit — un paiement peut être refusé après
+la redirection, et afficher « actif » sur la foi d'un retour d'URL serait faux.
+
+**Le montant ne vient jamais du navigateur.** Le Checkout ne reçoit qu'un
+identifiant de prix, relu en base à travers la RLS. Le serveur refuse en outre
+les offres sur devis et les prix « à partir de » : un tarif non ferme ne peut
+pas être prélevé.
+
+Deux écarts assumés par rapport à la spécification, détaillés dans
+[DATABASE.md](./docs/DATABASE.md) : un conflit d'idempotence ne suffit pas à
+conclure qu'un événement a été traité, et un événement volontairement non
+reflété est acquitté avec sa raison plutôt que rejoué indéfiniment.
+
+**Le catalogue Stripe reste à publier.** Tant que `stripe_price_id` est NULL,
+aucune offre n'est souscriptible et l'interface propose « Demander un devis ».
+Marche à suivre dans [SETUP.md §8](./docs/SETUP.md).
+
+**Ce qui n'est pas encore vérifié.** Le compte Stripe n'existe pas au moment de
+la livraison : les trois fonctions Edge n'ont donc jamais été exécutées contre
+l'API réelle, et aucun webhook n'a été reçu. Ce qui est vérifié l'est côté
+application — 19 tests de rendu et de règles d'affichage — et côté base, où les
+172 tests d'isolation confirment que les tables financières restent
+inaccessibles en écriture. Le parcours complet se vérifie en suivant
+[SETUP.md §8.6](./docs/SETUP.md), clés de test en main.
 
 ## Ce que contient le lot 7
 
@@ -197,7 +246,8 @@ témoignages, et mentions légales en attente de vos informations d'entreprise.
 
 - Projet Vite · React 19 · TypeScript · Tailwind 4, arborescence modulaire (§38)
 - 16 migrations SQL : 19 tables, 22 types, 30 fonctions (§45)
-  — 18 migrations et 36 fonctions aujourd'hui, lots 3 à 6 compris
+  — 19 migrations et 39 fonctions aujourd'hui, lots 3 à 7 compris
+  (le lot 8 n'a demandé aucune migration : le schéma financier l'attendait)
 - RLS activée **et forcée** sur toutes les tables, 11 gardes par trigger
 - Suite de 136 tests d'isolation multi-tenant (§47), tous au vert
   — 172 aujourd'hui, avec le verrou d'accès, les notifications et le journal
@@ -238,9 +288,9 @@ Le schéma est appliqué sur le projet Supabase **HBGLABS CLIENT PLATFORM**
 
 | Contrôle | Résultat |
 |---|---|
-| Application des 16 migrations sur base vierge | sans erreur |
+| Application des 19 migrations sur base vierge | sans erreur |
 | `npm run test:rls` : 172 tests, 8 fichiers | tous au vert |
-| `npm test` : 72 tests de rendu, de gardes et de confidentialité | tous au vert |
+| `npm test` : 91 tests de rendu, de gardes et de confidentialité | tous au vert |
 | Écriture des formulaires depuis la clé anon | vérifiée contre la base réelle |
 | Parcours d'authentification, 13 contrôles | vérifié contre la base réelle |
 | Parcours administrateur, 19 contrôles | vérifié contre la base réelle |

@@ -104,9 +104,20 @@ function PlanCard({ plan }: { plan: PublicPlan }) {
         {/* Le bouton reflète ce qui est réellement possible. Tant que le
             catalogue Stripe n'existe pas, `isPurchasable` renvoie false et
             l'appel à l'action mène au devis. Un bouton « Souscrire » aboutirait
-            à une erreur Stripe incompréhensible pour le visiteur. */}
+            à une erreur Stripe incompréhensible pour le visiteur.
+
+            Souscriptible, il mène à l'espace client et non directement au
+            paiement : le Checkout facture une ENTREPRISE, et il faut donc
+            savoir laquelle. La garde `RequireAuth` conduit à la connexion si
+            nécessaire, puis l'écran de facturation reprend l'offre choisie. */}
         <Button asChild fullWidth variant={plan.is_featured ? 'primary' : 'outline'}>
-          <Link to={`/devis?offre=${plan.code}`}>
+          <Link
+            to={
+              purchasable
+                ? `/dashboard/facturation?offre=${plan.code}`
+                : `/devis?offre=${plan.code}`
+            }
+          >
             {purchasable ? 'Choisir cette offre' : 'Demander un devis'}
           </Link>
         </Button>

@@ -10,6 +10,7 @@ import {
   Menu,
   MessageSquare,
   MonitorSmartphone,
+  Receipt,
   ScrollText,
   X,
 } from 'lucide-react';
@@ -26,8 +27,7 @@ import { LoadingState } from '@/components/ui/States';
  * Espace d'administration HBG Labs (§27).
  *
  * Barre latérale sur grand écran, tiroir sur mobile (§40). Les entrées
- * correspondent toutes à un écran existant : « Abonnements » et « Facturation »
- * n'y figurent pas, leurs tables restant vides tant que Stripe n'écrit pas.
+ * correspondent toutes à un écran existant.
  *
  * « Demandes clients » désigne les tickets de support, « Prospects » les
  * formulaires du site public. Deux flux distincts, deux entrées distinctes.
@@ -41,6 +41,7 @@ const navigation = [
   { to: '/admin/clients', label: 'Clients', icon: Building2 },
   { to: '/admin/sites', label: 'Sites', icon: MonitorSmartphone },
   { to: '/admin/domaines', label: 'Domaines', icon: Globe },
+  { to: '/admin/abonnements', label: 'Abonnements', icon: Receipt },
   { to: '/admin/tickets', label: 'Demandes clients', icon: MessageSquare },
   { to: '/admin/demandes', label: 'Prospects', icon: Inbox },
   { to: '/admin/journal', label: 'Journal', icon: ScrollText },

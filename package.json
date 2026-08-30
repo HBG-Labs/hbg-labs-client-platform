@@ -28,7 +28,9 @@
     "check:privileges": "node scripts/audit-privileges.mjs",
     "auth:sync": "node scripts/sync-auth-config.mjs",
     "auth:check": "node scripts/sync-auth-config.mjs --check",
-    "check:access": "node scripts/check-platform-access.mjs"
+    "check:access": "node scripts/check-platform-access.mjs",
+    "stripe:sync": "node scripts/sync-stripe-catalog.mjs",
+    "stripe:check": "node scripts/sync-stripe-catalog.mjs --check"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
