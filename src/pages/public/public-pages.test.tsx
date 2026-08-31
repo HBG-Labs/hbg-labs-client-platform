@@ -246,19 +246,38 @@ describe('Formulaire de devis', () => {
 });
 
 describe('Pages légales', () => {
-  it('signale une publication incomplète tant que l’identité légale manque', async () => {
+  it('affiche les mentions légales et l’identité de l’entreprise', async () => {
     const { MentionsLegalesPage } = await import('./MentionsLegalesPage');
     renderWithProviders(<MentionsLegalesPage />);
 
-    expect(screen.getByText('Publication incomplète')).toBeInTheDocument();
-    expect(screen.getByText('Numéro SIRET')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Mentions légales/i })).toBeInTheDocument();
+    expect(screen.getByText('10919844000017')).toBeInTheDocument();
+    expect(screen.getAllByText(/Vercel Inc\./i).length).toBeGreaterThan(0);
   });
 
-  it('n’invente aucune information d’entreprise', async () => {
-    const { MentionsLegalesPage } = await import('./MentionsLegalesPage');
-    renderWithProviders(<MentionsLegalesPage />);
+  it('affiche la politique de confidentialité et les droits RGPD', async () => {
+    const { PolitiqueConfidentialitePage } = await import('./PolitiqueConfidentialitePage');
+    renderWithProviders(<PolitiqueConfidentialitePage />);
 
-    // Les valeurs absentes sont marquées, pas remplacées par du plausible.
-    expect(screen.getAllByText('à compléter').length).toBeGreaterThan(0);
+    expect(screen.getByRole('heading', { name: /Politique de confidentialité/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/hbglabs@gmail\.com/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/CNIL/i).length).toBeGreaterThan(0);
+  });
+
+  it('affiche les CGU, CGV et la politique des cookies', async () => {
+    const { CguPage } = await import('./CguPage');
+    const { CgvPage } = await import('./CgvPage');
+    const { CookiesPage } = await import('./CookiesPage');
+
+    const { unmount: unmountCgu } = renderWithProviders(<CguPage />);
+    expect(screen.getByRole('heading', { name: /Conditions générales d’utilisation/i })).toBeInTheDocument();
+    unmountCgu();
+
+    const { unmount: unmountCgv } = renderWithProviders(<CgvPage />);
+    expect(screen.getByRole('heading', { name: /Conditions générales de vente/i })).toBeInTheDocument();
+    unmountCgv();
+
+    renderWithProviders(<CookiesPage />);
+    expect(screen.getByRole('heading', { name: /Politique relative aux cookies/i })).toBeInTheDocument();
   });
 });

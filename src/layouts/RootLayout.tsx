@@ -1,15 +1,12 @@
 import { Outlet } from 'react-router-dom';
+import { CookieBanner } from '@/components/marketing/CookieBanner';
+import { CookiePreferencesModal } from '@/components/marketing/CookiePreferencesModal';
 
 /**
  * Enveloppe racine, commune à toutes les routes.
  *
- * Ne porte que le lien d'évitement, qui doit être le premier élément
- * focalisable du document, avant toute barre de navigation. Le placer plus bas
- * obligerait à traverser le menu au clavier pour atteindre le contenu.
- *
- * Les repères de page (`<main>`, en-tête, pied de page) appartiennent aux mises
- * en page filles : le site public et le futur espace client n'ont pas la même
- * structure.
+ * Porte le lien d'évitement d'accessibilité ainsi que le gestionnaire de consentement
+ * des cookies et traceurs.
  */
 export function RootLayout() {
   return (
@@ -19,6 +16,10 @@ export function RootLayout() {
       </a>
 
       <Outlet />
+
+      {/* Bandeau de consentement CNIL et modale de préférences */}
+      <CookieBanner />
+      <CookiePreferencesModal />
     </>
   );
 }

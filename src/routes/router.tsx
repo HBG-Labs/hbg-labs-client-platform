@@ -109,8 +109,16 @@ export const router = createBrowserRouter([
             ),
           },
           {
+            path: 'cgu',
+            lazy: lazyRoute(() => import('@/pages/public/CguPage'), 'CguPage'),
+          },
+          {
             path: 'cgv',
             lazy: lazyRoute(() => import('@/pages/public/CgvPage'), 'CgvPage'),
+          },
+          {
+            path: 'cookies',
+            lazy: lazyRoute(() => import('@/pages/public/CookiesPage'), 'CookiesPage'),
           },
           { path: '*', element: <NotFoundPage /> },
         ],

@@ -11,6 +11,7 @@ import {
 } from '@/schemas/lead.schema';
 import { useSubmitQuoteRequest } from '@/features/leads/useSubmitLead';
 import { LeadRateLimitError } from '@/services/leads.service';
+import { site } from '@/config/site';
 import { Seo } from '@/components/Seo';
 import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
@@ -200,10 +201,10 @@ export function DevisPage() {
             <input type="hidden" {...register('plan_code')} />
 
             <div className="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-muted">
-                Vos données servent uniquement à traiter cette demande.{' '}
+              <p className="max-w-md text-xs leading-relaxed text-muted">
+                Les informations recueillies sont destinées à HBG Labs pour l’analyse précontractuelle de votre projet (conservation 3 ans). Pour exercer vos droits RGPD, contactez <a href={`mailto:${site.contact.dpoEmail}`} className="text-primary hover:underline">{site.contact.dpoEmail}</a>. Consultez notre{' '}
                 <a href="/politique-confidentialite" className="text-primary hover:underline">
-                  Politique de confidentialité
+                  politique de confidentialité
                 </a>
                 .
               </p>

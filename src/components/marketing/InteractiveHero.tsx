@@ -248,12 +248,13 @@ export function InteractiveHero({
         <div className="max-w-xl lg:max-w-2xl">
           <h1
             id="hero-heading"
-            className="text-balance font-serif font-normal text-white [text-shadow:_0_2px_10px_rgba(0,0,0,0.85),_0_6px_25px_rgba(0,0,0,0.7),_0_14px_50px_rgba(0,0,0,0.55)] text-[clamp(48px,12vw,96px)] lg:text-[104px] leading-[1.02] tracking-[-0.015em]"
+            className="text-balance font-serif font-normal text-white [text-shadow:_0_2px_12px_rgba(0,0,0,0.85),_0_8px_28px_rgba(0,0,0,0.7),_0_16px_55px_rgba(0,0,0,0.55)] text-[clamp(52px,12vw,104px)] lg:text-[112px] leading-[0.98] tracking-[-0.02em]"
           >
-            Créer <br />l'impossible
+            Créer <br />
+            <span className="italic font-normal">l'impossible</span>
           </h1>
 
-          <p className="mt-4 sm:mt-8 max-w-sm sm:max-w-md font-sans font-medium text-[15px] sm:text-base leading-relaxed text-white [text-shadow:_0_1px_8px_rgba(0,0,0,0.9),_0_4px_18px_rgba(0,0,0,0.75)]">
+          <p className="mt-5 sm:mt-8 max-w-sm sm:max-w-md font-sans font-medium text-[15px] sm:text-base leading-[1.65] text-white/95 [text-shadow:_0_1px_8px_rgba(0,0,0,0.9),_0_4px_20px_rgba(0,0,0,0.75)]">
             On transforme vos idées les plus ambitieuses en sites web réels.
             Parce qu'«&nbsp;infaisable&nbsp;» n'est que le point de départ.
           </p>

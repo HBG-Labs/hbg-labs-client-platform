@@ -1,20 +1,8 @@
 /**
- * Identité du site public et informations légales.
+ * Identité du site public et informations légales de HBG Labs.
  *
  * Point unique de vérité pour tout ce qui identifie HBG Labs : nom, baseline,
- * coordonnées, mentions légales. Aucune de ces valeurs ne doit être écrite en
- * dur dans un composant.
- *
- *
- * VALEURS MANQUANTES
- *
- * Plusieurs champs légaux restent vides parce que l'information n'est pas
- * connue. Ils ne sont pas remplis par des valeurs plausibles : un SIRET
- * inventé sur une page de mentions légales est une fausse déclaration, et le
- * visiteur n'a aucun moyen de repérer la substitution.
- *
- * Les pages légales détectent l'absence via `missingLegalFields()` et affichent
- * un avertissement explicite à la place du contenu concerné.
+ * coordonnées, mentions légales et sous-traitants RGPD.
  */
 
 export interface SiteConfig {
@@ -26,12 +14,15 @@ export interface SiteConfig {
   readonly contact: {
     readonly email: string;
     readonly phone: string;
+    readonly dpoEmail: string;
   };
   readonly legal: {
     readonly legalForm: string;
     readonly siret: string;
+    readonly siren: string;
     readonly vatNumber: string;
     readonly shareCapital: string;
+    readonly rcs: string;
     readonly publicationDirector: string;
     readonly address: {
       readonly line1: string;
@@ -49,70 +40,85 @@ export interface SiteConfig {
     readonly name: string;
     readonly purpose: string;
     readonly location: string;
+    readonly transferMechanism: string;
   }[];
 }
 
-/**
- * Type explicite plutôt que `as const` sur l'objet.
- *
- * `as const` figerait chaque chaîne vide en type littéral `''`. TypeScript
- * réduirait alors `if (phone) { phone.replace(...) }` à `never` dans la branche
- * vraie, puisqu'une chaîne vide littérale ne peut pas être vraie. Le code
- * cesserait de compiler dès qu'un champ est renseigné plus tard.
- */
 export const site: SiteConfig = {
   name: 'HBG Labs',
-  legalName: '',
+  legalName: 'HBG Labs',
 
-  /** Positionnement, §6. */
+  /** Positionnement */
   positioning: 'HBG Labs crée, héberge et maintient votre présence digitale.',
 
-  /** Message principal du hero, §6. */
+  /** Message principal du hero */
   headline: 'Votre site web. Votre hébergement. Votre tranquillité.',
 
-  /** Zone d'activité principale, utilisée par le référencement local (§41). */
+  /** Zone d\'activité principale */
   area: 'Martinique',
 
   contact: {
-    /** Adresse de contact affichée publiquement. Vide = ligne masquée. */
-    email: '',
+    email: 'hbglabs@gmail.com',
     phone: '',
+    dpoEmail: 'hbglabs@gmail.com',
   },
 
-  /** Informations légales obligatoires (article 6 III de la LCEN). */
+  /** Informations légales obligatoires (article 6 III de la LCEN) */
   legal: {
-    /** Forme juridique, par exemple « SASU » ou « Entreprise individuelle ». */
-    legalForm: '',
-    /** 14 chiffres. */
-    siret: '',
-    /** Numéro de TVA intracommunautaire, si assujetti. */
-    vatNumber: '',
-    /** Capital social, si société. */
-    shareCapital: '',
-    /** Directeur de la publication. */
-    publicationDirector: '',
+    legalForm: 'Entrepreneur individuel (EI)',
+    siret: '10919844000017',
+    siren: '109 198 440',
+    vatNumber: 'TVA non applicable, art. 293 B du CGI',
+    shareCapital: 'Non applicable (Entreprise individuelle)',
+    rcs: 'RCS Fort-de-France',
+    publicationDirector: 'Harry BERGOZ, Fondateur de HBG Labs',
     address: {
-      line1: '',
-      postalCode: '',
-      city: '',
+      line1: 'Durand',
+      postalCode: '97212',
+      city: 'Saint-Joseph',
       country: 'France',
     },
   },
 
-  /** Hébergeur du site, à mentionner obligatoirement. */
+  /** Hébergeur du site (Vercel Inc.) */
   host: {
     name: 'Vercel Inc.',
     address: '440 N Barranca Ave #4133, Covina, CA 91723, États-Unis',
     website: 'https://vercel.com',
   },
 
-  /** Sous-traitants traitant des données personnelles (RGPD). */
+  /** Sous-traitants traitant des données personnelles (RGPD Art. 28) */
   processors: [
-    { name: 'Supabase', purpose: 'Hébergement de la base de données et authentification', location: 'Union européenne (Irlande)' },
-    { name: 'Vercel', purpose: 'Hébergement et diffusion du site', location: 'États-Unis' },
-    { name: 'Stripe', purpose: 'Traitement des paiements et facturation', location: 'États-Unis' },
-    { name: 'Resend', purpose: 'Envoi des courriels transactionnels', location: 'États-Unis' },
-    { name: 'Sentry', purpose: 'Supervision technique des erreurs de l’application, sans donnée personnelle', location: 'États-Unis' },
+    {
+      name: 'Supabase Inc.',
+      purpose: 'Hébergement de la base de données relationnelle PostgreSQL et gestion de l’authentification GoTrue',
+      location: 'Union européenne (Irlande)',
+      transferMechanism: 'Hébergement direct dans l’UE',
+    },
+    {
+      name: 'Vercel Inc.',
+      purpose: 'Hébergement de l’application web, réseau de distribution de contenu (CDN) et routage DNS',
+      location: 'États-Unis / Réseau mondial Edge',
+      transferMechanism: 'Clauses contractuelles types (CCT) & Cadre de protection des données UE/USA (DPF)',
+    },
+    {
+      name: 'Stripe Payments Europe, Ltd. / Stripe Inc.',
+      purpose: 'Traitement sécurisé des paiements récurrents, prélèvements et portail de facturation client',
+      location: 'Union européenne (Irlande) / États-Unis',
+      transferMechanism: 'Clauses contractuelles types (CCT) & Certification PCI-DSS Niveau 1',
+    },
+    {
+      name: 'Resend Inc.',
+      purpose: 'Envoi des courriels transactionnels de notifications de tickets et réinitialisation de mot de passe',
+      location: 'États-Unis',
+      transferMechanism: 'Clauses contractuelles types (CCT) & Accord de traitement des données (DPA)',
+    },
+    {
+      name: 'Sentry (Functional Software Inc.)',
+      purpose: 'Supervision technique et détection des erreurs logicielles (anonymisée, sans identifiants ni données personnelles)',
+      location: 'États-Unis',
+      transferMechanism: 'Clauses contractuelles types (CCT) & PII désactivée (sendDefaultPii: false)',
+    },
   ],
 };
 
@@ -123,10 +129,7 @@ export interface MissingLegalField {
 }
 
 /**
- * Champs légaux non renseignés.
- *
- * Les pages `/mentions-legales` et `/cgv` s'en servent pour signaler une
- * publication incomplète plutôt que d'afficher un contenu inexact.
+ * Vérification des champs légaux obligatoires.
  */
 export function missingLegalFields(): MissingLegalField[] {
   const missing: MissingLegalField[] = [];

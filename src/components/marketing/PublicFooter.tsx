@@ -1,16 +1,13 @@
 import { Link } from 'react-router-dom';
-import { Mail, Phone } from 'lucide-react';
+import { Mail, Phone, SlidersHorizontal } from 'lucide-react';
 import { site } from '@/config/site';
 import { footerNav } from '@/config/navigation';
 import { Container } from '@/components/ui/Layout';
+import { openCookiePreferences } from '@/hooks/useCookieConsent';
 import { Logo } from './Logo';
 
 /**
- * Pied de page.
- *
- * Les coordonnées ne s'affichent que si elles sont renseignées dans
- * `src/config/site.ts`. Une adresse de contact inventée renverrait les
- * messages des prospects dans le vide.
+ * Pied de page public.
  */
 export function PublicFooter() {
   const year = new Date().getFullYear();
@@ -68,6 +65,18 @@ export function PublicFooter() {
                     </Link>
                   </li>
                 ))}
+                {column.title === 'Informations légales' && (
+                  <li>
+                    <button
+                      type="button"
+                      onClick={openCookiePreferences}
+                      className="inline-flex items-center gap-1.5 font-sans text-sm text-muted transition-colors hover:text-accent cursor-pointer"
+                    >
+                      <SlidersHorizontal className="size-3.5" aria-hidden="true" />
+                      Gérer mes cookies
+                    </button>
+                  </li>
+                )}
               </ul>
             </nav>
           ))}

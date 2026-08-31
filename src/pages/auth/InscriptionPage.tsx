@@ -144,8 +144,12 @@ export function InscriptionPage() {
               />
               <label htmlFor="accept-terms" className="text-sm leading-relaxed text-muted">
                 J’accepte les{' '}
+                <Link to="/cgu" className="text-primary hover:underline">
+                  conditions générales d’utilisation
+                </Link>
+                , les{' '}
                 <Link to="/cgv" className="text-primary hover:underline">
-                  conditions générales de vente
+                  CGV
                 </Link>{' '}
                 et la{' '}
                 <Link to="/politique-confidentialite" className="text-primary hover:underline">

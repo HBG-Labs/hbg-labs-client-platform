@@ -47,10 +47,11 @@ const PAGES = [
   { path: '/contact', priority: '0.7', changefreq: 'yearly' },
   { path: '/devis', priority: '0.7', changefreq: 'yearly' },
   { path: '/politique-confidentialite', priority: '0.3', changefreq: 'yearly' },
+  { path: '/cookies', priority: '0.3', changefreq: 'yearly' },
 ];
 
 /** Exclues de l'index, cohérent avec la balise noindex des pages concernées. */
-const DISALLOWED = ['/cgv', '/mentions-legales', '/dashboard', '/admin'];
+const DISALLOWED = ['/cgv', '/cgu', '/mentions-legales', '/dashboard', '/admin'];
 
 function readEnvValue(key) {
   if (process.env[key]) return process.env[key];

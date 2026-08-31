@@ -1,18 +1,10 @@
 import { site } from '@/config/site';
 import { Seo } from '@/components/Seo';
-import { Alert } from '@/components/ui/Alert';
 import { LegalPage, LegalSection } from '@/components/marketing/LegalPage';
 
 /**
- * Conditions générales de vente.
- *
- * Le texte décrit le fonctionnement réel de la plateforme : abonnement mensuel
- * prélevé par Stripe, hébergement lié à l'abonnement, demandes de modification
- * traitées par tickets.
- *
- * Il engage juridiquement HBG Labs et demande une relecture par un
- * professionnel du droit avant mise en ligne. L'encart d'avertissement le
- * signale explicitement plutôt que de laisser croire à un document validé.
+ * Conditions Générales de Vente (CGV) applicables aux prestations de création de sites internet,
+ * d'hébergement, de maintenance et de services digitaux fournies par HBG Labs.
  */
 export function CgvPage() {
   return (
@@ -26,152 +18,163 @@ export function CgvPage() {
 
       <LegalPage
         title="Conditions générales de vente"
-        updatedAt="2026-08-28"
+        updatedAt="2026-08-31"
         requiresLegalIdentity
       >
-        <Alert tone="warning" title="Document en cours de finalisation" className="mb-10">
+        <LegalSection title="1. Objet et champ d’application">
           <p>
-            Ce texte décrit le fonctionnement des prestations tel qu’il est implémenté
-            dans la plateforme. Il doit être relu et validé par un professionnel du droit
-            avant la mise en ligne publique du site.
+            Les présentes Conditions Générales de Vente (ci-après les «&nbsp;CGV&nbsp;») s’appliquent à
+            l’ensemble des prestations de services numériques proposées par l’entreprise individuelle{' '}
+            <strong className="font-medium text-foreground">{site.legalName}</strong> (SIREN {site.legal.siren}),
+            notamment la conception et le développement de sites web, l’hébergement managé, la gestion des
+            noms de domaine, ainsi que la maintenance préventive, corrective et évolutive.
           </p>
-        </Alert>
-
-        <LegalSection title="1. Objet">
-          <p>
-            Les présentes conditions régissent les prestations de création, d’hébergement
-            et de maintenance de sites web fournies par {site.legalName || site.name} à
-            ses clients professionnels. Toute commande implique leur acceptation sans
-            réserve.
+          <p className="mt-2">
+            Toute commande de prestation ou souscription à un abonnement implique l’adhésion pleine et
+            entière du client aux présentes CGV, qui prévalent sur tout autre document ou conditions
+            d’achat du client.
           </p>
         </LegalSection>
 
-        <LegalSection title="2. Devis et formation du contrat">
+        <LegalSection title="2. Devis, commande et formation du contrat">
           <p>
-            Les tarifs publiés sur le site sont indicatifs. Ceux portant la mention « à
-            partir de » constituent un point de départ et ne valent pas offre ferme.
+            Les prix figurant sur le site public sont donnés à titre indicatif («&nbsp;à partir de&nbsp;»)
+            et ne constituent pas une offre ferme.
           </p>
-          <p>
-            Chaque prestation de création fait l’objet d’un devis détaillant le
-            périmètre, le calendrier et le montant. Le contrat est formé à l’acceptation
-            écrite du devis par le client. Le devis est valable trente jours.
+          <p className="mt-2">
+            Chaque prestation personnalisée de création ou refonte de site fait l’objet d’un devis préalable
+            écrit détaillant le cahier des charges, le périmètre fonctionnel, le planning estimatif et le
+            montant de la prestation.
           </p>
-        </LegalSection>
-
-        <LegalSection title="3. Obligations du client">
-          <p>
-            Le client fournit les contenus nécessaires à la réalisation : textes, images,
-            logo et informations légales. Il garantit détenir les droits d’usage de ces
-            éléments et garantit {site.name} contre toute réclamation à ce titre.
-          </p>
-          <p>
-            Les délais annoncés supposent une réponse du client sous cinq jours ouvrés à
-            chaque demande de validation. Un retard de validation décale le calendrier
-            d’autant.
+          <p className="mt-2">
+            Le devis est valable pendant une durée de trente (30) jours à compter de sa date d’émission. Le
+            contrat est valablement formé dès lors que le devis est retourné signé et accepté par le client
+            (ou validé par voie électronique), accompagné du règlement de l’acompte stipulé.
           </p>
         </LegalSection>
 
-        <LegalSection title="4. Recette et livraison">
+        <LegalSection title="3. Collaboration et obligations du client">
           <p>
-            Le site est mis à disposition sur une adresse de préproduction. Le client
-            dispose de dix jours ouvrés pour signaler les anomalies. Passé ce délai sans
-            retour, la recette est réputée acceptée et le site est mis en production.
+            La réalisation d’un site web nécessite une collaboration active entre le client et HBG Labs.
+            Le client s’engage à :
+          </p>
+          <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-muted">
+            <li>Fournir dans les délais impartis l’ensemble des éléments nécessaires à la réalisation (textes, visuels haute définition, logos, chartes graphiques, mentions légales spécifiques).</li>
+            <li>Garantir qu’il est titulaire des droits de propriété intellectuelle sur tous les éléments transmis à HBG Labs et dégager HBG Labs de toute responsabilité en cas d’action en contrefaçon intentée par un tiers.</li>
+            <li>Désigner un interlocuteur unique décisionnaire pour la validation des étapes de conception et de recette.</li>
+            <li>Répondre aux demandes de validation sous cinq (5) jours ouvrés afin de ne pas décaler le calendrier convenu.</li>
+          </ul>
+        </LegalSection>
+
+        <LegalSection title="4. Recette, livraison et mise en ligne">
+          <p>
+            À l’issue de la phase de développement, le site est mis à disposition du client sur un
+            environnement sécurisé de préproduction afin de procéder à la phase de recette.
+          </p>
+          <p className="mt-2">
+            Le client dispose d’un délai de dix (10) jours ouvrés pour formuler par écrit ses éventuelles
+            réserves portant sur la conformité du livrable par rapport au devis accepté. À défaut de réserves
+            notifiées dans ce délai, la recette est réputée prononcée sans réserve et le site peut être basculé
+            en production après complet paiement du solde de la prestation de création.
           </p>
         </LegalSection>
 
-        <LegalSection title="5. Abonnement, prix et paiement">
+        <LegalSection title="5. Tarifs, abonnements récurrents et modalités de paiement">
           <p>
-            L’hébergement et, selon l’offre souscrite, la maintenance font l’objet d’un
-            abonnement mensuel. Les montants sont exprimés hors taxes et majorés de la
-            taxe applicable.
+            Les tarifs des prestations de création et des forfaits d’hébergement et de maintenance sont
+            indiqués en euros (€), hors taxes (TVA non applicable conformément à l’article 293 B du CGI, ou
+            majorés de la TVA au taux légal en vigueur si assujettissement).
           </p>
-          <p>
-            Le prélèvement est opéré mensuellement par notre prestataire de paiement, à
-            date anniversaire de la souscription. Le client gère son moyen de paiement et
-            accède à ses factures depuis son espace client.
+          <p className="mt-2">
+            Les prestations d’hébergement et de maintenance continue font l’objet d’un abonnement mensuel à
+            échéance récurrente, prélevé de manière automatique par carte bancaire via le prestataire de
+            paiement sécurisé Stripe à date anniversaire.
           </p>
-          <p>
-            En cas d’échec de prélèvement, le client est informé et dispose de quinze
-            jours pour régulariser. Passé ce délai, l’accès au service peut être suspendu
-            après information préalable.
-          </p>
-        </LegalSection>
-
-        <LegalSection title="6. Durée et résiliation">
-          <p>
-            L’abonnement est conclu sans engagement de durée et se renouvelle par tacite
-            reconduction mensuelle. Chacune des parties peut y mettre fin à tout moment
-            depuis l’espace client ou par écrit, avec effet à l’échéance de la période en
-            cours.
-          </p>
-          <p>
-            À la résiliation, l’hébergement cesse à l’échéance de la période payée et le
-            site n’est plus accessible. Le code source et les contenus sont remis au
-            client sur demande formulée dans les trente jours. Le nom de domaine, enregistré
-            au nom du client, lui reste acquis.
+          <p className="mt-2">
+            En cas de rejet de prélèvement, le client est automatiquement notifié et dispose d’un délai de
+            quinze (15) jours pour régulariser sa situation. À défaut de régularisation dans ce délai, HBG Labs
+            se réserve le droit de suspendre temporairement l’accès à l’hébergement et aux services associés
+            jusqu’au paiement intégral des sommes dues.
           </p>
         </LegalSection>
 
-        <LegalSection title="7. Maintenance et demandes de modification">
+        <LegalSection title="6. Droit de rétractation">
           <p>
-            Les offres incluant la maintenance couvrent les mises à jour techniques, les
-            sauvegardes et les corrections d’anomalies. Les demandes de modification de
-            contenu sont adressées via l’espace client et traitées dans les limites
-            prévues par l’offre souscrite.
+            Pour les clients professionnels, les dispositions relatives au droit de rétractation du Code de
+            la consommation ne sont pas applicables, sauf dans les conditions très strictes prévues par
+            l’article L. 221-3 du Code de la consommation (contrats conclus hors établissement pour les
+            entreprises de moins de cinq salariés et dont l’objet n’entre pas dans le champ principal de leur
+            activité).
           </p>
-          <p>
-            Une demande relevant d’un développement nouveau fait l’objet d’un devis
-            distinct, soumis au client avant toute intervention.
-          </p>
-        </LegalSection>
-
-        <LegalSection title="8. Disponibilité">
-          <p>
-            {site.name} met en œuvre les moyens raisonnables pour assurer la
-            disponibilité des sites hébergés. La disponibilité dépend d’infrastructures
-            tierces, et aucune garantie de disponibilité continue n’est consentie hors
-            engagement de niveau de service souscrit séparément.
-          </p>
-          <p>
-            Les interruptions programmées pour maintenance sont annoncées à l’avance
-            lorsque leur durée le justifie.
+          <p className="mt-2">
+            Lorsque la prestation est commandée par un consommateur ou un non-professionnel, celui-ci dispose
+            d’un délai de quatorze (14) jours pour exercer son droit de rétractation à compter de la conclusion
+            du contrat. Toutefois, si le client demande expressément le commencement d’exécution des services
+            avant l’expiration de ce délai, il renonce expressément à son droit de rétractation pour les
+            prestations pleinement exécutées conformément à l’article L. 221-28 du Code de la consommation.
           </p>
         </LegalSection>
 
-        <LegalSection title="9. Propriété intellectuelle">
+        <LegalSection title="7. Durée, tacite reconduction et résiliation de l’abonnement">
           <p>
-            À complet paiement du prix, le client devient titulaire des droits d’usage
-            sur les développements spécifiques réalisés pour son site. Les composants
-            génériques, bibliothèques et savoir-faire de {site.name} demeurent sa
-            propriété.
+            Les abonnements mensuels d’hébergement et de maintenance sont conclus sans engagement de durée et
+            se renouvellent automatiquement de mois en mois par tacite reconduction.
+          </p>
+          <p className="mt-2">
+            Le client peut résilier son abonnement à tout moment directement depuis son espace client ou par
+            courrier électronique adressé à HBG Labs. La résiliation prend effet à l’issue de la période
+            mensuelle en cours déjà réglée. Aucun remboursement prorata temporis du mois entamé n’est effectué.
           </p>
         </LegalSection>
 
-        <LegalSection title="10. Responsabilité">
+        <LegalSection title="8. Réversibilité et restitution des données">
           <p>
-            La responsabilité de {site.name} est limitée aux dommages directs et
-            plafonnée au montant des sommes versées par le client au titre des douze mois
-            précédant le fait générateur. Les dommages indirects, notamment la perte
-            d’exploitation ou de chiffre d’affaires, sont exclus.
+            À la cessation des relations contractuelles pour quelque cause que ce soit, HBG Labs s’engage à
+            restituer au client, sur simple demande écrite formulée dans un délai de trente (30) jours suivant
+            la fin du contrat :
+          </p>
+          <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-muted">
+            <li>L’ensemble des contenus, médias et textes appartenant au client.</li>
+            <li>Le code source des développements spécifiques réalisés pour son compte.</li>
+            <li>Les codes d’autorisation de transfert (Auth-Code) pour les noms de domaine gérés.</li>
+          </ul>
+        </LegalSection>
+
+        <LegalSection title="9. Propriété intellectuelle et transfert des droits">
+          <p>
+            Le transfert de propriété intellectuelle sur les créations graphiques et développements
+            spécifiques réalisés sur mesure pour le client est subordonné au paiement intégral du prix convenu
+            au devis.
+          </p>
+          <p className="mt-2">
+            HBG Labs conserve l’entière propriété de ses méthodes, bibliothèques, savoir-faire, composants
+            génériques réutilisables et frameworks techniques ayant servi à la réalisation du projet.
+          </p>
+          <p className="mt-2">
+            Sauf refus exprès formulé par écrit, le client autorise HBG Labs à mentionner la réalisation du
+            site web à titre de référence commerciale sur son site internet et ses supports promotionnels.
           </p>
         </LegalSection>
 
-        <LegalSection title="11. Données personnelles">
+        <LegalSection title="10. Responsabilité et garanties">
           <p>
-            Le traitement des données personnelles est décrit dans notre{' '}
-            <a href="/politique-confidentialite" className="text-primary hover:underline">
-              politique de confidentialité
-            </a>
-            . Lorsque {site.name} traite des données pour le compte du client, un accord
-            de sous-traitance est conclu conformément à l’article 28 du RGPD.
+            HBG Labs est tenue à une obligation de moyens pour l’ensemble des prestations exécutées.
+          </p>
+          <p className="mt-2">
+            La responsabilité de HBG Labs ne saurait être engagée pour des dommages indirects tels que perte de
+            chiffre d’affaires, manque à gagner, préjudice d’image ou perte d’exploitation. En tout état de
+            cause, si la responsabilité de HBG Labs devait être retenue, le montant total des indemnités ne
+            pourra excéder les sommes effectivement perçues par HBG Labs au titre du contrat au cours des douze
+            (12) derniers mois.
           </p>
         </LegalSection>
 
-        <LegalSection title="12. Droit applicable et litiges">
+        <LegalSection title="11. Droit applicable et règlement des différends">
           <p>
-            Les présentes conditions sont soumises au droit français. En cas de
-            différend, les parties recherchent une solution amiable avant toute action
-            contentieuse. À défaut d’accord, le litige relève des tribunaux compétents.
+            Les présentes CGV sont soumises au droit français. En cas de litige, les parties s’engagent à
+            rechercher en priorité une solution amiable. À défaut d’accord amiable dans un délai de trente (30)
+            jours à compter de la notification du litige, celui-ci sera soumis aux tribunaux compétents dans le
+            ressort du tribunal de commerce de Fort-de-France.
           </p>
         </LegalSection>
       </LegalPage>

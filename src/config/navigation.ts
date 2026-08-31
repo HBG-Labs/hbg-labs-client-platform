@@ -1,14 +1,8 @@
 /**
- * Structure de navigation du site public (§5).
+ * Structure de navigation du site public.
  *
  * Déclarée une fois, consommée par la barre de navigation, le menu mobile, le
- * pied de page et le plan du site. Une route ajoutée ici sans page
- * correspondante produirait un lien mort : le routeur et ce fichier évoluent
- * ensemble.
- *
- * Les routes d'authentification (/connexion, /inscription) n'y figurent pas
- * encore : les écrans arrivent au lot 3. Un lien vers une page inexistante
- * donnerait l'impression d'une fonctionnalité livrée.
+ * pied de page et le plan du site.
  */
 
 export interface NavLink {
@@ -57,7 +51,9 @@ export const footerNav: readonly { title: string; links: readonly NavLink[] }[] 
     links: [
       { label: 'Mentions légales', to: '/mentions-legales' },
       { label: 'Politique de confidentialité', to: '/politique-confidentialite' },
+      { label: 'Conditions générales d’utilisation', to: '/cgu' },
       { label: 'Conditions générales de vente', to: '/cgv' },
+      { label: 'Politique des cookies', to: '/cookies' },
     ],
   },
 ];

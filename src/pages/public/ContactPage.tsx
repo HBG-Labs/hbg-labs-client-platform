@@ -146,13 +146,13 @@ export function ContactPage() {
                     </Field>
 
                     <div className="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
-                      <p className="text-sm text-muted">
-                        Vos données servent uniquement à traiter ce message.{' '}
+                      <p className="max-w-md text-xs leading-relaxed text-muted">
+                        Les données recueillies sont traitées par HBG Labs pour répondre à votre demande (conservation max. 3 ans). Pour exercer vos droits d’accès, de rectification ou d’effacement, écrivez à <a href={`mailto:${site.contact.dpoEmail}`} className="text-primary hover:underline">{site.contact.dpoEmail}</a>. Consultez notre{' '}
                         <a
                           href="/politique-confidentialite"
                           className="text-primary hover:underline"
                         >
-                          Politique de confidentialité
+                          politique de confidentialité
                         </a>
                         .
                       </p>

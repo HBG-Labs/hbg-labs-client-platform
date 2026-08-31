@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Download, ShieldCheck, Mail } from 'lucide-react';
+import { site } from '@/config/site';
 import {
   changePasswordSchema,
   type ChangePasswordInput,
@@ -63,6 +64,32 @@ export function ParametresPage() {
       );
     }
   });
+
+  const handleExportData = () => {
+    if (!user) return;
+    const userData = {
+      export_date: new Date().toISOString(),
+      platform: site.name,
+      user: {
+        id: user.id,
+        email: user.email,
+        full_name: profile?.full_name ?? null,
+        created_at: profile?.created_at ?? user.created_at,
+        platform_role: profile?.platform_role ?? 'CLIENT',
+      },
+      notice: 'Conformément à l’article 20 du RGPD (droit à la portabilité), ces données sont fournies dans un format JSON structuré et lisible par machine.',
+    };
+
+    const blob = new Blob([JSON.stringify(userData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `hbg-labs-donnees-${user.id.slice(0, 8)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <>
@@ -174,6 +201,66 @@ export function ParametresPage() {
                   Modifier mon mot de passe
                 </Button>
               </form>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="size-5 text-primary" aria-hidden="true" />
+                <CardTitle as="h2">Protection des données & Droits RGPD</CardTitle>
+              </div>
+              <CardDescription>
+                Gérez vos données personnelles conformément au Règlement Général sur la Protection des Données (RGPD).
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent className="space-y-6 text-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-lg border border-border bg-surface-muted/30 p-4">
+                <div>
+                  <h3 className="font-medium text-foreground">Exporter mes données (Portabilité)</h3>
+                  <p className="mt-1 text-xs text-muted">
+                    Téléchargez l’ensemble des informations associées à votre profil au format JSON lisible par machine (Art. 20 RGPD).
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportData}
+                  className="shrink-0 inline-flex items-center gap-2"
+                >
+                  <Download className="size-4" aria-hidden="true" />
+                  Exporter mes données
+                </Button>
+              </div>
+
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-lg border border-border bg-surface-muted/30 p-4">
+                <div>
+                  <h3 className="font-medium text-foreground">Suppression de compte & Droit à l’effacement</h3>
+                  <p className="mt-1 text-xs text-muted">
+                    Pour demander la clôture de votre compte et la purge de vos données personnelles (hors obligations légales comptables de 10 ans), adressez votre demande à notre DPO.
+                  </p>
+                </div>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="shrink-0 inline-flex items-center gap-2"
+                >
+                  <a href={`mailto:${site.contact.dpoEmail}?subject=Demande%20d'effacement%20de%20compte%20RGPD&body=Bonjour,%20je%20souhaite%20exercer%20mon%20droit%20à%20l'effacement%20concernant%20mon%20compte%20client%20${encodeURIComponent(user?.email || '')}.`}>
+                    <Mail className="size-4" aria-hidden="true" />
+                    Demander la suppression
+                  </a>
+                </Button>
+              </div>
+
+              <p className="text-xs text-muted">
+                Pour en savoir plus sur la gestion de vos données et vos droits, consultez notre{' '}
+                <a href="/politique-confidentialite" className="text-primary hover:underline font-medium">
+                  politique de confidentialité
+                </a>
+                .
+              </p>
             </CardContent>
           </Card>
         </div>
