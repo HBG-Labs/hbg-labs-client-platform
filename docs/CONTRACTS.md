@@ -140,7 +140,7 @@ Signalez plutôt que d'inventer (§51). État après le lot 9 :
 | Abonnement et facturation côté client | **livré** | 8 |
 | Envoi d'emails (Resend) | **livré**, canal fermé par défaut | 9 |
 | Intégration Vercel (statut réel des sites) | **livré**, exige `vercel_project_id` | 9 |
-| Upload de pièces jointes | schéma et buckets prêts, pas de composant | 4 |
+| Upload de pièces jointes | **livré** — dépôt, téléchargement signé, suppression réservée | 4 |
 | Contrôle avant déploiement, exploitation | **livré** — `npm run preflight`, [RUNBOOK.md](./RUNBOOK.md) | 10 |
 | Catalogue Stripe (`stripe_price_id`) | **dépend de `npm run stripe:sync`** | 8 |
 
@@ -174,6 +174,7 @@ Réutilisez ces briques plutôt que d'en écrire de nouvelles.
 | `Dialog`, `DialogContent` | `components/ui/Dialog` | modale Radix, focus piégé |
 | `AdminPageHeader` | `layouts/AdminLayout` | en-tête d'écran d'administration |
 | `TicketConversation` | `components/tickets/` | fil de demande, client et admin |
+| `TicketAttachments` | `components/tickets/` | dépôt et lecture des pièces jointes |
 | `NotificationBell` | `components/notifications/` | cloche, compteur et panneau |
 | `useMySubscriptions`, `useMyInvoices` | `features/billing/useBilling` | abonnement et factures du client |
 | `useStartCheckout`, `useBillingPortal` | `features/billing/useBilling` | souscription et portail Stripe |
