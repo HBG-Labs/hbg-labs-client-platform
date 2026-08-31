@@ -48,6 +48,7 @@ coverage/
 .vercel/
 .env.local
 
-# OS
+# OS & Root assets
 Thumbs.db
 desktop.ini
+/*.mp4

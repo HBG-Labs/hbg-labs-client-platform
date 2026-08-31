@@ -15,22 +15,23 @@ import { faqSchema, localBusinessSchema } from '@/lib/structured-data';
 import { Button } from '@/components/ui/Button';
 import { Container, Section, SectionHeading } from '@/components/ui/Layout';
 import { Accordion, AccordionItem } from '@/components/ui/Accordion';
+import { InteractiveHero } from '@/components/marketing/InteractiveHero';
 import { PricingGrid } from '@/components/marketing/PricingGrid';
 import { CtaBanner } from '@/components/marketing/CtaBanner';
+import { useHeroVariant } from '@/hooks/useHeroVariant';
 
 /**
  * Page d'accueil (§6).
  *
- * Les quatorze sections demandées sont présentes, à une exception documentée :
- * la section « Témoignages » est absente. HBG Labs n'a pas encore d'avis client
- * publiable, et §57 comme la règle 03-frontend §8.10 interdisent les faux avis.
- * La section « Nos engagements » occupe cette place avec des affirmations
- * vérifiables. Les témoignages y prendront leur place quand ils existeront.
+ * Supporte la bascule dynamique entre le nouveau hero interactif vidéo
+ * et l'ancien hero classique éditorial via le bouton de la topbar.
  *
  * Les tarifs affichés viennent de la base via `PricingGrid`, jamais de ce
  * fichier.
  */
 export function HomePage() {
+  const { variant } = useHeroVariant();
+
   return (
     <>
       <Seo
@@ -40,46 +41,76 @@ export function HomePage() {
         structuredData={[localBusinessSchema(), faqSchema(faq)]}
       />
 
-      {/* ---- 1. Hero Éditorial Plein Cadre Immersion ---- */}
-      <section className="relative min-h-[calc(100vh-52px)] min-h-[calc(100svh-52px)] w-full overflow-hidden flex items-start sm:items-center bg-background">
-        {/* Image de fond plein cadre cadrée sur la pousse/arbre et les papillons */}
-        <img
-          src="/images/hero-editorial.jpg"
-          alt="HBG Labs — Création digitale et croissance"
-          className="absolute inset-0 h-full w-full object-cover object-[78%_38%] sm:object-[75%_bottom] md:object-[80%_center]"
-          loading="eager"
-          fetchPriority="high"
+      {/* ---- 1. Hero : Vidéo interactive ou Ancien Hero classique ---- */}
+      {variant === 'video' ? (
+        <InteractiveHero
+          videoSrc="/videos/no_flying_bugs.mp4"
+          posterSrc="/images/hero-editorial.jpg"
         />
-
-        {/* Contenu textuel et boutons posés directement sur l'image */}
-        <Container width="wide" className="relative z-10 pt-8 pb-12 sm:py-20 lg:py-24 min-h-[calc(100svh-52px)] sm:min-h-0 flex flex-col justify-between sm:justify-center">
-          <div className="max-w-xl lg:max-w-2xl">
-            <h1
-              id="hero-heading"
-              className="text-balance font-serif font-normal text-accent text-[clamp(48px,12vw,96px)] leading-[1.02] tracking-[-0.015em]"
-            >
-              Créer <br />l'impossible
-            </h1>
-
-            <p className="mt-4 sm:mt-8 max-w-sm sm:max-w-md font-sans text-[15px] sm:text-base leading-relaxed text-ink/90">
-              On transforme vos idées les plus ambitieuses en sites web réels.
-              Parce qu'«&nbsp;infaisable&nbsp;» n'est que le point de départ.
-            </p>
+      ) : (
+        <section
+          className="relative min-h-[calc(100vh-52px)] min-h-[calc(100svh-52px)] w-full overflow-hidden flex items-start sm:items-center bg-background"
+          aria-label="Présentation principale classique HBG Labs"
+        >
+          {/* Fond Image Plein Cadre */}
+          <div
+            className="absolute inset-0 h-full w-full pointer-events-none overflow-hidden z-0 bg-background"
+            aria-hidden="true"
+          >
+            <img
+              src="/images/hero-editorial.jpg"
+              alt="HBG Labs — Création digitale et croissance"
+              loading="eager"
+              fetchPriority="high"
+              className="absolute inset-0 h-full w-full object-cover object-[78%_38%] sm:object-[75%_bottom] md:object-[80%_center]"
+            />
           </div>
 
-          {/* Boutons placés sous l'arbre sur mobile (en bas de l'écran), surélevés légèrement */}
-          <div className="mt-auto mb-3 sm:mb-0 pt-6 sm:mt-10 sm:pt-0 flex flex-col gap-3.5 sm:flex-row sm:items-center max-w-xl">
-            <Button asChild size="lg" variant="primary" className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 text-[15px] shadow-md justify-center text-center">
-              <Link to="/devis">
-                Démarrer un projet
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-6 sm:px-8 py-4 sm:py-5 text-[15px] bg-surface/90 backdrop-blur-sm hover:bg-surface border-ink/20 shadow-sm justify-center text-center">
-              <Link to="/tarifs">Découvrir les offres</Link>
-            </Button>
-          </div>
-        </Container>
-      </section>
+          {/* Contenu Texte & Actions */}
+          <Container
+            width="wide"
+            className="relative z-10 pt-8 pb-12 sm:py-20 lg:py-24 min-h-[calc(100svh-52px)] sm:min-h-0 flex flex-col justify-between sm:justify-center"
+          >
+            <div className="max-w-xl lg:max-w-2xl">
+              <h1
+                id="hero-heading"
+                className="text-balance font-serif font-normal text-accent text-[clamp(48px,12vw,96px)] lg:text-[104px] leading-[1.02] tracking-[-0.015em]"
+              >
+                Créer <br />l'impossible
+              </h1>
+
+              <p className="mt-4 sm:mt-8 max-w-sm sm:max-w-md font-sans text-[15px] sm:text-base leading-relaxed text-ink/90">
+                On transforme vos idées les plus ambitieuses en sites web réels.
+                Parce qu'«&nbsp;infaisable&nbsp;» n'est que le point de départ.
+              </p>
+            </div>
+
+            {/* Actions Principales */}
+            <div className="mt-auto mb-3 sm:mb-0 pt-6 sm:mt-10 sm:pt-0 flex flex-col gap-3.5 sm:flex-row sm:items-center max-w-xl">
+              <Button
+                asChild
+                size="lg"
+                variant="primary"
+                className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 text-[15px] shadow-md justify-center text-center group"
+              >
+                <Link to="/devis">
+                  Démarrer un projet
+                  <ArrowRight className="size-4 ml-1 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                </Link>
+              </Button>
+
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="w-full sm:w-auto px-6 sm:px-8 py-4 sm:py-5 text-[15px] bg-surface/90 backdrop-blur-sm hover:bg-surface border-ink/20 shadow-xs justify-center text-center"
+              >
+                <Link to="/tarifs">Découvrir les offres</Link>
+              </Button>
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* ---- 2. Problème client ---- */}
       <Section tone="muted">

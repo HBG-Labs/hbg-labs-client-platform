@@ -1,29 +1,26 @@
 import { useState } from 'react';
 import { Link, NavLink as RouterNavLink } from 'react-router-dom';
 import * as Dialog from '@radix-ui/react-dialog';
-import { Menu, X } from 'lucide-react';
+import { Menu, Play, Image as ImageIcon, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { mainNav } from '@/config/navigation';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Layout';
 import { useAuth } from '@/features/auth/auth-context';
+import { useHeroVariant } from '@/hooks/useHeroVariant';
 import { Logo } from './Logo';
 
 /**
  * Barre de navigation du site public.
  *
- * Sur mobile, le menu devient un tiroir latéral (§40). Radix Dialog fournit le
- * piège de focus, la fermeture par Échap, le blocage du défilement d'arrière
- * plan et les attributs ARIA. Réécrire cela à la main donne presque toujours
- * un tiroir dont on sort au clavier sans le fermer.
- *
- * Sur grand écran la navigation reste plate : les trois pages de services sont
- * accessibles depuis `/services` et le pied de page. Un menu déroulant au
- * survol pose des problèmes d'accessibilité réels pour trois liens.
+ * Intègre un commutateur (switch segmenté) à 2 positions :
+ * - [ Vidéo ] : Hero interactif animé et scrubbé à la souris
+ * - [ Classique ] : Ancien hero avec image éditoriale
  */
 export function PublicNavbar() {
   const [open, setOpen] = useState(false);
   const { user, isLoading } = useAuth();
+  const { variant, setVariant } = useHeroVariant();
 
   const closeDrawer = () => setOpen(false);
 
@@ -31,7 +28,7 @@ export function PublicNavbar() {
     <header className="sticky top-0 z-40 h-[52px] bg-background transition-colors duration-200">
       <Container width="wide" className="h-full">
         <nav
-          className="flex h-full items-center justify-between gap-6"
+          className="flex h-full items-center justify-between gap-4 lg:gap-6"
           aria-label="Navigation principale"
         >
           <Logo />
@@ -56,6 +53,46 @@ export function PublicNavbar() {
           </ul>
 
           <div className="hidden items-center gap-3 md:flex">
+            {/* ── Switch Segmenté à 2 boutons : Vidéo ⇄ Classique ── */}
+            <div
+              className="inline-flex items-center rounded-full border border-border/80 bg-surface p-1 shadow-2xs"
+              role="radiogroup"
+              aria-label="Choix du modèle de hero"
+            >
+              <button
+                type="button"
+                role="radio"
+                aria-checked={variant === 'video'}
+                onClick={() => setVariant('video')}
+                className={cn(
+                  'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer',
+                  variant === 'video'
+                    ? 'bg-ink text-white shadow-xs'
+                    : 'text-muted hover:text-ink'
+                )}
+                title="Afficher le hero vidéo interactif"
+              >
+                <Play className="size-2.5 fill-current" aria-hidden="true" />
+                <span>Vidéo</span>
+              </button>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={variant === 'classic'}
+                onClick={() => setVariant('classic')}
+                className={cn(
+                  'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer',
+                  variant === 'classic'
+                    ? 'bg-ink text-white shadow-xs'
+                    : 'text-muted hover:text-ink'
+                )}
+                title="Afficher l'ancien hero classique"
+              >
+                <ImageIcon className="size-3" aria-hidden="true" />
+                <span>Classique</span>
+              </button>
+            </div>
+
             {!isLoading &&
               (user ? (
                 <Button asChild size="sm" variant="outline">
@@ -154,6 +191,35 @@ export function PublicNavbar() {
                 </div>
 
                 <div className="space-y-3 border-t border-border p-6">
+                  {/* Switch Hero Mobile */}
+                  <div className="flex items-center justify-between rounded-xl border border-border bg-surface p-2">
+                    <span className="text-xs font-medium text-muted pl-2">Modèle</span>
+                    <div className="inline-flex rounded-full bg-background p-0.5 border border-border">
+                      <button
+                        type="button"
+                        onClick={() => setVariant('video')}
+                        className={cn(
+                          'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-all cursor-pointer',
+                          variant === 'video' ? 'bg-ink text-white shadow-xs' : 'text-muted hover:text-ink'
+                        )}
+                      >
+                        <Play className="size-2.5 fill-current" aria-hidden="true" />
+                        <span>Vidéo</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setVariant('classic')}
+                        className={cn(
+                          'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-all cursor-pointer',
+                          variant === 'classic' ? 'bg-ink text-white shadow-xs' : 'text-muted hover:text-ink'
+                        )}
+                      >
+                        <ImageIcon className="size-3" aria-hidden="true" />
+                        <span>Classique</span>
+                      </button>
+                    </div>
+                  </div>
+
                   {!isLoading &&
                     (user ? (
                       <Button asChild fullWidth variant="outline">
