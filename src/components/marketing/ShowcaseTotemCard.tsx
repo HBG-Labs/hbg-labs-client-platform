@@ -90,7 +90,7 @@ export function ShowcaseTotemCard({
           {/* Inner Artwork Cutout Window */}
           <div className="relative w-full flex-1 overflow-hidden bg-white shadow-[inset_0_3px_8px_rgba(0,0,0,0.4),0_1px_2px_rgba(0,0,0,0.15)] border border-stone-400/30">
             
-            {/* Static Landscape Desktop Layout */}
+            {/* Static Landscape Desktop Layout (No scroll animation) */}
             <div className="w-full h-full select-none">
               {project.id === 'soie-et-terre' ? (
                 <SoieEtTerreLandscapeMockup />
@@ -136,11 +136,11 @@ export function ShowcaseTotemCard({
 
 /**
  * ── Landscape Desktop Mockup for SOIE & TERRE ──
- * Reproduction fidèle 1:1 statique du vrai site BeautyLanding
+ * Reproduction fidèle 1:1 du vrai site BeautyLanding (Hero immersif sans défilement)
  */
 function SoieEtTerreLandscapeMockup() {
   return (
-    <div className="relative w-full h-full overflow-hidden flex flex-col justify-between text-white font-sans antialiased">
+    <div className="relative w-full h-full overflow-hidden bg-[#FAF8F5] text-[#2B2520] font-sans antialiased text-[11px] sm:text-[12px] leading-snug">
       {/* Background Photo */}
       <div
         className="absolute inset-0 w-full h-full bg-cover bg-center"
@@ -154,12 +154,12 @@ function SoieEtTerreLandscapeMockup() {
       </div>
 
       {/* Real Site Mini Topbar */}
-      <div className="relative z-10 h-8 sm:h-9 px-4 sm:px-6 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-[#E8DFD8]/80 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="size-2 rounded-full bg-[#8C684F]" />
-          <span className="font-serif font-bold text-[11px] sm:text-[12px] tracking-[0.2em] text-[#2B2520]">SOIE &amp; TERRE</span>
+      <div className="relative z-10 h-7 sm:h-8 px-3 sm:px-5 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-[#E8DFD8]/80 flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <span className="size-1.5 rounded-full bg-[#8C684F]" />
+          <span className="font-serif font-bold text-[10px] sm:text-[11px] tracking-[0.2em] text-[#2B2520]">SOIE &amp; TERRE</span>
         </div>
-        <div className="hidden sm:flex items-center gap-4 text-[8px] uppercase tracking-[0.15em] text-[#6B6259] font-medium">
+        <div className="hidden sm:flex items-center gap-3.5 text-[8px] uppercase tracking-[0.15em] text-[#6B6259] font-medium">
           <span>Accueil</span>
           <span>Nos soins</span>
           <span>Rituels</span>
@@ -167,39 +167,39 @@ function SoieEtTerreLandscapeMockup() {
           <span>Boutique</span>
           <span>Contact</span>
         </div>
-        <div className="px-3 py-1 rounded-full border border-[#2B2520]/60 text-[#2B2520] text-[8px] font-bold uppercase tracking-wider whitespace-nowrap shadow-2xs">
+        <div className="px-2.5 py-0.5 rounded-full border border-[#2B2520]/60 text-[#2B2520] text-[7.5px] font-bold uppercase tracking-wider whitespace-nowrap shadow-2xs">
           Prendre rendez-vous
         </div>
       </div>
 
       {/* Real Site Hero Content */}
-      <div className="relative z-10 flex-1 p-4 sm:p-6 flex flex-col justify-between max-w-lg">
+      <div className="relative z-10 h-[calc(100%-1.75rem)] p-3 sm:p-5 flex flex-col justify-between text-white max-w-lg">
         <div>
-          <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-[8px] font-bold uppercase tracking-[0.2em] mb-2">
+          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-[7.5px] font-bold uppercase tracking-[0.2em] mb-1.5">
             <Sparkles className="size-2.5 text-[#D4B996]" />
             <span>Rituels de Beauté &bull; Antilles</span>
           </div>
 
-          <h4 className="font-serif text-[18px] sm:text-[22px] lg:text-[25px] font-light text-white leading-tight tracking-tight">
+          <h4 className="font-serif text-[16px] sm:text-[20px] lg:text-[23px] font-light text-white leading-tight tracking-tight">
             La beauté <br />
             <span className="italic font-normal">à l’état naturel.</span>
           </h4>
 
-          <p className="mt-1 text-[9px] sm:text-[10px] text-[#EAE3D9] leading-relaxed line-clamp-2 max-w-sm font-light">
+          <p className="mt-1 text-[8.5px] sm:text-[9.5px] text-[#EAE3D9] leading-relaxed line-clamp-2 max-w-sm font-light">
             Des soins inspirés de la nature des Antilles, pensés pour révéler votre éclat et vous offrir un véritable moment de bien-être.
           </p>
 
-          <div className="mt-2.5 flex items-center gap-2.5">
-            <span className="px-3 py-1 rounded-full bg-[#FAF8F5] text-[#2B2520] text-[8px] font-bold uppercase tracking-wider shadow-sm">
+          <div className="mt-2 flex items-center gap-2">
+            <span className="px-2.5 py-1 rounded-full bg-[#FAF8F5] text-[#2B2520] text-[7.5px] font-bold uppercase tracking-wider shadow-sm">
               Découvrir nos soins
             </span>
-            <span className="px-3 py-1 rounded-full border border-white/80 text-white text-[8px] font-bold uppercase tracking-wider">
+            <span className="px-2.5 py-1 rounded-full border border-white/80 text-white text-[7.5px] font-bold uppercase tracking-wider">
               Prendre rendez-vous
             </span>
           </div>
         </div>
 
-        <div className="pt-2 border-t border-white/20 flex items-center gap-3 text-[8px] font-mono uppercase tracking-widest text-[#D4B996]">
+        <div className="pt-1.5 border-t border-white/20 flex items-center gap-3 text-[7.5px] font-mono uppercase tracking-widest text-[#D4B996]">
           <span>Martinique</span>
           <span>&bull;</span>
           <span>Guadeloupe</span>
@@ -213,68 +213,68 @@ function SoieEtTerreLandscapeMockup() {
 
 /**
  * ── Landscape Desktop Mockup for KAYO CONSTRUCTION ──
- * Reproduction statique 1:1 du site Kayo Construction
+ * Conçu spécifiquement pour le ratio horizontal panoramique (Sans défilement)
  */
 function KayoConstructionLandscapeMockup() {
   return (
-    <div className="relative w-full h-full bg-[#121316] text-[#F4F5F7] font-sans antialiased text-[11px] sm:text-[12px] leading-snug overflow-hidden flex flex-col justify-between">
-      {/* ── Mini Desktop Topbar ── */}
-      <div className="h-8 sm:h-9 px-4 sm:px-6 bg-[#181A1F] border-b border-[#2A2E38] flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="size-2 rounded-full bg-[#E65100]" />
-          <span className="font-sans font-black text-[11px] sm:text-[12px] tracking-wider text-white">KAYO CONSTRUCTION</span>
+    <div className="relative w-full h-full overflow-hidden bg-[#121316] text-[#F4F5F7] font-sans antialiased text-[11px] sm:text-[12px] leading-snug flex flex-col">
+      {/* Mini Desktop Topbar */}
+      <div className="h-7 sm:h-8 px-3 sm:px-5 bg-[#181A1F] border-b border-[#2A2E38] flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-1.5">
+          <span className="size-1.5 rounded-full bg-[#E65100]" />
+          <span className="font-sans font-black text-[10px] sm:text-[11px] tracking-wider text-white">KAYO CONSTRUCTION</span>
         </div>
-        <div className="hidden sm:flex items-center gap-4 text-[8px] uppercase tracking-wider text-[#A0A6B5] font-semibold">
+        <div className="hidden sm:flex items-center gap-3.5 text-[8px] uppercase tracking-wider text-[#A0A6B5] font-semibold">
           <span>Gros Œuvre</span>
           <span>Parc Matériel</span>
           <span>Chantiers</span>
           <span>Contact</span>
         </div>
-        <div className="px-3 py-1 rounded-md bg-[#E65100] text-white text-[8px] font-bold tracking-wide whitespace-nowrap shadow-2xs">
+        <div className="px-2.5 py-0.5 rounded-md bg-[#E65100] text-white text-[7.5px] font-bold tracking-wide whitespace-nowrap shadow-2xs">
           Demander un devis
         </div>
       </div>
 
-      {/* ── Hero Widescreen 2-Column Banner ── */}
-      <div className="flex-1 p-4 sm:p-6 grid grid-cols-12 gap-5 items-center">
+      {/* Hero Widescreen 2-Column Banner */}
+      <div className="p-3 sm:p-5 flex-1 grid grid-cols-12 gap-4 items-center">
         {/* Left Column: Industrial Presentation */}
-        <div className="col-span-7 pr-2">
-          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#E65100]/20 border border-[#E65100]/30 text-[#FF8A50] text-[8px] font-black uppercase tracking-wider mb-2">
+        <div className="col-span-7 pr-2 flex flex-col justify-center">
+          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#E65100]/20 border border-[#E65100]/30 text-[#FF8A50] text-[7.5px] font-black uppercase tracking-wider mb-1.5 w-fit">
             <HardHat className="size-2.5" />
             <span>Gros Œuvre &bull; VRD &bull; Génie Civil</span>
           </div>
 
-          <h4 className="font-sans text-[16px] sm:text-[19px] lg:text-[21px] font-black text-white leading-tight uppercase tracking-tight">
+          <h4 className="font-sans text-[15px] sm:text-[18px] lg:text-[20px] font-black text-white leading-tight uppercase tracking-tight">
             Construire avec force. <br />
             <span className="text-[#E65100]">Bâtir avec précision.</span>
           </h4>
 
-          <p className="mt-1.5 text-[9px] sm:text-[10px] text-[#A0A6B5] leading-relaxed line-clamp-2">
+          <p className="mt-1 text-[8.5px] sm:text-[9.5px] text-[#A0A6B5] leading-relaxed line-clamp-2">
             340+ chantiers livrés aux Antilles. 45 engins en parc propre et équipes certifiées parasismique.
           </p>
 
-          <div className="mt-3 flex items-center gap-3">
-            <span className="px-3 py-1 rounded-md bg-[#E65100] text-white text-[8px] font-bold uppercase tracking-wider">
+          <div className="mt-2.5 flex items-center gap-2.5">
+            <span className="px-2.5 py-1 rounded-md bg-[#E65100] text-white text-[7.5px] font-bold uppercase tracking-wider">
               Étude de projet
             </span>
-            <div className="flex items-center gap-2 text-[8px] font-mono text-[#DCDFE4]">
-              <span className="text-[#FF8A50] font-bold text-[10px]">45</span> Engins
+            <div className="flex items-center gap-2 text-[7.5px] font-mono text-[#DCDFE4]">
+              <span className="text-[#FF8A50] font-bold text-[9px]">45</span> Engins
               <span className="text-stone-600">|</span>
-              <span className="text-[#FF8A50] font-bold text-[10px]">340+</span> Chantiers
+              <span className="text-[#FF8A50] font-bold text-[9px]">340+</span> Chantiers
             </div>
           </div>
         </div>
 
         {/* Right Column: Site Excavator Image */}
-        <div className="col-span-5 relative aspect-[16/11] rounded-xl overflow-hidden shadow-md border border-[#2A2E38]">
+        <div className="col-span-5 relative h-full max-h-[140px] rounded-lg overflow-hidden shadow-md border border-[#2A2E38]">
           <img
             src="/images/showcase/kayo-construction.jpg"
             alt="Kayo Construction Chantiers"
             className="w-full h-full object-cover object-[center_35%]"
           />
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-2 text-white">
-            <p className="text-[8px] font-bold text-white uppercase leading-tight">Parc Engins Propre</p>
-            <p className="text-[7px] text-[#FF8A50]">Pelles chenilles 22T &bull; Camions 8x4</p>
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-1.5 text-white">
+            <p className="text-[7.5px] font-bold text-white uppercase leading-tight">Parc Engins Propre</p>
+            <p className="text-[6.5px] text-[#FF8A50]">Pelles chenilles 22T &bull; Camions 8x4</p>
           </div>
         </div>
       </div>
