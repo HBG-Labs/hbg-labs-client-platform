@@ -32,33 +32,33 @@ export function ShowcaseGallery() {
   return (
     <Section
       id="realisations"
-      className="relative py-28 sm:py-36 overflow-hidden border-y border-stone-300/80 bg-[#E3E1DC]"
+      className="relative py-20 sm:py-28 lg:py-32 overflow-hidden border-y border-stone-300/80 bg-[#E3E1DC]"
     >
-      {/* ── Realistic Studio Architectural Concrete Wall Background ── */}
+      {/* ── 4K Calibrated Studio Architectural Concrete Wall Background ── */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none"
+        className="absolute inset-0 bg-cover bg-[center_top] xl:bg-center bg-no-repeat pointer-events-none 2xl:bg-contain"
         style={{ backgroundImage: "url('/images/showcase-wall-bg.jpg')" }}
       />
-      {/* Ambient depth overlay */}
+      {/* Ambient soft lighting overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-stone-900/5 via-transparent to-stone-900/15 pointer-events-none" />
 
-      <Container width="wide" className="relative z-10">
+      <Container width="wide" className="relative z-10 max-w-7xl mx-auto">
         {/* ── Header Area (True to reference image) ── */}
-        <div className="text-center max-w-4xl mx-auto">
+        <div className="text-center max-w-3xl mx-auto">
           <p className="text-xs sm:text-sm font-semibold tracking-widest text-[#3B3E48] uppercase">
             Nos réalisations / Showcase
           </p>
 
-          <h2 className="mt-3 font-sans text-2xl sm:text-4xl md:text-5xl lg:text-[2.65rem] font-black uppercase tracking-tight text-[#111215] leading-tight">
+          <h2 className="mt-2.5 font-sans text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-black uppercase tracking-tight text-[#111215] leading-tight">
             Des expériences digitales pensées pour votre activité.
           </h2>
 
-          <p className="mt-3 text-sm sm:text-base text-[#4A4D57] font-medium">
+          <p className="mt-2 text-xs sm:text-sm md:text-base text-[#4A4D57] font-medium">
             Chaque entreprise est unique. Votre site doit l’être aussi.
           </p>
 
           {/* ── Minimalist Inline Filter Bar (TOUS | SOIN & BEAUTÉ | ...) ── */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-y-2 text-xs sm:text-sm uppercase tracking-wider font-bold text-[#3B3E48]">
+          <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-y-2 text-xs sm:text-sm uppercase tracking-wider font-bold text-[#3B3E48]">
             {FILTER_ITEMS.map((item, index) => {
               const isActive = activeFilter === item.id;
               return (
@@ -86,7 +86,7 @@ export function ShowcaseGallery() {
         </div>
 
         {/* ── 4 Wall-Mounted Interactive Screens Grid ── */}
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 items-start">
+        <div className="mt-12 sm:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-6 xl:gap-8 items-start max-w-6xl mx-auto">
           {SHOWCASE_PROJECTS.map((project) => {
             const isFocused =
               activeFilter === 'ALL' || activeFilter === project.category;
@@ -103,7 +103,7 @@ export function ShowcaseGallery() {
         </div>
 
         {/* ── Studio Brushed Aluminum Plaque "HBGLabs" ── */}
-        <div className="mt-14 flex justify-center">
+        <div className="mt-12 sm:mt-14 flex justify-center">
           <div className="relative inline-flex items-center gap-3 px-8 py-2.5 rounded-md bg-gradient-to-b from-[#E6E8EC] via-[#CED2D9] to-[#ADB3BD] border border-white/60 shadow-[0_6px_20px_rgba(0,0,0,0.25),inset_0_1px_2px_rgba(255,255,255,0.8)] select-none">
             {/* Corner metallic rivets */}
             <div className="absolute top-1.5 left-2 size-1.5 rounded-full bg-stone-500/70 shadow-inner" />
