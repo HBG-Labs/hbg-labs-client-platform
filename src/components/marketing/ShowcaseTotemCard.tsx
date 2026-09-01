@@ -194,15 +194,15 @@ function SoieEtTerreLandscapeMockup() {
 function KayoConstructionLandscapeMockup() {
   return (
     <div className="relative w-full h-full overflow-hidden bg-[#121316] text-[#F4F5F7] font-sans antialiased text-[11px] sm:text-[12px] leading-snug flex flex-col">
-      {/* Background Excavator Photo Full Bleed */}
+      {/* Background Excavator Photo Full Bleed with light transparent filter */}
       <div
         className="absolute inset-0 w-full h-full bg-cover bg-center"
         style={{
           backgroundImage: "url('/images/showcase/kayo-construction-hero.jpg')",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-[#121316]/95 via-[#121316]/80 to-[#121316]/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#121316]/90 via-transparent to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0E1013]/70 via-[#0E1013]/35 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
       </div>
 
       {/* Mini Desktop Topbar */}

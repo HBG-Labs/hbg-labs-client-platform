@@ -183,8 +183,8 @@ export function ConstructionLanding() {
             backgroundImage: "url('/images/showcase/kayo-construction-hero.jpg')",
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#121316] via-[#121316]/90 to-[#121316]/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#121316] via-transparent to-[#121316]/75" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#121316]/70 via-[#121316]/35 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto grid gap-12 lg:grid-cols-12 items-center">
