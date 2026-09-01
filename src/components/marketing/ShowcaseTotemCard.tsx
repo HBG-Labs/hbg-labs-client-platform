@@ -192,9 +192,9 @@ function SoieEtTerreLandscapeMockup() {
         {/* Right Column: Clean Dedicated Hero Portrait */}
         <div className="col-span-5 relative aspect-[16/11] rounded-xl overflow-hidden shadow-md border border-[#E8DFD8]">
           <img
-            src="/images/hero-editorial.jpg"
+            src="/images/showcase/soie-et-terre-hero.jpg"
             alt="Soie & Terre Soins Botaniques"
-            className="w-full h-full object-cover object-[center_25%]"
+            className="w-full h-full object-cover object-[center_35%]"
           />
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent p-2 text-white">
             <p className="text-[8px] font-bold leading-tight">Rituel Signature Caraïbes</p>

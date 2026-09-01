@@ -299,7 +299,7 @@ export function BeautyLanding() {
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat scale-105 transition-transform duration-1000 ease-out"
           style={{
-            backgroundImage: "url('/images/hero-editorial.jpg')",
+            backgroundImage: "url('/images/showcase/soie-et-terre-hero.jpg')",
           }}
         >
           {/* Subtle Warm Cinematic Shadow Gradient Overlay */}
