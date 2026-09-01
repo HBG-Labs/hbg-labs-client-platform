@@ -1,4 +1,4 @@
-import { Shield, Sparkles, Clock, CheckCircle2 } from 'lucide-react';
+import { Shield, Sparkles, Clock } from 'lucide-react';
 import { site } from '@/config/site';
 import { faq } from '@/content/marketing';
 import { Seo } from '@/components/Seo';
@@ -107,58 +107,143 @@ export function TarifsPage() {
             align="center"
           />
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-stone-200 border border-stone-200 rounded-none bg-white">
             {/* HBG Care */}
-            <div className="rounded-2xl border border-border bg-surface p-6 sm:p-7 shadow-xs">
-              <div className="flex items-center gap-2 text-ink">
-                <Shield className="size-5 text-accent" aria-hidden="true" />
-                <h3 className="font-serif text-xl font-normal">HBG Care</h3>
+            <div className="p-7 sm:p-9 flex flex-col justify-between bg-white">
+              <div>
+                <div className="flex items-center gap-2 min-h-[36px]">
+                  <Shield className="size-5 text-stone-700" aria-hidden="true" />
+                  <h3 className="font-serif text-3xl font-normal text-ink">HBG Care</h3>
+                </div>
+
+                <p className="mt-2.5 text-sm text-stone-600 leading-relaxed min-h-[44px]">
+                  L’essentiel pour garder votre site en ligne sans interruption.
+                </p>
+
+                <div className="mt-8 mb-6">
+                  <p className="text-xs font-sans text-stone-500 font-medium">Abonnement</p>
+                  <div className="mt-1 flex items-baseline gap-1">
+                    <span className="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">29 €</span>
+                    <span className="text-xs font-bold text-stone-500 tracking-wider">/ mois</span>
+                  </div>
+                </div>
+
+                <div className="border-t border-stone-200/80 my-8" />
+
+                <div>
+                  <h4 className="text-sm font-bold text-ink mb-4">Inclus</h4>
+                  <ul className="space-y-3 text-sm">
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-stone-900 font-bold select-none text-base leading-none mt-0.5">•</span>
+                      <span className="leading-tight text-stone-800">Hébergement infogéré haute performance</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-stone-900 font-bold select-none text-base leading-none mt-0.5">•</span>
+                      <span className="leading-tight text-stone-800">Certificat SSL & sécurité HTTPS</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-stone-900 font-bold select-none text-base leading-none mt-0.5">•</span>
+                      <span className="leading-tight text-stone-800">Sauvegardes & surveillance continue</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-stone-900 font-bold select-none text-base leading-none mt-0.5">•</span>
+                      <span className="leading-tight text-stone-800">Support par e-mail sous 48h</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <p className="mt-2 text-3xl font-serif font-normal text-ink">29 € <span className="text-xs font-sans text-muted">/ mois</span></p>
-              <p className="mt-2 text-xs text-muted">L’essentiel pour garder votre site en ligne sans interruption.</p>
-              <ul className="mt-6 space-y-2.5 text-xs text-ink">
-                <li className="flex items-center gap-2"><CheckCircle2 className="size-3.5 text-accent" /> Hébergement infogéré haute performance</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="size-3.5 text-accent" /> Certificat SSL & sécurité HTTPS</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="size-3.5 text-accent" /> Sauvegardes & surveillance continue</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="size-3.5 text-accent" /> Support par e-mail sous 48h</li>
-              </ul>
             </div>
 
             {/* HBG Care Plus */}
-            <div className="rounded-2xl border-2 border-accent bg-surface p-6 sm:p-7 shadow-md relative">
-              <div className="absolute -top-3 left-6">
-                <span className="rounded-full bg-accent px-3 py-0.5 text-[11px] font-semibold text-white">
-                  Recommandé
-                </span>
+            <div className="p-7 sm:p-9 flex flex-col justify-between bg-white">
+              <div>
+                <div className="flex items-center gap-2 min-h-[36px]">
+                  <Sparkles className="size-5 text-stone-700" aria-hidden="true" />
+                  <h3 className="font-serif text-3xl font-normal text-ink">HBG Care Plus</h3>
+                </div>
+
+                <p className="mt-2.5 text-sm text-stone-600 leading-relaxed min-h-[44px]">
+                  Pour les entreprises qui souhaitent des mises à jour régulières.
+                </p>
+
+                <div className="mt-8 mb-6">
+                  <p className="text-xs font-sans text-stone-500 font-medium">Abonnement</p>
+                  <div className="mt-1 flex items-baseline gap-1">
+                    <span className="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">49 €</span>
+                    <span className="text-xs font-bold text-stone-500 tracking-wider">/ mois</span>
+                  </div>
+                </div>
+
+                <div className="border-t border-stone-200/80 my-8" />
+
+                <div>
+                  <h4 className="text-sm font-bold text-ink mb-4">Inclus</h4>
+                  <ul className="space-y-3 text-sm">
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-stone-900 font-bold select-none text-base leading-none mt-0.5">•</span>
+                      <span className="leading-tight text-stone-800">Tout ce qui est inclus dans HBG Care</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-stone-900 font-bold select-none text-base leading-none mt-0.5">•</span>
+                      <span className="leading-tight text-stone-800 font-medium">Jusqu’à 30 min de modifications/mois</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-stone-900 font-bold select-none text-base leading-none mt-0.5">•</span>
+                      <span className="leading-tight text-stone-800">Vérifications & optimisation de vitesse</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-stone-900 font-bold select-none text-base leading-none mt-0.5">•</span>
+                      <span className="leading-tight text-stone-800">Support prioritaire sous 24h ouvrées</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div className="flex items-center gap-2 text-ink">
-                <Sparkles className="size-5 text-accent" aria-hidden="true" />
-                <h3 className="font-serif text-xl font-normal">HBG Care Plus</h3>
-              </div>
-              <p className="mt-2 text-3xl font-serif font-normal text-ink">49 € <span className="text-xs font-sans text-muted">/ mois</span></p>
-              <p className="mt-2 text-xs text-muted">Pour les entreprises qui souhaitent des mises à jour régulières.</p>
-              <ul className="mt-6 space-y-2.5 text-xs text-ink">
-                <li className="flex items-center gap-2"><CheckCircle2 className="size-3.5 text-accent" /> Tout ce qui est inclus dans HBG Care</li>
-                <li className="flex items-center gap-2 font-medium text-accent"><CheckCircle2 className="size-3.5 text-accent" /> Jusqu’à 30 min de modifications/mois</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="size-3.5 text-accent" /> Vérifications & optimisation de vitesse</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="size-3.5 text-accent" /> Support prioritaire sous 24h ouvrées</li>
-              </ul>
             </div>
 
             {/* HBG Care Pro */}
-            <div className="rounded-2xl border border-border bg-surface p-6 sm:p-7 shadow-xs">
-              <div className="flex items-center gap-2 text-ink">
-                <Clock className="size-5 text-accent" aria-hidden="true" />
-                <h3 className="font-serif text-xl font-normal">HBG Care Pro</h3>
+            <div className="p-7 sm:p-9 flex flex-col justify-between bg-white">
+              <div>
+                <div className="flex items-center gap-2 min-h-[36px]">
+                  <Clock className="size-5 text-stone-700" aria-hidden="true" />
+                  <h3 className="font-serif text-3xl font-normal text-ink">HBG Care Pro</h3>
+                </div>
+
+                <p className="mt-2.5 text-sm text-stone-600 leading-relaxed min-h-[44px]">
+                  Déléguez intégralement la vie et l'optimisation de votre site.
+                </p>
+
+                <div className="mt-8 mb-6">
+                  <p className="text-xs font-sans text-stone-500 font-medium">Abonnement</p>
+                  <div className="mt-1 flex items-baseline gap-1">
+                    <span className="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">79 €</span>
+                    <span className="text-xs font-bold text-stone-500 tracking-wider">/ mois</span>
+                  </div>
+                </div>
+
+                <div className="border-t border-stone-200/80 my-8" />
+
+                <div>
+                  <h4 className="text-sm font-bold text-ink mb-4">Inclus</h4>
+                  <ul className="space-y-3 text-sm">
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-stone-900 font-bold select-none text-base leading-none mt-0.5">•</span>
+                      <span className="leading-tight text-stone-800">Tout ce qui est inclus dans HBG Care Plus</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-stone-900 font-bold select-none text-base leading-none mt-0.5">•</span>
+                      <span className="leading-tight text-stone-800 font-medium">Jusqu’à 1 h de modifications/mois</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-stone-900 font-bold select-none text-base leading-none mt-0.5">•</span>
+                      <span className="leading-tight text-stone-800">Suivi SEO technique & rapport mensuel</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-stone-900 font-bold select-none text-base leading-none mt-0.5">•</span>
+                      <span className="leading-tight text-stone-800">Support prioritaire dédié direct</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <p className="mt-2 text-3xl font-serif font-normal text-ink">79 € <span className="text-xs font-sans text-muted">/ mois</span></p>
-              <p className="mt-2 text-xs text-muted">Déléguez intégralement la vie et l'optimisation de votre site.</p>
-              <ul className="mt-6 space-y-2.5 text-xs text-ink">
-                <li className="flex items-center gap-2"><CheckCircle2 className="size-3.5 text-accent" /> Tout ce qui est inclus dans HBG Care Plus</li>
-                <li className="flex items-center gap-2 font-medium text-accent"><CheckCircle2 className="size-3.5 text-accent" /> Jusqu’à 1 h de modifications/mois</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="size-3.5 text-accent" /> Suivi SEO technique & rapport mensuel</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="size-3.5 text-accent" /> Support prioritaire dédié direct</li>
-              </ul>
             </div>
           </div>
         </Container>
@@ -174,15 +259,15 @@ export function TarifsPage() {
             align="center"
           />
 
-          <div className="mt-10 overflow-hidden rounded-2xl border border-border bg-surface shadow-xs">
-            <div className="divide-y divide-border">
+          <div className="mt-10 overflow-hidden rounded-none border border-stone-200 bg-white">
+            <div className="divide-y divide-stone-200">
               {optionsList.map((item) => (
                 <div
                   key={item.service}
-                  className="flex items-center justify-between p-4 sm:px-6 transition-colors hover:bg-surface-muted/40"
+                  className="flex items-center justify-between p-4 sm:px-6 transition-colors hover:bg-stone-50/60"
                 >
                   <span className="text-sm font-medium text-ink">{item.service}</span>
-                  <span className="text-sm font-semibold text-accent">{item.price}</span>
+                  <span className="text-sm font-semibold text-ink">{item.price}</span>
                 </div>
               ))}
             </div>
@@ -200,14 +285,14 @@ export function TarifsPage() {
             align="center"
           />
 
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {processSteps.map((step) => (
               <div
                 key={step.step}
-                className="relative rounded-2xl border border-border bg-surface p-5 shadow-xs flex flex-col justify-between"
+                className="relative rounded-none border border-stone-200 bg-white p-5 flex flex-col justify-between"
               >
                 <div>
-                  <span className="font-serif text-3xl font-normal text-accent/80">{step.step}</span>
+                  <span className="font-serif text-3xl font-normal text-stone-400">{step.step}</span>
                   <h3 className="mt-2 text-base font-semibold text-ink">{step.title}</h3>
                   <p className="mt-2 text-xs leading-relaxed text-muted">{step.description}</p>
                 </div>
