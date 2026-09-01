@@ -65,7 +65,7 @@ export function ShowcaseTotemCard({
         </h3>
       </button>
 
-      {/* ── Real Architectural Gallery Wall Picture Frame (Sharp 90° corners, Mat board) ── */}
+      {/* ── Real Architectural Gallery Wall Picture Frame (Horizontal Landscape 4:3) ── */}
       <div
         ref={cardRef}
         onClick={() => onOpen(project.id)}
@@ -79,7 +79,7 @@ export function ShowcaseTotemCard({
             ? '0 24px 48px -12px rgba(0,0,0,0.5), 0 8px 20px -4px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.9)'
             : '0 16px 36px -10px rgba(0,0,0,0.35), 0 4px 12px -2px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.85)',
         }}
-        className="cursor-pointer group relative w-full aspect-[3/4] p-2 sm:p-2.5 bg-[#16171B] border-[5px] sm:border-[7px] border-[#1C1D22] shadow-2xl select-none"
+        className="cursor-pointer group relative w-full aspect-[4/3] p-2 sm:p-2.5 bg-[#16171B] border-[5px] sm:border-[7px] border-[#1C1D22] shadow-2xl select-none"
       >
         {/* Subtle Frame Outer Bevel Edge Highlight */}
         <div className="absolute inset-0 border border-white/10 pointer-events-none" />
@@ -99,7 +99,7 @@ export function ShowcaseTotemCard({
                 isHovered ? 'duration-[5000ms] -translate-y-[45%]' : 'duration-[1000ms] translate-y-0'
               }`}
               style={{
-                height: '240%',
+                height: '280%',
                 maxHeight: 'none',
               }}
             />
@@ -113,7 +113,7 @@ export function ShowcaseTotemCard({
             />
 
             {/* Hover Action Pill */}
-            <div className="absolute inset-x-2 bottom-2.5 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <div className="absolute inset-x-2 bottom-2 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <span className="inline-flex items-center gap-1 px-3 py-1 bg-black/90 text-white text-[10px] font-bold uppercase tracking-wider shadow-md">
                 <span>Explorer</span>
                 <ArrowUpRight className="size-3" />
@@ -123,7 +123,7 @@ export function ShowcaseTotemCard({
 
           {/* ── Museum Mat Bottom Label ── */}
           <div className="pt-1.5 flex items-center justify-between text-[9px] font-mono uppercase tracking-widest text-[#4A4D57]">
-            <span className="font-bold text-[#22242B] truncate max-w-[120px]">{project.name}</span>
+            <span className="font-bold text-[#22242B] truncate max-w-[140px]">{project.name}</span>
             <span className="text-[#7A7E8B]">HBG LABS</span>
           </div>
         </div>
