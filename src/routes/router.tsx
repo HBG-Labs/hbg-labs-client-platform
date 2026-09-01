@@ -91,6 +91,14 @@ export const router = createBrowserRouter([
             lazy: lazyRoute(() => import('@/pages/public/ContactPage'), 'ContactPage'),
           },
           {
+            path: 'showcase',
+            lazy: lazyRoute(() => import('@/pages/public/ShowcasePage'), 'ShowcasePage'),
+          },
+          {
+            path: 'showcase/:projectId',
+            lazy: lazyRoute(() => import('@/pages/public/ShowcasePage'), 'ShowcasePage'),
+          },
+          {
             path: 'devis',
             lazy: lazyRoute(() => import('@/pages/public/DevisPage'), 'DevisPage'),
           },

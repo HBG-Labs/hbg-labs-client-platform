@@ -1,37 +1,48 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '@/test/render';
 import { ShowcaseGallery } from './ShowcaseGallery';
 
-describe('ShowcaseGallery — Galerie de maquettes interactives', () => {
-  it('affiche le projet initial par défaut et permet de changer de secteur', async () => {
-    const user = userEvent.setup();
+describe('ShowcaseGallery component', () => {
+  it('affiche le titre principal et les 4 projets phares', () => {
     renderWithProviders(<ShowcaseGallery />);
 
-    // Projet par défaut (Soins Beauté & Spa — Karay Beauty)
-    expect(screen.getAllByText('Karay Beauty').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText(/Rituels de soins caribéens/i).length).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getByText('Des expériences digitales pensées pour votre activité.')
+    ).toBeInTheDocument();
 
-    // Changement d'onglet vers Gastronomie & Vins
-    const gastroTab = screen.getByRole('button', { name: /Gastronomie & Vins/i });
-    await user.click(gastroTab);
-
-    expect(screen.getAllByText('Maison Sévérac').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText(/Haute cuisine française/i).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('SOIE & TERRE')).toBeInTheDocument();
+    expect(screen.getByText('KAYO CONSTRUCTION')).toBeInTheDocument();
+    expect(screen.getByText('RACINES & BRAISE')).toBeInTheDocument();
+    expect(screen.getByText('HORIZONS PRESTIGE')).toBeInTheDocument();
   });
 
-  it('permet de basculer entre la vue ordinateur et la vue smartphone', async () => {
+  it('filtre les projets selon la catégorie sélectionnée', async () => {
     const user = userEvent.setup();
     renderWithProviders(<ShowcaseGallery />);
 
-    // Vue ordinateur par défaut (présence de la barre d'URL)
-    expect(screen.getByText(/https:\/\/www.karaybeauty.fr/i)).toBeInTheDocument();
+    const btpFilter = screen.getByRole('button', { name: 'Artisan & BTP' });
+    await user.click(btpFilter);
 
-    // Bascule vers la vue mobile
-    const mobileBtn = screen.getByRole('button', { name: /Mobile/i });
-    await user.click(mobileBtn);
+    expect(screen.getByText('KAYO CONSTRUCTION')).toBeInTheDocument();
+    expect(screen.queryByText('SOIE & TERRE')).not.toBeInTheDocument();
+    expect(screen.queryByText('RACINES & BRAISE')).not.toBeInTheDocument();
+    expect(screen.queryByText('HORIZONS PRESTIGE')).not.toBeInTheDocument();
+  });
 
-    expect(screen.getByText(/100 % Tactile & Fluide/i)).toBeInTheDocument();
+  it('ouvre la vue immersive au clic sur Voir le projet', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ShowcaseGallery />);
+
+    const viewButtons = screen.getAllByRole('button', { name: /Voir le projet/i });
+    expect(viewButtons.length).toBeGreaterThan(0);
+
+    const firstButton = viewButtons[0];
+    if (firstButton) {
+      await user.click(firstButton);
+    }
+
+    expect(screen.getByText(/Retour au site HBG Labs/i)).toBeInTheDocument();
   });
 });

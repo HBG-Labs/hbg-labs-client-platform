@@ -16,8 +16,8 @@ import { Button } from '@/components/ui/Button';
 import { Container, Section, SectionHeading } from '@/components/ui/Layout';
 import { Accordion, AccordionItem } from '@/components/ui/Accordion';
 import { InteractiveHero } from '@/components/marketing/InteractiveHero';
-import { ShowcaseGallery } from '@/components/marketing/ShowcaseGallery';
 import { PricingGrid } from '@/components/marketing/PricingGrid';
+import { ShowcaseGallery } from '@/components/marketing/ShowcaseGallery';
 import { CtaBanner } from '@/components/marketing/CtaBanner';
 import { useHeroVariant } from '@/hooks/useHeroVariant';
 
@@ -114,23 +114,7 @@ export function HomePage() {
         </section>
       )}
 
-      {/* ---- 2. Vitrine & Réalisations (Showcase Maquettes) ---- */}
-      <Section id="realisations">
-        <Container>
-          <SectionHeading
-            eyebrow="Vitrine & Réalisations"
-            title="Des créations pensées pour marquer les esprits et convertir"
-            description="Explorez des exemples d’interfaces web conçues sur mesure par HBG Labs selon votre secteur d’activité."
-            align="center"
-          />
-
-          <div className="mt-12">
-            <ShowcaseGallery />
-          </div>
-        </Container>
-      </Section>
-
-      {/* ---- 3. Problème client ---- */}
+      {/* ---- 2. Problème client ---- */}
       <Section tone="muted">
         <Container>
           <SectionHeading
@@ -188,6 +172,9 @@ export function HomePage() {
           </div>
         </Container>
       </Section>
+
+      {/* ---- Showcase & Réalisations Métiers ---- */}
+      <ShowcaseGallery />
 
       {/* ---- 5. Fonctionnement ---- */}
       <Section tone="muted">

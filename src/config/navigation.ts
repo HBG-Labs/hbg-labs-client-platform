@@ -23,6 +23,7 @@ export const mainNav: readonly NavLink[] = [
       { label: 'Maintenance', to: '/maintenance' },
     ],
   },
+  { label: 'Réalisations', to: '/showcase' },
   { label: 'Tarifs', to: '/tarifs' },
   { label: 'Contact', to: '/contact' },
 ];
@@ -30,8 +31,9 @@ export const mainNav: readonly NavLink[] = [
 /** Colonnes du pied de page. */
 export const footerNav: readonly { title: string; links: readonly NavLink[] }[] = [
   {
-    title: 'Services',
+    title: 'Services & Réalisations',
     links: [
+      { label: 'Showcase Réalisations', to: '/showcase' },
       { label: 'Création de site web', to: '/creation-site-web' },
       { label: 'Hébergement', to: '/hebergement' },
       { label: 'Maintenance', to: '/maintenance' },
@@ -41,6 +43,7 @@ export const footerNav: readonly { title: string; links: readonly NavLink[] }[] 
   {
     title: 'Entreprise',
     links: [
+      { label: 'Nos réalisations', to: '/showcase' },
       { label: 'Tarifs', to: '/tarifs' },
       { label: 'Demander un devis', to: '/devis' },
       { label: 'Contact', to: '/contact' },
