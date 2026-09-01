@@ -48,7 +48,7 @@ export function ShowcaseGallery() {
           }}
         />
 
-        <Container width="wide" className="relative z-10 max-w-7xl mx-auto pt-16 sm:pt-24 md:pt-28 lg:pt-32 pb-24 sm:pb-36 lg:pb-48">
+        <div className="relative z-10 w-full max-w-[1780px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 pt-16 sm:pt-24 md:pt-28 lg:pt-32 pb-24 sm:pb-36 lg:pb-48">
           {/* ── Header Area (True to reference image) ── */}
           <div className="text-center max-w-3xl mx-auto">
             <p className="text-xs sm:text-sm font-semibold tracking-widest text-[#3B3E48] uppercase">
@@ -63,7 +63,7 @@ export function ShowcaseGallery() {
               Chaque entreprise est unique. Votre site doit l’être aussi.
             </p>
 
-            {/* ── Minimalist Inline Filter Bar (SOIN & BEAUTÉ | ARTISAN & BTP | ...) ── */}
+            {/* ── Minimalist Inline Filter Bar (SOIN & BEAUTÉ | ARTISAN & BTP) ── */}
             <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-y-2 text-xs sm:text-sm uppercase tracking-wider font-bold text-[#3B3E48]">
               {FILTER_ITEMS.map((item, index) => {
                 const isActive = activeFilter === item.id;
@@ -91,8 +91,8 @@ export function ShowcaseGallery() {
             </div>
           </div>
 
-          {/* ── 2 Wall-Mounted Interactive Wide Panoramic Picture Frames ── */}
-          <div className="mt-10 sm:mt-14 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 xl:gap-10 items-start max-w-6xl xl:max-w-7xl 2xl:max-w-[1560px] mx-auto">
+          {/* ── 2 Wall-Mounted Interactive Ultra-Wide Panoramic Picture Frames ── */}
+          <div className="mt-10 sm:mt-14 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 xl:gap-10 items-start w-full max-w-[1740px] mx-auto">
             {SHOWCASE_PROJECTS.map((project) => {
               const isFocused =
                 activeFilter === null || activeFilter === project.category;
@@ -107,7 +107,7 @@ export function ShowcaseGallery() {
               );
             })}
           </div>
-        </Container>
+        </div>
       </div>
 
       {/* ── Bottom Call To Action ── */}
