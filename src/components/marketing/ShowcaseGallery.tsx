@@ -35,20 +35,20 @@ export function ShowcaseGallery() {
       id="realisations"
       className="relative w-full bg-[#E5E3DE] overflow-hidden border-b border-stone-300/80"
     >
-      {/* ── Realistic Studio Architectural Concrete Wall at 100% Natural Size ── */}
-      <div className="relative w-full max-w-[2000px] mx-auto">
-        {/* Natural Uncropped Wall Background */}
+      {/* ── Realistic Studio Architectural Concrete Wall (Full 16:9 Scene Height) ── */}
+      <div className="relative w-full max-w-[2000px] mx-auto min-h-[680px] sm:min-h-[860px] md:min-h-[980px] lg:min-h-[1100px] flex flex-col justify-start">
+        {/* Natural Full-Height Wall Background */}
         <div
           className="absolute inset-0 w-full h-full pointer-events-none"
           style={{
             backgroundImage: "url('/images/showcase-wall-bg.jpg')",
-            backgroundSize: '100% auto',
-            backgroundPosition: 'center top',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center bottom',
             backgroundRepeat: 'no-repeat',
           }}
         />
 
-        <Container width="wide" className="relative z-10 max-w-7xl mx-auto pt-16 sm:pt-24 md:pt-28 lg:pt-32 pb-16 sm:pb-20">
+        <Container width="wide" className="relative z-10 max-w-7xl mx-auto pt-16 sm:pt-24 md:pt-28 lg:pt-32 pb-24 sm:pb-36 lg:pb-48">
           {/* ── Header Area (True to reference image) ── */}
           <div className="text-center max-w-3xl mx-auto">
             <p className="text-xs sm:text-sm font-semibold tracking-widest text-[#3B3E48] uppercase">
