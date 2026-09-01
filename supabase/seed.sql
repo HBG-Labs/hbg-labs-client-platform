@@ -68,7 +68,7 @@ with target as (
     v.is_starting_price
   from (values
     -- code,       nature,                        périodicité,                    montant, « à partir de »
-    ('STARTER',  'ONE_TIME'::public.price_kind,  null::public.billing_interval,    49000, true),
+    ('STARTER',  'ONE_TIME'::public.price_kind,  null::public.billing_interval,    58000, true),
     ('STARTER',  'RECURRING',                    'month',                           2900, false),
     ('PRO',      'ONE_TIME',                     null,                             89000, true),
     ('PRO',      'RECURRING',                    'month',                           4900, false),

@@ -66,7 +66,7 @@ export function TarifsPage() {
     <>
       <Seo
         title="Tarifs"
-        description="Tarifs de création, d’hébergement et de maintenance de site web. Formules Starter (490 €), Business (890 €) et Premium (1 490 €)."
+        description="Tarifs de création, d’hébergement et de maintenance de site web. Formules Starter (580 €), Business (890 €) et Premium (1 490 €)."
         path="/tarifs"
       />
 

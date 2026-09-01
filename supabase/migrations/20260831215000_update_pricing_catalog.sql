@@ -36,7 +36,7 @@ WHERE code = 'BUSINESS';
 -- 2. Mise à jour des prix
 -- STARTER
 UPDATE public.plan_prices
-SET unit_amount_cents = 49000, is_starting_price = true
+SET unit_amount_cents = 58000, is_starting_price = true
 WHERE plan_id = (SELECT id FROM public.plans WHERE code = 'STARTER') AND kind = 'ONE_TIME';
 
 UPDATE public.plan_prices
