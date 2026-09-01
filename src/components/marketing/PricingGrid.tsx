@@ -11,9 +11,9 @@ import { usePublicPlans } from '@/features/pricing/usePublicPlans';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
 
 const COLUMN_GRADIENTS = [
-  'bg-gradient-to-b from-[#ECFDF5]/70 via-[#F0FDF4]/20 to-white/95',
+  'bg-white',
   'bg-gradient-to-b from-[#F3E8FF]/80 via-[#FAF5FF]/30 to-white/95',
-  'bg-gradient-to-b from-[#FDF2F8]/70 via-[#FFF1F2]/20 to-white/95',
+  'bg-white',
 ];
 
 const CTA_LABELS = [
@@ -45,7 +45,7 @@ function PlanCard({ plan, index }: PlanCardProps) {
       <div>
         {/* ── Header: Title & Optional Featured Badge ── */}
         <div className="flex items-center justify-between gap-3 min-h-[36px]">
-          <h3 className="font-sans text-2xl sm:text-3xl font-black text-ink tracking-tight">
+          <h3 className="font-serif text-3xl sm:text-4xl font-normal text-ink">
             {plan.name}
           </h3>
           {plan.is_featured && (
@@ -56,7 +56,7 @@ function PlanCard({ plan, index }: PlanCardProps) {
         </div>
 
         {/* ── Subtitle / Tagline ── */}
-        <p className="mt-3 text-sm text-stone-600 leading-relaxed min-h-[44px]">
+        <p className="mt-2.5 text-sm text-stone-600 leading-relaxed min-h-[44px]">
           {plan.tagline || plan.description}
         </p>
 
@@ -68,7 +68,7 @@ function PlanCard({ plan, index }: PlanCardProps) {
                 {setup.is_starting_price ? 'à partir de' : 'Tarif'}
               </p>
               <div className="mt-1 flex items-baseline gap-1">
-                <span className="font-sans text-4xl sm:text-5xl font-black tracking-tight text-ink">
+                <span className="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">
                   {formatAmountCompact(setup.unit_amount_cents, setup.currency)}
                 </span>
                 <span className="text-xs font-bold text-stone-500 tracking-wider">
@@ -86,7 +86,7 @@ function PlanCard({ plan, index }: PlanCardProps) {
               <p className="text-xs font-sans text-stone-500 font-medium">
                 Tarif
               </p>
-              <p className="mt-1 font-sans text-4xl sm:text-5xl font-black tracking-tight text-ink">
+              <p className="mt-1 font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">
                 Sur devis
               </p>
             </div>
@@ -96,7 +96,7 @@ function PlanCard({ plan, index }: PlanCardProps) {
                 Abonnement
               </p>
               <div className="mt-1 flex items-baseline gap-1">
-                <span className="font-sans text-4xl sm:text-5xl font-black tracking-tight text-ink">
+                <span className="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">
                   {formatAmountCompact(monthly.unit_amount_cents, monthly.currency)}
                 </span>
                 <span className="text-xs font-bold text-stone-500 tracking-wider">
@@ -105,7 +105,7 @@ function PlanCard({ plan, index }: PlanCardProps) {
               </div>
             </div>
           ) : (
-            <p className="font-sans text-3xl font-black text-ink">Sur devis</p>
+            <p className="font-serif text-3xl font-normal text-ink">Sur devis</p>
           )}
         </div>
 
