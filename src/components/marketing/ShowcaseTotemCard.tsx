@@ -106,16 +106,6 @@ export function ShowcaseTotemCard({
           </span>
         </div>
       </div>
-
-      {/* ── Project Label Below Card ── */}
-      <div className="mt-3 flex items-center justify-between px-1">
-        <span className="text-[12px] font-bold text-[#1E2028] tracking-wide">
-          {project.name}
-        </span>
-        <span className="text-[11px] font-medium text-[#6B7280]">
-          {project.sectorLabel}
-        </span>
-      </div>
     </div>
   );
 }
