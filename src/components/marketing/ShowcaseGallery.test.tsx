@@ -4,28 +4,29 @@ import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '@/test/render';
 import { ShowcaseGallery } from './ShowcaseGallery';
 
-describe('ShowcaseGallery — Galerie 3D et maquettes interactives', () => {
-  it('affiche les cartes 3D et permet de changer de catégorie', async () => {
+describe('ShowcaseGallery — Galerie de maquettes interactives', () => {
+  it('affiche le projet initial par défaut et permet de changer de secteur', async () => {
     const user = userEvent.setup();
     renderWithProviders(<ShowcaseGallery />);
 
-    // Catégorie active par défaut (Services)
-    expect(screen.getAllByText('Services & Devis').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('MAISON SÉVÉRAC').length).toBeGreaterThanOrEqual(1);
+    // Projet par défaut (Coiffure & Soins Beauté)
+    expect(screen.getAllByText('L’Atelier Botanique').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/Maison de coiffure/i).length).toBeGreaterThanOrEqual(1);
 
-    // Clic sur la carte Sites Vitrines
-    const vitrinesCard = screen.getAllByText('Sites Vitrines')[0]!;
-    await user.click(vitrinesCard);
+    // Changement d'onglet vers Gastronomie & Vins
+    const gastroTab = screen.getByRole('button', { name: /Gastronomie & Vins/i });
+    await user.click(gastroTab);
 
-    expect(screen.getAllByText('STUDIO VANEAU').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('Maison Sévérac').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/Haute cuisine française/i).length).toBeGreaterThanOrEqual(1);
   });
 
-  it('permet de basculer entre la vue grand écran et smartphone', async () => {
+  it('permet de basculer entre la vue ordinateur et la vue smartphone', async () => {
     const user = userEvent.setup();
     renderWithProviders(<ShowcaseGallery />);
 
-    // Vue ordinateur par défaut
-    expect(screen.getByText(/https:\/\/www.maison-severac.fr/i)).toBeInTheDocument();
+    // Vue ordinateur par défaut (présence de la barre d'URL)
+    expect(screen.getByText(/https:\/\/www.latelier-botanique.fr/i)).toBeInTheDocument();
 
     // Bascule vers la vue mobile
     const mobileBtn = screen.getByRole('button', { name: /Mobile/i });
