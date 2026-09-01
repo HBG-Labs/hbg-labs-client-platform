@@ -1,31 +1,28 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  ArrowRight, 
-  Sparkles, 
-  Check, 
-  Maximize2
-} from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { SHOWCASE_PROJECTS, type ShowcaseSector } from '@/data/showcase';
+import { ShowcaseTotemCard } from './ShowcaseTotemCard';
 import { ProjectViewerModal } from './showcase/ProjectViewerModal';
 import { Container, Section } from '@/components/ui/Layout';
 import { Button } from '@/components/ui/Button';
 
-const FILTER_TABS: { id: ShowcaseSector; label: string }[] = [
-  { id: 'BEAUTY', label: 'Soin & Beauté' },
-  { id: 'BTP', label: 'Artisan & BTP' },
-  { id: 'RESTAURANT', label: 'Restauration' },
-  { id: 'REAL_ESTATE', label: 'Immobilier' },
+type FilterType = 'ALL' | ShowcaseSector;
+
+const FILTER_ITEMS: { id: FilterType; label: string }[] = [
+  { id: 'ALL', label: 'TOUS' },
+  { id: 'BEAUTY', label: 'SOIN & BEAUTÉ' },
+  { id: 'BTP', label: 'ARTISAN & BTP' },
+  { id: 'RESTAURANT', label: 'RESTAURATION' },
+  { id: 'REAL_ESTATE', label: 'IMMOBILIER' },
 ];
 
 export function ShowcaseGallery() {
-  const [selectedCategory, setSelectedCategory] = useState<ShowcaseSector>('BEAUTY');
+  const [activeFilter, setActiveFilter] = useState<FilterType>('ALL');
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string>(
     SHOWCASE_PROJECTS[0]?.id ?? 'soie-et-terre'
   );
-
-  const filteredProjects = SHOWCASE_PROJECTS.filter((p) => p.category === selectedCategory);
 
   const handleOpenProject = (id: string) => {
     setSelectedProjectId(id);
@@ -33,169 +30,116 @@ export function ShowcaseGallery() {
   };
 
   return (
-    <Section id="realisations" className="bg-[#0B0D11] text-white py-24 sm:py-32 relative overflow-hidden">
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
+    <Section
+      id="realisations"
+      className="relative bg-[#18191E] text-stone-100 py-24 sm:py-32 overflow-hidden border-y border-stone-800"
+    >
+      {/* ── Studio Architectural Wall Backdrop & Ceiling Lighting ── */}
+      {/* Subtle concrete texture & ambient daylight gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#2D2E36] via-[#1C1D23] to-[#121317] pointer-events-none" />
 
-      <Container>
-        <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-muted/10 border border-white/10 text-white/90 text-xs font-semibold uppercase tracking-widest mb-4">
-            <Sparkles className="size-3.5 text-accent" />
-            Nos Réalisations &bull; Showcase
-          </div>
+      {/* 4 Spotlights from ceiling projecting over each screen */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 grid grid-cols-4 pointer-events-none opacity-40">
+        <div className="h-full bg-gradient-to-b from-amber-200/10 via-amber-400/5 to-transparent blur-3xl" />
+        <div className="h-full bg-gradient-to-b from-orange-300/10 via-orange-400/5 to-transparent blur-3xl" />
+        <div className="h-full bg-gradient-to-b from-amber-400/10 via-amber-500/5 to-transparent blur-3xl" />
+        <div className="h-full bg-gradient-to-b from-sky-300/10 via-sky-400/5 to-transparent blur-3xl" />
+      </div>
 
-          <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl text-white font-normal tracking-tight leading-[1.08]">
+      <Container width="wide" className="relative z-10">
+        {/* ── Header Area ── */}
+        <div className="text-center max-w-4xl mx-auto">
+          <p className="text-xs sm:text-sm font-medium tracking-widest text-stone-400 uppercase">
+            Nos réalisations / Showcase
+          </p>
+
+          <h2 className="mt-3 font-sans text-2xl sm:text-4xl md:text-5xl lg:text-[2.75rem] font-extrabold uppercase tracking-tight text-white leading-tight">
             Des expériences digitales pensées pour votre activité.
           </h2>
 
-          <p className="mt-4 text-sm sm:text-base text-[#94A3B8] leading-relaxed">
-            Chaque entreprise est unique. Votre site doit l’être aussi. Explorez nos concepts sur mesure conçus pour valoriser l’identité et maximiser la conversion de chaque métier.
+          <p className="mt-3 text-sm sm:text-base text-stone-400 font-normal">
+            Chaque entreprise est unique. Votre site doit l’être aussi.
           </p>
+
+          {/* ── Minimalist Inline Filter Bar (TOUS | SOIN & BEAUTÉ | ...) ── */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-y-2 text-xs sm:text-sm uppercase tracking-wider font-semibold text-stone-400">
+            {FILTER_ITEMS.map((item, index) => {
+              const isActive = activeFilter === item.id;
+              return (
+                <div key={item.id} className="inline-flex items-center">
+                  <button
+                    type="button"
+                    onClick={() => setActiveFilter(item.id)}
+                    className={`px-3 py-1 transition-all duration-200 cursor-pointer ${
+                      isActive
+                        ? 'text-white font-bold underline decoration-accent decoration-2 underline-offset-8 scale-105'
+                        : 'text-stone-400 hover:text-stone-200'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                  {index < FILTER_ITEMS.length - 1 && (
+                    <span className="text-stone-600 select-none px-1" aria-hidden="true">
+                      |
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        {/* ── Category Filters ── */}
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-2">
-          {FILTER_TABS.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setSelectedCategory(tab.id)}
-              className={`px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${
-                selectedCategory === tab.id
-                  ? 'bg-white text-black shadow-md scale-105'
-                  : 'bg-white/5 text-[#94A3B8] hover:text-white hover:bg-white/10 border border-white/5'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {/* ── Projects Grid ── */}
-        <div className="mt-16 space-y-20">
-          {filteredProjects.map((project, index) => {
-            const isReversed = index % 2 === 1;
+        {/* ── 4 Wall-Mounted Interactive Screens Grid ── */}
+        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 items-start">
+          {SHOWCASE_PROJECTS.map((project) => {
+            const isFocused =
+              activeFilter === 'ALL' || activeFilter === project.category;
 
             return (
-              <div
+              <ShowcaseTotemCard
                 key={project.id}
-                className="group relative rounded-3xl border border-white/10 bg-[#12151D]/90 backdrop-blur-sm p-6 sm:p-10 lg:p-12 transition-all hover:border-white/20 shadow-2xl"
-              >
-                <div className={`grid gap-10 lg:grid-cols-12 lg:items-center ${isReversed ? 'lg:grid-flow-dense' : ''}`}>
-                  {/* Left Column: Info & Metrics */}
-                  <div className={`lg:col-span-5 ${isReversed ? 'lg:col-start-8' : ''}`}>
-                    <span className="inline-block text-xs font-mono uppercase tracking-wider px-3 py-1 rounded-full bg-white/10 text-white/90 font-semibold mb-4">
-                      {project.sectorLabel}
-                    </span>
-
-                    <h3 className="font-serif text-3xl sm:text-4xl text-white font-normal">
-                      {project.name}
-                    </h3>
-
-                    <p className="mt-2 text-sm font-serif italic text-[#CBD5E1]">
-                      « {project.tagline} »
-                    </p>
-
-                    <p className="mt-4 text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
-                      {project.shortPitch}
-                    </p>
-
-                    {/* Metrics Badges */}
-                    <div className="mt-6 grid grid-cols-3 gap-3 border-y border-white/10 py-4">
-                      {project.metrics.map((m) => (
-                        <div key={m.label}>
-                          <span className="font-mono text-lg sm:text-xl font-bold text-white block">
-                            {m.value}
-                          </span>
-                          <span className="text-[10px] text-[#94A3B8] uppercase tracking-wider">
-                            {m.label}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Features checklist */}
-                    <ul className="mt-6 space-y-2 text-xs text-[#CBD5E1]">
-                      {project.features.map((feat) => (
-                        <li key={feat} className="flex items-center gap-2.5">
-                          <Check className="size-3.5 text-accent shrink-0" />
-                          <span>{feat}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    {/* Action Button */}
-                    <div className="mt-8">
-                      <button
-                        type="button"
-                        onClick={() => handleOpenProject(project.id)}
-                        className="inline-flex items-center gap-3 bg-white text-black font-semibold text-xs uppercase tracking-widest px-7 py-3.5 rounded-full hover:bg-accent hover:text-white transition-all shadow-md group/btn"
-                      >
-                        <span>Voir le projet</span>
-                        <ArrowRight className="size-4 transition-transform duration-200 group-hover/btn:translate-x-1" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Right Column: Clean Design Preview Frame */}
-                  <div className={`lg:col-span-7 ${isReversed ? 'lg:col-start-1' : ''}`}>
-                    <div 
-                      onClick={() => handleOpenProject(project.id)}
-                      className="cursor-pointer group/frame relative rounded-2xl border border-white/10 bg-[#161922] overflow-hidden shadow-2xl transition-all duration-300 hover:border-white/25 hover:shadow-accent/5"
-                    >
-                      {/* Screen Preview Container */}
-                      <div className="relative aspect-[16/10] overflow-hidden bg-[#0A0B0E] flex items-center justify-center">
-                        <img
-                          src={project.mockupImage}
-                          alt={`Maquette interactive ${project.name} par HBG Labs`}
-                          loading="lazy"
-                          className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover/frame:scale-105"
-                        />
-
-                        {/* Top-right subtle badge */}
-                        <div className="absolute top-4 right-4 z-10">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-white/90 text-[11px] font-medium tracking-wide">
-                            <span className="size-1.5 rounded-full bg-accent animate-pulse" />
-                            Concept interactif
-                          </span>
-                        </div>
-
-                        {/* Hover Overlay Hint */}
-                        <div className="absolute inset-0 bg-black/45 opacity-0 group-hover/frame:opacity-100 transition-opacity duration-200 flex items-center justify-center p-4">
-                          <span className="inline-flex items-center gap-2 bg-white text-black px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider shadow-2xl transition-transform duration-200 group-hover/frame:scale-105">
-                            <Maximize2 className="size-4" />
-                            Explorer le concept en plein écran
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                project={project}
+                isFocused={isFocused}
+                onOpen={handleOpenProject}
+              />
             );
           })}
         </div>
 
-        {/* ── Bottom Conversion Banner ── */}
-        <div className="mt-28 rounded-3xl border border-white/10 bg-gradient-to-r from-[#181C26] to-[#12151E] p-8 sm:p-12 text-center relative overflow-hidden">
-          <div className="max-w-2xl mx-auto">
-            <span className="text-xs uppercase tracking-widest font-semibold text-accent block mb-2">
-              Sur Mesure &bull; Studio Digital
+        {/* ── Studio Brushed Aluminum Plaque "HBGLabs" ── */}
+        <div className="mt-14 flex justify-center">
+          <div className="relative inline-flex items-center gap-3 px-8 py-2.5 rounded-md bg-gradient-to-b from-[#4A4E5A] via-[#2F323A] to-[#202228] border border-white/20 shadow-[0_4px_20px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] select-none">
+            {/* Corner metallic rivets */}
+            <div className="absolute top-1.5 left-2 size-1.5 rounded-full bg-stone-400/50 shadow-inner" />
+            <div className="absolute top-1.5 right-2 size-1.5 rounded-full bg-stone-400/50 shadow-inner" />
+            <div className="absolute bottom-1.5 left-2 size-1.5 rounded-full bg-stone-400/50 shadow-inner" />
+            <div className="absolute bottom-1.5 right-2 size-1.5 rounded-full bg-stone-400/50 shadow-inner" />
+
+            <span className="font-mono text-xs sm:text-sm font-black tracking-[0.25em] uppercase text-stone-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+              HBGLabs
             </span>
-            <h3 className="font-serif text-2xl sm:text-4xl text-white font-normal">
-              Votre activité mérite son propre univers digital.
-            </h3>
-            <p className="mt-4 text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
-              Que vous soyez artisan, restaurateur, professionnel de l’immobilier ou entrepreneur, HBG Labs crée une expérience digitale pensée pour votre activité.
-            </p>
-            <div className="mt-8">
-              <Button asChild size="lg" variant="primary" className="rounded-full px-8 py-4 uppercase text-xs tracking-widest font-bold">
-                <Link to="/devis">
-                  Démarrer mon projet
-                  <ArrowRight className="size-4 ml-1" />
-                </Link>
-              </Button>
-            </div>
+          </div>
+        </div>
+
+        {/* ── Bottom Call To Action ── */}
+        <div className="mt-20 max-w-2xl mx-auto rounded-2xl border border-white/10 bg-[#1F2128]/80 backdrop-blur-md p-8 sm:p-10 text-center shadow-xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[11px] font-semibold uppercase tracking-wider mb-3">
+            <Sparkles className="size-3" />
+            Sur Mesure &bull; Studio Digital
+          </div>
+          <h3 className="font-sans text-xl sm:text-2xl font-bold uppercase text-white tracking-tight">
+            Votre activité mérite son propre univers digital.
+          </h3>
+          <p className="mt-2 text-xs sm:text-sm text-stone-400 leading-relaxed">
+            Que vous soyez artisan, restaurateur, professionnel de l’immobilier ou entrepreneur, HBG Labs crée une expérience digitale pensée pour votre activité.
+          </p>
+          <div className="mt-6">
+            <Button asChild size="lg" variant="primary" className="rounded-full px-8 py-3 uppercase text-xs tracking-widest font-bold">
+              <Link to="/devis">
+                Démarrer mon projet
+                <ArrowRight className="size-4 ml-1" />
+              </Link>
+            </Button>
           </div>
         </div>
       </Container>

@@ -5,54 +5,43 @@ import { renderWithProviders } from '@/test/render';
 import { ShowcaseGallery } from './ShowcaseGallery';
 
 describe('ShowcaseGallery component', () => {
-  it('affiche le titre principal et le premier projet par défaut', () => {
+  it('affiche le titre principal, les filtres et les 4 écrans d’exposition', () => {
     renderWithProviders(<ShowcaseGallery />);
 
     expect(
       screen.getByText('Des expériences digitales pensées pour votre activité.')
     ).toBeInTheDocument();
 
+    expect(screen.getByRole('button', { name: 'TOUS' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'SOIN & BEAUTÉ' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'ARTISAN & BTP' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'RESTAURATION' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'IMMOBILIER' })).toBeInTheDocument();
+
     expect(screen.getByText('SOIE & TERRE')).toBeInTheDocument();
-    expect(screen.queryByText('Tous')).not.toBeInTheDocument();
+    expect(screen.getByText('KAYO CONSTRUCTION')).toBeInTheDocument();
+    expect(screen.getByText('RACINES & BRAISE')).toBeInTheDocument();
+    expect(screen.getByText('HORIZONS PRESTIGE')).toBeInTheDocument();
+
+    expect(screen.getByText('HBGLabs')).toBeInTheDocument();
   });
 
-  it('bascule entre les univers métiers au clic sur les filtres', async () => {
+  it('change le filtre actif au clic', async () => {
     const user = userEvent.setup();
     renderWithProviders(<ShowcaseGallery />);
 
-    // Test BTP
-    const btpFilter = screen.getByRole('button', { name: 'Artisan & BTP' });
+    const btpFilter = screen.getByRole('button', { name: 'ARTISAN & BTP' });
     await user.click(btpFilter);
 
-    expect(screen.getByText('KAYO CONSTRUCTION')).toBeInTheDocument();
-    expect(screen.queryByText('SOIE & TERRE')).not.toBeInTheDocument();
-
-    // Test Restauration
-    const restoFilter = screen.getByRole('button', { name: 'Restauration' });
-    await user.click(restoFilter);
-
-    expect(screen.getByText('RACINES & BRAISE')).toBeInTheDocument();
-    expect(screen.queryByText('KAYO CONSTRUCTION')).not.toBeInTheDocument();
-
-    // Test Immobilier
-    const realEstateFilter = screen.getByRole('button', { name: 'Immobilier' });
-    await user.click(realEstateFilter);
-
-    expect(screen.getByText('HORIZONS PRESTIGE')).toBeInTheDocument();
-    expect(screen.queryByText('RACINES & BRAISE')).not.toBeInTheDocument();
+    expect(btpFilter).toHaveClass('underline');
   });
 
-  it('ouvre la vue immersive au clic sur Voir le projet', async () => {
+  it('ouvre la vue immersive au clic sur une maquette', async () => {
     const user = userEvent.setup();
     renderWithProviders(<ShowcaseGallery />);
 
-    const viewButtons = screen.getAllByRole('button', { name: /Voir le projet/i });
-    expect(viewButtons.length).toBeGreaterThan(0);
-
-    const firstButton = viewButtons[0];
-    if (firstButton) {
-      await user.click(firstButton);
-    }
+    const firstCard = screen.getByText('SOIE & TERRE');
+    await user.click(firstCard);
 
     expect(screen.getByText(/Retour au site HBG Labs/i)).toBeInTheDocument();
   });
