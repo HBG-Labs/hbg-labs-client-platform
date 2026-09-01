@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { ArrowUpRight, Sparkles, ShieldCheck, HardHat } from 'lucide-react';
+import { ArrowUpRight, Sparkles, HardHat } from 'lucide-react';
 import type { ShowcaseProject } from '@/data/showcase';
 
 interface ShowcaseTotemCardProps {
@@ -90,12 +90,8 @@ export function ShowcaseTotemCard({
           {/* Inner Artwork Cutout Window */}
           <div className="relative w-full flex-1 overflow-hidden bg-white shadow-[inset_0_3px_8px_rgba(0,0,0,0.4),0_1px_2px_rgba(0,0,0,0.15)] border border-stone-400/30">
             
-            {/* Scrollable Landscape Desktop Layout */}
-            <div
-              className={`w-full transition-transform ease-in-out select-none ${
-                isHovered ? 'duration-[6000ms] -translate-y-[40%]' : 'duration-[1000ms] translate-y-0'
-              }`}
-            >
+            {/* Static Landscape Desktop Layout */}
+            <div className="w-full h-full select-none">
               {project.id === 'soie-et-terre' ? (
                 <SoieEtTerreLandscapeMockup />
               ) : (
@@ -140,109 +136,75 @@ export function ShowcaseTotemCard({
 
 /**
  * ── Landscape Desktop Mockup for SOIE & TERRE ──
- * Reproduction fidèle 1:1 du vrai site BeautyLanding avec fond héro immersif
+ * Reproduction fidèle 1:1 statique du vrai site BeautyLanding
  */
 function SoieEtTerreLandscapeMockup() {
   return (
-    <div className="w-full bg-[#FAF8F5] text-[#2B2520] font-sans antialiased text-[11px] sm:text-[12px] leading-snug">
-      
-      {/* ── 1. REAL SITE HERO SECTION (Full-bleed background) ── */}
-      <div className="relative w-full aspect-[21/10] overflow-hidden">
-        {/* Background Photo */}
-        <div
-          className="absolute inset-0 w-full h-full bg-cover bg-center"
-          style={{
-            backgroundImage: "url('/images/showcase/soie-et-terre-hero.jpg')",
-          }}
-        >
-          {/* Real site gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1E1915]/90 via-[#1E1915]/50 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1E1915]/80 via-transparent to-black/30" />
+    <div className="relative w-full h-full overflow-hidden flex flex-col justify-between text-white font-sans antialiased">
+      {/* Background Photo */}
+      <div
+        className="absolute inset-0 w-full h-full bg-cover bg-center"
+        style={{
+          backgroundImage: "url('/images/showcase/soie-et-terre-hero.jpg')",
+        }}
+      >
+        {/* Real site gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1E1915]/90 via-[#1E1915]/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1E1915]/80 via-transparent to-black/30" />
+      </div>
+
+      {/* Real Site Mini Topbar */}
+      <div className="relative z-10 h-8 sm:h-9 px-4 sm:px-6 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-[#E8DFD8]/80 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="size-2 rounded-full bg-[#8C684F]" />
+          <span className="font-serif font-bold text-[11px] sm:text-[12px] tracking-[0.2em] text-[#2B2520]">SOIE &amp; TERRE</span>
         </div>
-
-        {/* Real Site Mini Topbar */}
-        <div className="relative z-10 h-8 sm:h-9 px-4 sm:px-6 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-[#E8DFD8]/80 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="size-2 rounded-full bg-[#8C684F]" />
-            <span className="font-serif font-bold text-[11px] sm:text-[12px] tracking-[0.2em] text-[#2B2520]">SOIE &amp; TERRE</span>
-          </div>
-          <div className="hidden sm:flex items-center gap-4 text-[8px] uppercase tracking-[0.15em] text-[#6B6259] font-medium">
-            <span>Accueil</span>
-            <span>Nos soins</span>
-            <span>Rituels</span>
-            <span>L’expérience</span>
-            <span>Boutique</span>
-            <span>Contact</span>
-          </div>
-          <div className="px-3 py-1 rounded-full border border-[#2B2520]/60 text-[#2B2520] text-[8px] font-bold uppercase tracking-wider whitespace-nowrap shadow-2xs">
-            Prendre rendez-vous
-          </div>
+        <div className="hidden sm:flex items-center gap-4 text-[8px] uppercase tracking-[0.15em] text-[#6B6259] font-medium">
+          <span>Accueil</span>
+          <span>Nos soins</span>
+          <span>Rituels</span>
+          <span>L’expérience</span>
+          <span>Boutique</span>
+          <span>Contact</span>
         </div>
-
-        {/* Real Site Hero Content */}
-        <div className="relative z-10 h-[calc(100%-2rem)] p-4 sm:p-6 flex flex-col justify-between text-white max-w-lg">
-          <div>
-            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-[8px] font-bold uppercase tracking-[0.2em] mb-2">
-              <Sparkles className="size-2.5 text-[#D4B996]" />
-              <span>Rituels de Beauté &bull; Antilles</span>
-            </div>
-
-            <h4 className="font-serif text-[18px] sm:text-[22px] lg:text-[25px] font-light text-white leading-tight tracking-tight">
-              La beauté <br />
-              <span className="italic font-normal">à l’état naturel.</span>
-            </h4>
-
-            <p className="mt-1 text-[9px] sm:text-[10px] text-[#EAE3D9] leading-relaxed line-clamp-2 max-w-sm font-light">
-              Des soins inspirés de la nature des Antilles, pensés pour révéler votre éclat et vous offrir un véritable moment de bien-être.
-            </p>
-
-            <div className="mt-2.5 flex items-center gap-2.5">
-              <span className="px-3 py-1 rounded-full bg-[#FAF8F5] text-[#2B2520] text-[8px] font-bold uppercase tracking-wider shadow-sm">
-                Découvrir nos soins
-              </span>
-              <span className="px-3 py-1 rounded-full border border-white/80 text-white text-[8px] font-bold uppercase tracking-wider">
-                Prendre rendez-vous
-              </span>
-            </div>
-          </div>
-
-          <div className="pt-2 border-t border-white/20 flex items-center gap-3 text-[8px] font-mono uppercase tracking-widest text-[#D4B996]">
-            <span>Martinique</span>
-            <span>&bull;</span>
-            <span>Guadeloupe</span>
-            <span>&bull;</span>
-            <span>Caraïbes</span>
-          </div>
+        <div className="px-3 py-1 rounded-full border border-[#2B2520]/60 text-[#2B2520] text-[8px] font-bold uppercase tracking-wider whitespace-nowrap shadow-2xs">
+          Prendre rendez-vous
         </div>
       </div>
 
-      {/* ── 2. REAL SITE SECTION SOINS (Visible on scroll) ── */}
-      <div className="p-4 sm:p-6 bg-[#F7F4EE] border-t border-[#E8DFD8]">
-        <div className="text-center mb-3">
-          <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-[#8C684F]">Carte des Rituels</p>
-          <h5 className="font-serif text-[14px] font-light text-[#2B2520]">Des soins pensés pour vous.</h5>
+      {/* Real Site Hero Content */}
+      <div className="relative z-10 flex-1 p-4 sm:p-6 flex flex-col justify-between max-w-lg">
+        <div>
+          <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-[8px] font-bold uppercase tracking-[0.2em] mb-2">
+            <Sparkles className="size-2.5 text-[#D4B996]" />
+            <span>Rituels de Beauté &bull; Antilles</span>
+          </div>
+
+          <h4 className="font-serif text-[18px] sm:text-[22px] lg:text-[25px] font-light text-white leading-tight tracking-tight">
+            La beauté <br />
+            <span className="italic font-normal">à l’état naturel.</span>
+          </h4>
+
+          <p className="mt-1 text-[9px] sm:text-[10px] text-[#EAE3D9] leading-relaxed line-clamp-2 max-w-sm font-light">
+            Des soins inspirés de la nature des Antilles, pensés pour révéler votre éclat et vous offrir un véritable moment de bien-être.
+          </p>
+
+          <div className="mt-2.5 flex items-center gap-2.5">
+            <span className="px-3 py-1 rounded-full bg-[#FAF8F5] text-[#2B2520] text-[8px] font-bold uppercase tracking-wider shadow-sm">
+              Découvrir nos soins
+            </span>
+            <span className="px-3 py-1 rounded-full border border-white/80 text-white text-[8px] font-bold uppercase tracking-wider">
+              Prendre rendez-vous
+            </span>
+          </div>
         </div>
-        <div className="grid grid-cols-4 gap-2">
-          <div className="p-2 rounded-xl bg-[#FAF8F5] border border-[#E8DFD8] shadow-2xs">
-            <span className="text-[7px] text-[#8C684F] font-bold block">01 &bull; VISAGE</span>
-            <p className="font-serif text-[9px] font-bold text-[#2B2520] truncate">Soins du Visage</p>
-            <p className="text-[7px] text-[#6B6259]">60 min &bull; 95 €</p>
-          </div>
-          <div className="p-2 rounded-xl bg-[#FAF8F5] border border-[#E8DFD8] shadow-2xs">
-            <span className="text-[7px] text-[#8C684F] font-bold block">02 &bull; CORPS</span>
-            <p className="font-serif text-[9px] font-bold text-[#2B2520] truncate">Soins du Corps</p>
-            <p className="text-[7px] text-[#6B6259]">50 min &bull; 85 €</p>
-          </div>
-          <div className="p-2 rounded-xl bg-[#FAF8F5] border border-[#E8DFD8] shadow-2xs">
-            <span className="text-[7px] text-[#8C684F] font-bold block">03 &bull; MASSAGES</span>
-            <p className="font-serif text-[9px] font-bold text-[#2B2520] truncate">Massages</p>
-            <p className="text-[7px] text-[#6B6259]">75 min &bull; 120 €</p>
-          </div>
-          <div className="p-2 rounded-xl bg-[#FAF8F5] border border-[#E8DFD8] shadow-2xs">
-            <span className="text-[7px] text-[#8C684F] font-bold block">04 &bull; SIGNATURE</span>
-            <p className="font-serif text-[9px] font-bold text-[#2B2520] truncate">Rituels Signature</p>
-            <p className="text-[7px] text-[#6B6259]">120 min &bull; 190 €</p>
-          </div>
+
+        <div className="pt-2 border-t border-white/20 flex items-center gap-3 text-[8px] font-mono uppercase tracking-widest text-[#D4B996]">
+          <span>Martinique</span>
+          <span>&bull;</span>
+          <span>Guadeloupe</span>
+          <span>&bull;</span>
+          <span>Caraïbes</span>
         </div>
       </div>
     </div>
@@ -251,30 +213,30 @@ function SoieEtTerreLandscapeMockup() {
 
 /**
  * ── Landscape Desktop Mockup for KAYO CONSTRUCTION ──
- * Conçu spécifiquement pour le ratio horizontal 4:3
+ * Reproduction statique 1:1 du site Kayo Construction
  */
 function KayoConstructionLandscapeMockup() {
   return (
-    <div className="w-full bg-[#121316] text-[#F4F5F7] font-sans antialiased text-[11px] sm:text-[12px] leading-snug">
+    <div className="relative w-full h-full bg-[#121316] text-[#F4F5F7] font-sans antialiased text-[11px] sm:text-[12px] leading-snug overflow-hidden flex flex-col justify-between">
       {/* ── Mini Desktop Topbar ── */}
       <div className="h-8 sm:h-9 px-4 sm:px-6 bg-[#181A1F] border-b border-[#2A2E38] flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="size-2 rounded-full bg-[#E65100]" />
           <span className="font-sans font-black text-[11px] sm:text-[12px] tracking-wider text-white">KAYO CONSTRUCTION</span>
         </div>
-        <div className="hidden sm:flex items-center gap-4 text-[9px] uppercase tracking-wider text-[#A0A6B5] font-semibold">
+        <div className="hidden sm:flex items-center gap-4 text-[8px] uppercase tracking-wider text-[#A0A6B5] font-semibold">
           <span>Gros Œuvre</span>
           <span>Parc Matériel</span>
           <span>Chantiers</span>
           <span>Contact</span>
         </div>
-        <div className="px-3 py-1 rounded-md bg-[#E65100] text-white text-[9px] font-bold tracking-wide whitespace-nowrap shadow-2xs">
+        <div className="px-3 py-1 rounded-md bg-[#E65100] text-white text-[8px] font-bold tracking-wide whitespace-nowrap shadow-2xs">
           Demander un devis
         </div>
       </div>
 
       {/* ── Hero Widescreen 2-Column Banner ── */}
-      <div className="p-4 sm:p-6 grid grid-cols-12 gap-5 items-center">
+      <div className="flex-1 p-4 sm:p-6 grid grid-cols-12 gap-5 items-center">
         {/* Left Column: Industrial Presentation */}
         <div className="col-span-7 pr-2">
           <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#E65100]/20 border border-[#E65100]/30 text-[#FF8A50] text-[8px] font-black uppercase tracking-wider mb-2">
@@ -292,7 +254,7 @@ function KayoConstructionLandscapeMockup() {
           </p>
 
           <div className="mt-3 flex items-center gap-3">
-            <span className="px-3 py-1 rounded-md bg-[#E65100] text-white text-[9px] font-bold uppercase tracking-wider">
+            <span className="px-3 py-1 rounded-md bg-[#E65100] text-white text-[8px] font-bold uppercase tracking-wider">
               Étude de projet
             </span>
             <div className="flex items-center gap-2 text-[8px] font-mono text-[#DCDFE4]">
@@ -313,28 +275,6 @@ function KayoConstructionLandscapeMockup() {
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-2 text-white">
             <p className="text-[8px] font-bold text-white uppercase leading-tight">Parc Engins Propre</p>
             <p className="text-[7px] text-[#FF8A50]">Pelles chenilles 22T &bull; Camions 8x4</p>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Below Hero: 3 Equipment & Technical Certifications ── */}
-      <div className="px-4 sm:px-6 pb-6 pt-2">
-        <div className="text-[9px] uppercase tracking-widest font-black text-[#FF8A50] mb-2 flex items-center gap-1">
-          <ShieldCheck className="size-2.5" />
-          <span>Expertises Opérationnelles</span>
-        </div>
-        <div className="grid grid-cols-3 gap-2">
-          <div className="p-2 rounded-lg bg-[#181A1F] border border-[#2A2E38]">
-            <p className="font-sans text-[10px] font-bold text-white">Gros Œuvre Béton</p>
-            <p className="text-[8px] text-[#A0A6B5]">Normes Eurocode 8</p>
-          </div>
-          <div className="p-2 rounded-lg bg-[#181A1F] border border-[#2A2E38]">
-            <p className="font-sans text-[10px] font-bold text-white">VRD & Terrassement</p>
-            <p className="text-[8px] text-[#A0A6B5]">Parc 45 engins</p>
-          </div>
-          <div className="p-2 rounded-lg bg-[#181A1F] border border-[#2A2E38]">
-            <p className="font-sans text-[10px] font-bold text-white">Génie Civil</p>
-            <p className="text-[8px] text-[#A0A6B5]">Ouvrages d'art</p>
           </div>
         </div>
       </div>
