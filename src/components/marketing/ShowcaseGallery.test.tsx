@@ -5,7 +5,7 @@ import { renderWithProviders } from '@/test/render';
 import { ShowcaseGallery } from './ShowcaseGallery';
 
 describe('ShowcaseGallery component', () => {
-  it('affiche le titre principal, les filtres et les 4 écrans d’exposition', () => {
+  it('affiche le titre principal, les filtres et les 2 écrans d’exposition', () => {
     renderWithProviders(<ShowcaseGallery />);
 
     expect(
@@ -14,13 +14,9 @@ describe('ShowcaseGallery component', () => {
 
     expect(screen.getByRole('button', { name: 'SOIN & BEAUTÉ' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'ARTISAN & BTP' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'RESTAURATION' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'IMMOBILIER' })).toBeInTheDocument();
 
     expect(screen.getByRole('heading', { name: 'SOIE & TERRE' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'KAYO CONSTRUCTION' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'RACINES & BRAISE' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'HORIZONS PRESTIGE' })).toBeInTheDocument();
   });
 
   it('change le filtre actif au clic', async () => {

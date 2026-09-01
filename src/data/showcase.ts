@@ -1,5 +1,5 @@
 /**
- * Données des 4 concepts de maquettes interactives pour le Showcase HBG Labs.
+ * Données des concepts de maquettes interactives pour le Showcase HBG Labs.
  */
 
 export type ShowcaseSector = 'BEAUTY' | 'BTP' | 'RESTAURANT' | 'REAL_ESTATE';
@@ -68,53 +68,5 @@ export const SHOWCASE_PROJECTS: ShowcaseProject[] = [
       'Architecture technique parasismique & VRD',
     ],
     mockupImage: '/images/showcase/kayo-construction.jpg',
-  },
-  {
-    id: 'racines-et-braise',
-    slug: 'racines-et-braise',
-    name: 'RACINES & BRAISE',
-    sectorLabel: 'Restauration',
-    category: 'RESTAURANT',
-    tagline: 'Les racines ont du caractère.',
-    description: 'Une cuisine caribéenne façonnée par le feu, le territoire et la transmission.',
-    shortPitch: 'Une expérience immersive construite autour de la gastronomie, du feu et des racines caribéennes.',
-    accentColor: '#D97736',
-    palette: ['#0E0D0C', '#1A1816', '#D97736', '#8A4A28', '#F5EFEB'],
-    metrics: [
-      { label: 'Réservations en direct', value: '78 %' },
-      { label: 'Zéro commission plateforme', value: '100 %' },
-      { label: 'Expérience immersive', value: '4K UI' },
-    ],
-    features: [
-      'Système de réservation de table en direct',
-      'Carte interactive & accords mets-rhums',
-      'Galerie gastronomique plein écran',
-      'Mise en valeur du terroir et de la braise',
-    ],
-    mockupImage: '/images/showcase/racines-et-braise.jpg',
-  },
-  {
-    id: 'horizons-prestige',
-    slug: 'horizons-prestige',
-    name: 'HORIZONS PRESTIGE',
-    sectorLabel: 'Immobilier',
-    category: 'REAL_ESTATE',
-    tagline: 'Votre horizon commence ici.',
-    description: 'Découvrez des propriétés d’exception dans les plus beaux environnements des Antilles.',
-    shortPitch: 'Une expérience premium conçue pour valoriser des propriétés d’exception.',
-    accentColor: '#0E7490',
-    palette: ['#0B131F', '#1E293B', '#0E7490', '#CBD5E1', '#FFFFFF'],
-    metrics: [
-      { label: 'Volume sous mandat', value: '120M €' },
-      { label: 'Mandats exclusifs', value: '98 %' },
-      { label: 'Délai moyen de vente', value: '45j' },
-    ],
-    features: [
-      'Moteur de recherche multicritères',
-      'Fiches de propriétés avec visite privée',
-      'Gestion des favoris en temps réel',
-      'Téléchargement de dossiers confidentiels',
-    ],
-    mockupImage: '/images/showcase/horizons-prestige.jpg',
   },
 ];

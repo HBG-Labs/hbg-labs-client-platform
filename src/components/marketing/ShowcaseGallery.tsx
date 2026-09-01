@@ -12,8 +12,6 @@ type FilterType = ShowcaseSector;
 const FILTER_ITEMS: { id: FilterType; label: string }[] = [
   { id: 'BEAUTY', label: 'SOIN & BEAUTÉ' },
   { id: 'BTP', label: 'ARTISAN & BTP' },
-  { id: 'RESTAURANT', label: 'RESTAURATION' },
-  { id: 'REAL_ESTATE', label: 'IMMOBILIER' },
 ];
 
 export function ShowcaseGallery() {
