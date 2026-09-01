@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Check, Minus } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { cn, formatAmountCompact } from '@/lib/utils';
 import {
   isPurchasable,
@@ -8,133 +8,150 @@ import {
   type PublicPlan,
 } from '@/services/plans.service';
 import { usePublicPlans } from '@/features/pricing/usePublicPlans';
-import { Button } from '@/components/ui/Button';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
 
-/**
- * Grille tarifaire (§7).
- *
- * Le tarif de création est mis en avant en valeur principale en haut de carte,
- * et le tarif mensuel d'hébergement & maintenance (HBG Care) est positionné en bas.
- */
-function PlanCard({ plan }: { plan: PublicPlan }) {
+const COLUMN_GRADIENTS = [
+  'bg-gradient-to-b from-[#ECFDF5]/70 via-[#F0FDF4]/20 to-white/95',
+  'bg-gradient-to-b from-[#F3E8FF]/80 via-[#FAF5FF]/30 to-white/95',
+  'bg-gradient-to-b from-[#FDF2F8]/70 via-[#FFF1F2]/20 to-white/95',
+];
+
+const CTA_LABELS = [
+  'Lancer la discussion',
+  'Découvrir nos offres',
+  'Demander un devis',
+];
+
+interface PlanCardProps {
+  plan: PublicPlan;
+  index: number;
+}
+
+function PlanCard({ plan, index }: PlanCardProps) {
   const monthly = monthlyPrice(plan);
   const setup = setupPrice(plan);
   const purchasable = isPurchasable(plan);
 
+  const backgroundGradient = COLUMN_GRADIENTS[index % COLUMN_GRADIENTS.length];
+  const ctaLabel = CTA_LABELS[index % CTA_LABELS.length];
+
   return (
     <div
       className={cn(
-        'relative flex flex-col justify-between rounded-2xl border bg-surface p-6 sm:p-8 transition-all duration-200',
-        plan.is_featured ? 'border-accent shadow-md ring-1 ring-accent' : 'border-border hover:border-ink/30',
+        'relative flex flex-col justify-between p-7 sm:p-9 transition-all duration-200',
+        backgroundGradient,
       )}
     >
-      {plan.is_featured && (
-        <div className="absolute -top-3 left-6">
-          <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">
-            Le plus choisi
-          </span>
-        </div>
-      )}
-
       <div>
-        <div>
-          <h3 className="font-serif text-2xl font-normal text-ink">{plan.name}</h3>
-          {plan.tagline && <p className="mt-1.5 text-sm text-muted">{plan.tagline}</p>}
+        {/* ── Header: Title & Optional Featured Badge ── */}
+        <div className="flex items-center justify-between gap-3 min-h-[36px]">
+          <h3 className="font-sans text-2xl sm:text-3xl font-black text-ink tracking-tight">
+            {plan.name}
+          </h3>
+          {plan.is_featured && (
+            <span className="rounded-full bg-[#E9D5FF] text-[#6B21A8] text-xs font-semibold px-3 py-1 shadow-2xs whitespace-nowrap">
+              Juste le meilleur
+            </span>
+          )}
         </div>
 
-        {/* ── 1. Prix de création (mis en valeur en haut) ── */}
-        <div className="mt-6 border-y border-border py-6">
+        {/* ── Subtitle / Tagline ── */}
+        <p className="mt-3 text-sm text-stone-600 leading-relaxed min-h-[44px]">
+          {plan.tagline || plan.description}
+        </p>
+
+        {/* ── Price Section ── */}
+        <div className="mt-8 mb-6">
           {setup ? (
             <div>
-              <p className="text-xs font-sans uppercase tracking-wider text-muted font-medium">
-                {setup.is_starting_price ? 'Création à partir de' : 'Création'}
+              <p className="text-xs font-sans text-stone-500 font-medium">
+                {setup.is_starting_price ? 'à partir de' : 'Tarif'}
               </p>
-              <p className="mt-1 flex items-baseline gap-1.5">
-                <span className="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">
+              <div className="mt-1 flex items-baseline gap-1">
+                <span className="font-sans text-4xl sm:text-5xl font-black tracking-tight text-ink">
                   {formatAmountCompact(setup.unit_amount_cents, setup.currency)}
                 </span>
-              </p>
+                <span className="text-xs font-bold text-stone-500 tracking-wider">
+                  /H.T.
+                </span>
+              </div>
+              {monthly && (
+                <p className="mt-2 text-xs text-stone-500 font-medium">
+                  + <span>{formatAmountCompact(monthly.unit_amount_cents, monthly.currency)}</span> / mois (hébergement &amp; maintenance)
+                </p>
+              )}
             </div>
           ) : plan.requires_quote ? (
             <div>
-              <p className="text-xs font-sans uppercase tracking-wider text-muted font-medium">
-                Création
+              <p className="text-xs font-sans text-stone-500 font-medium">
+                Tarif
               </p>
-              <p className="mt-1 font-serif text-3xl sm:text-4xl font-normal tracking-tight text-ink">
+              <p className="mt-1 font-sans text-4xl sm:text-5xl font-black tracking-tight text-ink">
                 Sur devis
               </p>
             </div>
           ) : monthly ? (
             <div>
-              <p className="text-xs font-sans uppercase tracking-wider text-muted font-medium">
+              <p className="text-xs font-sans text-stone-500 font-medium">
                 Abonnement
               </p>
-              <p className="mt-1 flex items-baseline gap-1.5">
-                <span className="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">
+              <div className="mt-1 flex items-baseline gap-1">
+                <span className="font-sans text-4xl sm:text-5xl font-black tracking-tight text-ink">
                   {formatAmountCompact(monthly.unit_amount_cents, monthly.currency)}
                 </span>
-                <span className="text-muted">/ mois</span>
-              </p>
+                <span className="text-xs font-bold text-stone-500 tracking-wider">
+                  / mois
+                </span>
+              </div>
             </div>
           ) : (
-            <p className="font-serif text-2xl font-normal text-ink">Sur devis</p>
+            <p className="font-sans text-3xl font-black text-ink">Sur devis</p>
           )}
         </div>
 
-        {plan.description && (
-          <p className="mt-6 text-sm leading-relaxed text-muted">{plan.description}</p>
-        )}
-
-        <ul className="mt-6 space-y-3">
-          {plan.plan_features.map((feature) => (
-            <li key={feature.id} className="flex gap-2.5 text-sm">
-              {feature.is_included ? (
-                <Check className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden="true" />
-              ) : (
-                <Minus className="mt-0.5 size-4 shrink-0 text-muted/40" aria-hidden="true" />
-              )}
-              <span
-                className={cn(feature.is_included ? 'text-ink' : 'text-muted/60 line-through')}
-                title={feature.detail ?? undefined}
-              >
-                {feature.label}
-              </span>
-              <span className="sr-only">
-                {feature.is_included ? 'inclus' : 'non inclus'}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* ── 2. Prix mensuel (positionné en bas au-dessus du bouton) ── */}
-      <div className="mt-8 pt-4 border-t border-border/80">
-        {monthly ? (
-          <p className="mb-4 text-center text-xs text-muted">
-            Hébergement &amp; maintenance :{' '}
-            <span className="font-semibold text-ink">
-              {formatAmountCompact(monthly.unit_amount_cents, monthly.currency)}
-            </span>{' '}
-            / mois
-          </p>
-        ) : (
-          <p className="mb-4 text-center text-xs text-muted">
-            Maintenance &amp; hébergement sur devis
-          </p>
-        )}
-
-        <Button asChild fullWidth variant={plan.is_featured ? 'primary' : 'outline'}>
+        {/* ── CTA Button (Black Pill with Arrow Circle) ── */}
+        <div className="mt-2">
           <Link
             to={
               purchasable
                 ? `/dashboard/facturation?offre=${plan.code}`
                 : `/devis?offre=${plan.code}`
             }
+            className="w-full rounded-full bg-black text-white px-6 py-3.5 font-semibold text-sm flex items-center justify-between shadow-md hover:bg-stone-900 transition-colors group cursor-pointer"
           >
-            {purchasable ? 'Choisir cette offre' : 'Demander un devis'}
+            <span>{ctaLabel}</span>
+            <span className="size-6 rounded-full bg-white text-black flex items-center justify-center font-bold text-xs transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shadow-xs shrink-0">
+              <ArrowUpRight className="size-3.5" />
+            </span>
           </Link>
-        </Button>
+        </div>
+
+        {/* ── Separator Line ── */}
+        <div className="border-t border-stone-200/80 my-8" />
+
+        {/* ── Features List ── */}
+        <div>
+          <h4 className="text-sm font-bold text-ink mb-4">Inclus</h4>
+          <ul className="space-y-3 text-sm">
+            {plan.plan_features.map((feature) => (
+              <li key={feature.id} className="flex items-start gap-2.5">
+                <span className="text-stone-900 font-bold select-none text-base leading-none mt-0.5">•</span>
+                <span
+                  className={cn(
+                    'leading-tight',
+                    feature.is_included ? 'text-stone-800' : 'text-stone-400 line-through',
+                  )}
+                  title={feature.detail ?? undefined}
+                >
+                  {feature.label}
+                </span>
+                <span className="sr-only">
+                  {feature.is_included ? 'inclus' : 'non inclus'}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
@@ -175,9 +192,14 @@ export function PricingGrid({ limit, className }: PricingGridProps) {
   const plans = limit ? data.slice(0, limit) : data;
 
   return (
-    <div className={cn('grid gap-6 lg:grid-cols-3', className)}>
-      {plans.map((plan) => (
-        <PlanCard key={plan.id} plan={plan} />
+    <div
+      className={cn(
+        'grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-stone-200/80 border border-stone-200/80 rounded-3xl overflow-hidden bg-white/90 shadow-sm relative',
+        className,
+      )}
+    >
+      {plans.map((plan, index) => (
+        <PlanCard key={plan.id} plan={plan} index={index} />
       ))}
     </div>
   );
