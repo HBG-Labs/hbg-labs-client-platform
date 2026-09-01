@@ -343,40 +343,40 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
       </section>
 
       {/* ── 3. SECTION INTRODUCTION / PHILOSOPHIE ── */}
-      <section id="philosophie" className="py-24 sm:py-32 bg-[#FAF8F5] border-b border-[#E8DFD8]">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      <section id="philosophie" className={`${isMobile ? 'py-12 px-4' : 'py-24 sm:py-32'} bg-[#FAF8F5] border-b border-[#E8DFD8]`}>
+        <div className={`max-w-7xl mx-auto ${isMobile ? 'px-0' : 'px-6 sm:px-8'}`}>
+          <div className={`grid ${isMobile ? 'grid-cols-1 gap-8' : 'grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16'} items-center`}>
             
             {/* Left Editorial Text */}
-            <div className="lg:col-span-6 space-y-6">
+            <div className={`${isMobile ? 'col-span-1 space-y-4' : 'lg:col-span-6 space-y-6'}`}>
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.25em] text-[#8C684F]">
                 <Leaf className="size-3.5" />
                 <span>Notre Philosophie</span>
               </div>
 
-              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-[#2B2520] leading-tight">
+              <h2 className={`font-serif ${isMobile ? 'text-2xl' : 'text-3xl sm:text-4xl lg:text-5xl'} font-light text-[#2B2520] leading-tight`}>
                 Prendre soin de soi <br />
                 <span className="italic font-normal">devient un rituel.</span>
               </h2>
 
-              <p className="text-base sm:text-lg text-[#6B6259] leading-relaxed font-light">
+              <p className={`${isMobile ? 'text-xs' : 'text-base sm:text-lg'} text-[#6B6259] leading-relaxed font-light`}>
                 Chez Soie &amp; Terre, chaque soin est pensé comme une parenthèse. Un moment pour ralentir, respirer et retrouver l'essentiel au contact des richesses botaniques des îles.
               </p>
 
-              <div className="pt-4 grid grid-cols-2 gap-6 border-t border-[#E8DFD8]">
+              <div className="pt-4 grid grid-cols-2 gap-4 sm:gap-6 border-t border-[#E8DFD8]">
                 <div>
-                  <p className="font-serif text-2xl sm:text-3xl text-[#8C684F] font-bold">100 %</p>
-                  <p className="mt-1 text-xs text-[#6B6259] uppercase tracking-wider font-medium">Actifs naturels &amp; purs</p>
+                  <p className={`font-serif ${isMobile ? 'text-xl' : 'text-2xl sm:text-3xl'} text-[#8C684F] font-bold`}>100 %</p>
+                  <p className="mt-1 text-[10px] sm:text-xs text-[#6B6259] uppercase tracking-wider font-medium">Actifs naturels &amp; purs</p>
                 </div>
                 <div>
-                  <p className="font-serif text-2xl sm:text-3xl text-[#8C684F] font-bold">4.9 / 5</p>
-                  <p className="mt-1 text-xs text-[#6B6259] uppercase tracking-wider font-medium">Satisfaction clients</p>
+                  <p className={`font-serif ${isMobile ? 'text-xl' : 'text-2xl sm:text-3xl'} text-[#8C684F] font-bold`}>4.9 / 5</p>
+                  <p className="mt-1 text-[10px] sm:text-xs text-[#6B6259] uppercase tracking-wider font-medium">Satisfaction clients</p>
                 </div>
               </div>
             </div>
 
             {/* Right Asymmetrical Visual Composition */}
-            <div className="lg:col-span-6 grid grid-cols-2 gap-4 sm:gap-6">
+            <div className={`${isMobile ? 'col-span-1 grid grid-cols-1 gap-4' : 'lg:col-span-6 grid grid-cols-2 gap-4 sm:gap-6'}`}>
               <div className="space-y-4 sm:space-y-6">
                 <div className="relative aspect-[3/4] rounded-3xl overflow-hidden shadow-lg">
                   <img
@@ -385,18 +385,18 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                   />
                 </div>
-                <div className="p-6 rounded-3xl bg-[#F0EAE1] border border-[#E0D6C8] text-center">
-                  <Heart className="size-6 text-[#8C684F] mx-auto mb-2" />
-                  <p className="font-serif text-sm font-semibold text-[#2B2520]">Plantes sauvages des Antilles</p>
-                  <p className="text-[11px] text-[#6B6259] mt-1">Cueillies dans le respect de la biodiversité</p>
+                <div className="p-4 sm:p-6 rounded-3xl bg-[#F0EAE1] border border-[#E0D6C8] text-center">
+                  <Heart className="size-5 sm:size-6 text-[#8C684F] mx-auto mb-2" />
+                  <p className="font-serif text-xs sm:text-sm font-semibold text-[#2B2520]">Plantes sauvages des Antilles</p>
+                  <p className="text-[10px] sm:text-[11px] text-[#6B6259] mt-1">Cueillies dans le respect de la biodiversité</p>
                 </div>
               </div>
 
-              <div className="space-y-4 sm:space-y-6 pt-8">
-                <div className="p-6 rounded-3xl bg-[#2B2520] text-white text-center">
-                  <ShieldCheck className="size-6 text-[#D4B996] mx-auto mb-2" />
-                  <p className="font-serif text-sm font-semibold">Formules Éco-responsables</p>
-                  <p className="text-[11px] text-[#D4B996]/80 mt-1">Zéro parabène, zéro silicone</p>
+              <div className={`space-y-4 sm:space-y-6 ${isMobile ? 'pt-0' : 'pt-8'}`}>
+                <div className="p-4 sm:p-6 rounded-3xl bg-[#2B2520] text-white text-center">
+                  <ShieldCheck className="size-5 sm:size-6 text-[#D4B996] mx-auto mb-2" />
+                  <p className="font-serif text-xs sm:text-sm font-semibold">Formules Éco-responsables</p>
+                  <p className="text-[10px] sm:text-[11px] text-[#D4B996]/80 mt-1">Zéro parabène, zéro silicone</p>
                 </div>
                 <div className="relative aspect-[3/4] rounded-3xl overflow-hidden shadow-lg">
                   <img
@@ -413,23 +413,23 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
       </section>
 
       {/* ── 4. SECTION SOINS & RITUELS (4 Cartes Interactives) ── */}
-      <section id="soins" className="py-24 sm:py-32 bg-[#F7F4EE]">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8">
+      <section id="soins" className={`${isMobile ? 'py-12 px-4' : 'py-24 sm:py-32'} bg-[#F7F4EE]`}>
+        <div className={`max-w-7xl mx-auto ${isMobile ? 'px-0' : 'px-6 sm:px-8'}`}>
           
-          <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#8C684F] mb-3">
+          <div className={`text-center max-w-2xl mx-auto ${isMobile ? 'mb-8' : 'mb-16 sm:mb-20'}`}>
+            <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-[#8C684F] mb-2">
               Notre Carte de Rituels
             </p>
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-[#2B2520]">
+            <h2 className={`font-serif ${isMobile ? 'text-2xl' : 'text-3xl sm:text-4xl lg:text-5xl'} font-light text-[#2B2520]`}>
               Des soins pensés pour vous.
             </h2>
-            <p className="mt-3 text-sm sm:text-base text-[#6B6259]">
+            <p className={`mt-2 ${isMobile ? 'text-xs' : 'text-sm sm:text-base'} text-[#6B6259]`}>
               Chaque protocole est adapté à votre peau et à votre niveau de fatigue pour une régénération sur-mesure.
             </p>
           </div>
 
-          {/* 4 Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          {/* Cards Grid */}
+          <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8'}`}>
             {CATEGORIES_SOINS.map((soin) => (
               <div
                 key={soin.id}
@@ -451,12 +451,12 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
                 </div>
 
                 {/* Content */}
-                <div className="p-6 flex-1 flex flex-col justify-between">
+                <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-wider text-[#8C684F] mb-1">
                       {soin.subtitle}
                     </p>
-                    <h3 className="font-serif text-lg font-bold text-[#2B2520] mb-2">
+                    <h3 className="font-serif text-base sm:text-lg font-bold text-[#2B2520] mb-2">
                       {soin.title}
                     </h3>
                     <p className="text-xs text-[#6B6259] leading-relaxed line-clamp-3">
@@ -464,7 +464,7 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
                     </p>
                   </div>
 
-                  <div className="mt-6 pt-4 border-t border-[#E8DFD8] flex items-center justify-between">
+                  <div className="mt-5 pt-4 border-t border-[#E8DFD8] flex items-center justify-between">
                     <div>
                       <span className="text-[10px] text-[#8C684F] font-mono block">{soin.duration}</span>
                       <span className="text-sm font-serif font-bold text-[#2B2520]">{soin.price}</span>
@@ -486,16 +486,16 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
       </section>
 
       {/* ── 5. SECTION RITUEL SIGNATURE (Mise en scène cinématographique) ── */}
-      <section id="rituel-signature" className="py-24 sm:py-32 bg-[#2B2520] text-white relative overflow-hidden">
+      <section id="rituel-signature" className={`${isMobile ? 'py-12 px-4' : 'py-24 sm:py-32'} bg-[#2B2520] text-white relative overflow-hidden`}>
         {/* Subtle background glow */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#8C684F]/20 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#4A5B4E]/20 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        <div className={`max-w-7xl mx-auto ${isMobile ? 'px-0' : 'px-6 sm:px-8'} relative z-10`}>
+          <div className={`grid ${isMobile ? 'grid-cols-1 gap-8' : 'grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16'} items-center`}>
             
             {/* Visual Box */}
-            <div className="lg:col-span-6 relative">
+            <div className={`${isMobile ? 'col-span-1' : 'lg:col-span-6'} relative`}>
               <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-white/10">
                 <img
                   src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1000&q=80"
@@ -503,67 +503,69 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="absolute -bottom-6 -right-6 hidden sm:block p-6 rounded-2xl bg-[#FAF8F5] text-[#2B2520] shadow-2xl max-w-xs border border-[#E8DFD8]">
-                <div className="flex items-center gap-1 text-amber-500 mb-1">
-                  <Star className="size-3.5 fill-current" />
-                  <Star className="size-3.5 fill-current" />
-                  <Star className="size-3.5 fill-current" />
-                  <Star className="size-3.5 fill-current" />
-                  <Star className="size-3.5 fill-current" />
+              {!isMobile && (
+                <div className="absolute -bottom-6 -right-6 hidden sm:block p-6 rounded-2xl bg-[#FAF8F5] text-[#2B2520] shadow-2xl max-w-xs border border-[#E8DFD8]">
+                  <div className="flex items-center gap-1 text-amber-500 mb-1">
+                    <Star className="size-3.5 fill-current" />
+                    <Star className="size-3.5 fill-current" />
+                    <Star className="size-3.5 fill-current" />
+                    <Star className="size-3.5 fill-current" />
+                    <Star className="size-3.5 fill-current" />
+                  </div>
+                  <p className="font-serif text-xs font-bold">« Le soin le plus complet des Caraïbes. »</p>
+                  <p className="text-[10px] text-[#6B6259] mt-0.5">Guide Spa &amp; Bien-être 2026</p>
                 </div>
-                <p className="font-serif text-xs font-bold">« Le soin le plus complet des Caraïbes. »</p>
-                <p className="text-[10px] text-[#6B6259] mt-0.5">Guide Spa &amp; Bien-être 2026</p>
-              </div>
+              )}
             </div>
 
             {/* Text & Steps */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[#D4B996] text-[11px] font-bold uppercase tracking-[0.2em]">
+            <div className={`${isMobile ? 'col-span-1 space-y-4' : 'lg:col-span-6 space-y-6'}`}>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[#D4B996] text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em]">
                 <Sparkles className="size-3" />
                 <span>Le Soin Émblématique</span>
               </div>
 
-              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-white leading-tight">
+              <h2 className={`font-serif ${isMobile ? 'text-2xl' : 'text-3xl sm:text-4xl lg:text-5xl'} font-light text-white leading-tight`}>
                 Un voyage <br />
                 <span className="italic font-normal text-[#D4B996]">pour les sens.</span>
               </h2>
 
-              <p className="text-sm sm:text-base text-[#D4B996]/90 leading-relaxed font-light">
+              <p className={`${isMobile ? 'text-xs' : 'text-sm sm:text-base'} text-[#D4B996]/90 leading-relaxed font-light`}>
                 Des gestes précis, des textures délicates et des actifs inspirés de notre environnement pour créer une expérience unique. Une immersion totale de 120 minutes qui revitalise le corps et apaise l’esprit.
               </p>
 
-              <ul className="space-y-3 pt-2 text-xs sm:text-sm text-white/90">
-                <li className="flex items-center gap-3">
-                  <div className="size-5 rounded-full bg-[#8C684F] flex items-center justify-center text-white shrink-0">
-                    <Check className="size-3" />
+              <ul className="space-y-2.5 pt-2 text-xs sm:text-sm text-white/90">
+                <li className="flex items-center gap-2.5">
+                  <div className="size-4.5 sm:size-5 rounded-full bg-[#8C684F] flex items-center justify-center text-white shrink-0">
+                    <Check className="size-2.5 sm:size-3" />
                   </div>
                   <span>Bain de pieds aux fleurs d’oranger &amp; sel rose</span>
                 </li>
-                <li className="flex items-center gap-3">
-                  <div className="size-5 rounded-full bg-[#8C684F] flex items-center justify-center text-white shrink-0">
-                    <Check className="size-3" />
+                <li className="flex items-center gap-2.5">
+                  <div className="size-4.5 sm:size-5 rounded-full bg-[#8C684F] flex items-center justify-center text-white shrink-0">
+                    <Check className="size-2.5 sm:size-3" />
                   </div>
                   <span>Gommage corporel velours au sucre de canne bio</span>
                 </li>
-                <li className="flex items-center gap-3">
-                  <div className="size-5 rounded-full bg-[#8C684F] flex items-center justify-center text-white shrink-0">
-                    <Check className="size-3" />
+                <li className="flex items-center gap-2.5">
+                  <div className="size-4.5 sm:size-5 rounded-full bg-[#8C684F] flex items-center justify-center text-white shrink-0">
+                    <Check className="size-2.5 sm:size-3" />
                   </div>
                   <span>Massage profond aux huiles tiédies de vanille &amp; bois bandé</span>
                 </li>
-                <li className="flex items-center gap-3">
-                  <div className="size-5 rounded-full bg-[#8C684F] flex items-center justify-center text-white shrink-0">
-                    <Check className="size-3" />
+                <li className="flex items-center gap-2.5">
+                  <div className="size-4.5 sm:size-5 rounded-full bg-[#8C684F] flex items-center justify-center text-white shrink-0">
+                    <Check className="size-2.5 sm:size-3" />
                   </div>
                   <span>Soin du visage éclat instantané à l’hibiscus</span>
                 </li>
               </ul>
 
-              <div className="pt-6">
+              <div className="pt-4">
                 <button
                   type="button"
                   onClick={() => handleOpenBooking('RITUELS SIGNATURE (120 min • 190 €)')}
-                  className="px-8 py-3.5 rounded-full bg-[#FAF8F5] text-[#2B2520] hover:bg-white text-xs font-bold uppercase tracking-[0.2em] transition-all shadow-lg cursor-pointer"
+                  className={`px-6 sm:px-8 py-3 rounded-full bg-[#FAF8F5] text-[#2B2520] hover:bg-white ${isMobile ? 'w-full text-center' : ''} text-xs font-bold uppercase tracking-[0.18em] transition-all shadow-lg cursor-pointer`}
                 >
                   Découvrir le rituel
                 </button>
@@ -575,30 +577,30 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
       </section>
 
       {/* ── 6. SECTION PRODUITS COSMÉTIQUES ── */}
-      <section id="produits" className="py-24 sm:py-32 bg-[#FAF8F5] border-b border-[#E8DFD8]">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8">
+      <section id="produits" className={`${isMobile ? 'py-12 px-4' : 'py-24 sm:py-32'} bg-[#FAF8F5] border-b border-[#E8DFD8]`}>
+        <div className={`max-w-7xl mx-auto ${isMobile ? 'px-0' : 'px-6 sm:px-8'}`}>
           
-          <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#8C684F] mb-3">
+          <div className={`text-center max-w-2xl mx-auto ${isMobile ? 'mb-8' : 'mb-16 sm:mb-20'}`}>
+            <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-[#8C684F] mb-2">
               Notre Ligne Botanique
             </p>
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-[#2B2520]">
+            <h2 className={`font-serif ${isMobile ? 'text-2xl' : 'text-3xl sm:text-4xl lg:text-5xl'} font-light text-[#2B2520]`}>
               La nature au cœur de nos soins.
             </h2>
-            <p className="mt-3 text-sm sm:text-base text-[#6B6259]">
+            <p className={`mt-2 ${isMobile ? 'text-xs' : 'text-sm sm:text-base'} text-[#6B6259]`}>
               Prolongez l’expérience chez vous avec nos créations cosmétiques artisanales, formulées et confectionnées dans nos ateliers caribéens.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-1 md:grid-cols-3 gap-8'}`}>
             {PRODUITS.map((prod) => (
               <div
                 key={prod.id}
-                className="group p-6 rounded-3xl bg-[#F7F4EE] border border-[#E8DFD8] hover:border-[#8C684F]/50 transition-all duration-300 flex flex-col justify-between"
+                className="group p-5 sm:p-6 rounded-3xl bg-[#F7F4EE] border border-[#E8DFD8] hover:border-[#8C684F]/50 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   {/* Product Image */}
-                  <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-white mb-6">
+                  <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-white mb-5">
                     <img
                       src={prod.image}
                       alt={prod.name}
@@ -610,16 +612,16 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
                   </div>
 
                   <div className="flex items-baseline justify-between mb-1">
-                    <h3 className="font-serif text-xl font-bold text-[#2B2520]">{prod.name}</h3>
-                    <span className="font-serif font-bold text-lg text-[#8C684F]">{prod.price}</span>
+                    <h3 className="font-serif text-lg font-bold text-[#2B2520]">{prod.name}</h3>
+                    <span className="font-serif font-bold text-base text-[#8C684F]">{prod.price}</span>
                   </div>
                   
-                  <p className="text-xs font-semibold text-[#8C684F] mb-2">{prod.subtitle}</p>
+                  <p className="text-xs font-semibold text-[#8C684F] mb-1.5">{prod.subtitle}</p>
                   <p className="text-xs text-[#6B6259] leading-relaxed">{prod.description}</p>
                   <span className="text-[10px] font-mono text-[#8C684F]/80 block mt-2">Flacon verre {prod.volume}</span>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-[#E8DFD8]">
+                <div className="mt-5 pt-4 border-t border-[#E8DFD8]">
                   <button
                     type="button"
                     onClick={() => handleAddToCart(prod.name)}
@@ -637,29 +639,29 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
       </section>
 
       {/* ── 7. SECTION EXPÉRIENCE & VALEURS ── */}
-      <section className="py-20 sm:py-28 bg-[#F0EAE1]">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
+      <section className={`${isMobile ? 'py-12 px-4' : 'py-20 sm:py-28'} bg-[#F0EAE1]`}>
+        <div className={`max-w-7xl mx-auto ${isMobile ? 'px-0' : 'px-6 sm:px-8'}`}>
+          <div className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12'}`}>
             
-            <div className="p-8 rounded-3xl bg-[#FAF8F5] border border-[#E0D6C8] space-y-4">
+            <div className="p-6 sm:p-8 rounded-3xl bg-[#FAF8F5] border border-[#E0D6C8] space-y-3 sm:space-y-4">
               <span className="font-mono text-xs font-bold text-[#8C684F]">01</span>
-              <h3 className="font-serif text-2xl font-bold text-[#2B2520]">EXPERTISE</h3>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#2B2520]">EXPERTISE</h3>
               <p className="text-xs sm:text-sm text-[#6B6259] leading-relaxed">
                 Des soins réalisés avec précision et attention par des praticiennes passionnées, formées aux meilleures techniques de modelage et de dermatologie naturelle.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-[#FAF8F5] border border-[#E0D6C8] space-y-4">
+            <div className="p-6 sm:p-8 rounded-3xl bg-[#FAF8F5] border border-[#E0D6C8] space-y-3 sm:space-y-4">
               <span className="font-mono text-xs font-bold text-[#8C684F]">02</span>
-              <h3 className="font-serif text-2xl font-bold text-[#2B2520]">NATURE</h3>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#2B2520]">NATURE</h3>
               <p className="text-xs sm:text-sm text-[#6B6259] leading-relaxed">
                 Des ingrédients rigoureusement sourcés aux Antilles. Nos formules privilégient les extraits purs de fruits tropicaux, de fleurs sauvages et d’huiles végétales vierges.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-[#FAF8F5] border border-[#E0D6C8] space-y-4">
+            <div className="p-6 sm:p-8 rounded-3xl bg-[#FAF8F5] border border-[#E0D6C8] space-y-3 sm:space-y-4">
               <span className="font-mono text-xs font-bold text-[#8C684F]">03</span>
-              <h3 className="font-serif text-2xl font-bold text-[#2B2520]">BIEN-ÊTRE</h3>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#2B2520]">BIEN-ÊTRE</h3>
               <p className="text-xs sm:text-sm text-[#6B6259] leading-relaxed">
                 Une parenthèse entièrement pensée pour vous. Lumière feutrée, musique douce, textures soyeuses : tout concourt à un lâcher-prise absolu.
               </p>
@@ -670,60 +672,60 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
       </section>
 
       {/* ── 8. SECTION GALERIE & TÉMOIGNAGES ── */}
-      <section className="py-24 sm:py-32 bg-[#FAF8F5]">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8">
+      <section className={`${isMobile ? 'py-12 px-4' : 'py-24 sm:py-32'} bg-[#FAF8F5]`}>
+        <div className={`max-w-7xl mx-auto ${isMobile ? 'px-0' : 'px-6 sm:px-8'}`}>
           
           {/* Gallery Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-20">
+          <div className={`grid ${isMobile ? 'grid-cols-2 gap-3 mb-10' : 'grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-20'}`}>
             {GALERIE_IMAGES.map((img, i) => (
-              <div key={i} className="relative aspect-square rounded-3xl overflow-hidden group shadow-md">
+              <div key={i} className="relative aspect-square rounded-2xl sm:rounded-3xl overflow-hidden group shadow-md">
                 <img
                   src={img.url}
                   alt={img.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 text-white">
-                  <p className="text-[11px] font-medium">{img.title}</p>
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3 sm:p-4 text-white">
+                  <p className="text-[10px] sm:text-[11px] font-medium">{img.title}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Testimonial Slider / Box */}
-          <div className="max-w-3xl mx-auto rounded-3xl bg-[#F7F4EE] border border-[#E8DFD8] p-8 sm:p-12 text-center relative shadow-sm">
-            <div className="flex justify-center text-amber-500 gap-1 mb-4">
-              <Star className="size-4 fill-current" />
-              <Star className="size-4 fill-current" />
-              <Star className="size-4 fill-current" />
-              <Star className="size-4 fill-current" />
-              <Star className="size-4 fill-current" />
+          <div className={`max-w-3xl mx-auto rounded-3xl bg-[#F7F4EE] border border-[#E8DFD8] ${isMobile ? 'p-6' : 'p-8 sm:p-12'} text-center relative shadow-sm`}>
+            <div className="flex justify-center text-amber-500 gap-1 mb-3">
+              <Star className="size-3.5 sm:size-4 fill-current" />
+              <Star className="size-3.5 sm:size-4 fill-current" />
+              <Star className="size-3.5 sm:size-4 fill-current" />
+              <Star className="size-3.5 sm:size-4 fill-current" />
+              <Star className="size-3.5 sm:size-4 fill-current" />
             </div>
 
             {(() => {
               const currentTestimonial = TEMOIGNAGES[testimonialIndex] ?? TEMOIGNAGES[0]!;
               return (
                 <>
-                  <blockquote className="font-serif text-lg sm:text-2xl text-[#2B2520] italic leading-relaxed">
+                  <blockquote className={`font-serif ${isMobile ? 'text-base' : 'text-lg sm:text-2xl'} text-[#2B2520] italic leading-relaxed`}>
                     « {currentTestimonial.quote} »
                   </blockquote>
 
-                  <div className="mt-6">
-                    <p className="text-sm font-bold text-[#2B2520]">{currentTestimonial.author}</p>
-                    <p className="text-xs text-[#8C684F]">{currentTestimonial.location}</p>
+                  <div className="mt-4 sm:mt-6">
+                    <p className="text-xs sm:text-sm font-bold text-[#2B2520]">{currentTestimonial.author}</p>
+                    <p className="text-[11px] sm:text-xs text-[#8C684F]">{currentTestimonial.location}</p>
                   </div>
                 </>
               );
             })()}
 
             {/* Slider Controls */}
-            <div className="mt-6 flex items-center justify-center gap-3">
+            <div className="mt-5 flex items-center justify-center gap-3">
               <button
                 type="button"
                 onClick={() => setTestimonialIndex((prev) => (prev === 0 ? TEMOIGNAGES.length - 1 : prev - 1))}
-                className="p-2 rounded-full border border-[#2B2520]/20 hover:bg-white text-[#2B2520] transition-colors cursor-pointer"
+                className="p-1.5 sm:p-2 rounded-full border border-[#2B2520]/20 hover:bg-white text-[#2B2520] transition-colors cursor-pointer"
                 aria-label="Témoignage précédent"
               >
-                <ChevronLeft className="size-4" />
+                <ChevronLeft className="size-3.5 sm:size-4" />
               </button>
               <span className="text-xs font-mono text-[#8C684F]">
                 {testimonialIndex + 1} / {TEMOIGNAGES.length}
@@ -731,10 +733,10 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
               <button
                 type="button"
                 onClick={() => setTestimonialIndex((prev) => (prev === TEMOIGNAGES.length - 1 ? 0 : prev + 1))}
-                className="p-2 rounded-full border border-[#2B2520]/20 hover:bg-white text-[#2B2520] transition-colors cursor-pointer"
+                className="p-1.5 sm:p-2 rounded-full border border-[#2B2520]/20 hover:bg-white text-[#2B2520] transition-colors cursor-pointer"
                 aria-label="Témoignage suivant"
               >
-                <ChevronRight className="size-4" />
+                <ChevronRight className="size-3.5 sm:size-4" />
               </button>
             </div>
           </div>
@@ -903,13 +905,13 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
       )}
 
       {/* ── 10. FOOTER ── */}
-      <footer id="contact" className="bg-[#2B2520] text-white pt-20 pb-12 border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8">
+      <footer id="contact" className={`bg-[#2B2520] text-white ${isMobile ? 'pt-12 pb-8' : 'pt-20 pb-12'} border-t border-white/10`}>
+        <div className={`max-w-7xl mx-auto ${isMobile ? 'px-4' : 'px-6 sm:px-8'}`}>
           
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-white/10">
+          <div className={`grid ${isMobile ? 'grid-cols-1 gap-8 pb-10' : 'grid-cols-1 md:grid-cols-12 gap-12 pb-16'} border-b border-white/10`}>
             
             {/* Brand column */}
-            <div className="md:col-span-5 space-y-4">
+            <div className={`${isMobile ? 'col-span-1' : 'md:col-span-5'} space-y-4`}>
               <div className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-[#D4B996]" />
                 <span className="font-serif text-2xl font-bold tracking-[0.2em] text-white">
@@ -924,22 +926,22 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
               </p>
               <div className="pt-2 text-xs text-[#D4B996] space-y-1 font-mono">
                 <p className="flex items-center gap-2">
-                  <MapPin className="size-3.5" />
+                  <MapPin className="size-3.5 shrink-0" />
                   <span>Anse Marcel, Saint-Martin &bull; Trois-Îlets, Martinique</span>
                 </p>
                 <p className="flex items-center gap-2">
-                  <Phone className="size-3.5" />
+                  <Phone className="size-3.5 shrink-0" />
                   <span>+596 596 00 00 00</span>
                 </p>
                 <p className="flex items-center gap-2">
-                  <Mail className="size-3.5" />
+                  <Mail className="size-3.5 shrink-0" />
                   <span>contact@soieetterre.com</span>
                 </p>
               </div>
             </div>
 
             {/* Navigation links */}
-            <div className="md:col-span-3 space-y-3">
+            <div className={`${isMobile ? 'col-span-1' : 'md:col-span-3'} space-y-3`}>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#D4B996]">
                 Navigation
               </p>
@@ -953,7 +955,7 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
             </div>
 
             {/* Newsletter */}
-            <div className="md:col-span-4 space-y-3">
+            <div className={`${isMobile ? 'col-span-1' : 'md:col-span-4'} space-y-3`}>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#D4B996]">
                 Le Carnet Sensoriel
               </p>
@@ -969,7 +971,7 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
                 />
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-full bg-[#FAF8F5] text-[#2B2520] hover:bg-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                  className="px-5 py-2.5 rounded-full bg-[#FAF8F5] text-[#2B2520] hover:bg-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer shrink-0"
                 >
                   <Send className="size-3.5" />
                 </button>
@@ -979,7 +981,7 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
           </div>
 
           {/* Bottom Copyright and HBG Labs Credit */}
-          <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
+          <div className="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/50">
             <p>&copy; 2026 Soie &amp; Terre — Tous droits réservés.</p>
             <p className="text-white/70">
               Site réalisé par <strong className="text-white">HBG Labs</strong>

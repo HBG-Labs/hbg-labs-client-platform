@@ -258,22 +258,22 @@ export function RealEstateLanding({ isMobile = false }: { isMobile?: boolean }) 
       </section>
 
       {/* ── Propriétés à la Une ── */}
-      <section id="proprietes" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#1E293B] pb-8">
+      <section id="proprietes" className={`${isMobile ? 'py-12 px-4' : 'py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}`}>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 border-b border-[#1E293B] pb-6 sm:pb-8">
           <div>
-            <span className="text-xs uppercase tracking-widest text-[#0E7490] font-semibold">Portfolio Exclusif</span>
-            <h2 className="mt-2 font-serif text-3xl sm:text-4xl text-white">Sélection Confidentielle</h2>
+            <span className="text-[10px] sm:text-xs uppercase tracking-widest text-[#0E7490] font-semibold">Portfolio Exclusif</span>
+            <h2 className={`mt-2 font-serif ${isMobile ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'} text-white`}>Sélection Confidentielle</h2>
           </div>
           <p className="text-xs text-[#94A3B8] max-w-md">
             Dossiers complets, plans d’architecte et visites privées accessibles sur simple demande qualifiée.
           </p>
         </div>
 
-        <div className="mt-12 grid gap-8 md:grid-cols-2">
+        <div className={`mt-8 sm:mt-12 grid gap-6 sm:gap-8 ${isMobile ? 'grid-cols-1' : 'md:grid-cols-2'}`}>
           {filteredProperties.map((p) => (
             <div
               key={p.id}
-              className="rounded-2xl border border-[#1E293B] bg-[#0F172A] p-7 transition-all hover:border-[#0E7490] flex flex-col justify-between"
+              className="rounded-2xl border border-[#1E293B] bg-[#0F172A] p-5 sm:p-7 transition-all hover:border-[#0E7490] flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between">
@@ -283,14 +283,14 @@ export function RealEstateLanding({ isMobile = false }: { isMobile?: boolean }) 
                   <button
                     type="button"
                     onClick={() => toggleFavorite(p.id)}
-                    className="p-2 text-[#94A3B8] hover:text-[#EF4444] transition-colors"
+                    className="p-2 text-[#94A3B8] hover:text-[#EF4444] transition-colors cursor-pointer"
                     aria-label="Ajouter aux favoris"
                   >
                     <Heart className={`size-5 ${favorites[p.id] ? 'fill-[#EF4444] text-[#EF4444]' : ''}`} />
                   </button>
                 </div>
 
-                <h3 className="mt-4 font-serif text-2xl text-white">{p.title}</h3>
+                <h3 className="mt-3 font-serif text-xl sm:text-2xl text-white">{p.title}</h3>
                 <p className="mt-1 flex items-center gap-1 text-xs text-[#94A3B8]">
                   <MapPin className="size-3.5 text-[#0E7490]" /> {p.location}
                 </p>
@@ -299,21 +299,21 @@ export function RealEstateLanding({ isMobile = false }: { isMobile?: boolean }) 
                   {p.description}
                 </p>
 
-                <div className="mt-6 flex items-center gap-6 text-xs text-[#CBD5E1] border-y border-[#1E293B] py-3">
+                <div className="mt-5 sm:mt-6 flex items-center gap-4 sm:gap-6 text-xs text-[#CBD5E1] border-y border-[#1E293B] py-3">
                   <span className="flex items-center gap-1.5"><Bed className="size-4 text-[#0E7490]" /> {p.bedrooms} suites</span>
                   <span className="flex items-center gap-1.5"><Maximize2 className="size-4 text-[#0E7490]" /> {p.surface}</span>
                 </div>
               </div>
 
-              <div className="mt-6 pt-2 flex items-center justify-between">
+              <div className="mt-5 sm:mt-6 pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <span className="text-[10px] uppercase tracking-wider text-[#64748B] block">Prix de présentation</span>
-                  <span className="font-serif text-2xl text-white font-medium">{p.price}</span>
+                  <span className="font-serif text-xl sm:text-2xl text-white font-medium">{p.price}</span>
                 </div>
                 <button
                   type="button"
                   onClick={() => handleOpenContact(p)}
-                  className="inline-flex items-center gap-2 bg-[#0E7490] text-white text-xs uppercase tracking-widest font-semibold px-5 py-2.5 rounded-full hover:bg-[#0891B2] transition-all"
+                  className="inline-flex items-center justify-center gap-2 bg-[#0E7490] text-white text-xs uppercase tracking-widest font-semibold px-5 py-2.5 rounded-full hover:bg-[#0891B2] transition-all cursor-pointer"
                 >
                   Visite privée
                   <ArrowRight className="size-3.5" />
@@ -325,51 +325,51 @@ export function RealEstateLanding({ isMobile = false }: { isMobile?: boolean }) 
       </section>
 
       {/* ── Chiffres Clés & Confiance ── */}
-      <section className="py-20 bg-[#070D16] border-y border-[#1E293B]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-8 sm:grid-cols-3 text-center">
+      <section className={`${isMobile ? 'py-12 px-4' : 'py-20 px-4 sm:px-6 lg:px-8'} bg-[#070D16] border-y border-[#1E293B]`}>
+        <div className={`max-w-7xl mx-auto grid gap-6 sm:gap-8 ${isMobile ? 'grid-cols-1' : 'sm:grid-cols-3'} text-center`}>
           <div>
-            <p className="font-serif text-4xl text-white">120M €</p>
-            <p className="text-xs uppercase tracking-widest text-[#0E7490] mt-2">Volume sous mandat</p>
+            <p className="font-serif text-3xl sm:text-4xl text-white">120M €</p>
+            <p className="text-[10px] sm:text-xs uppercase tracking-widest text-[#0E7490] mt-1.5">Volume sous mandat</p>
           </div>
           <div>
-            <p className="font-serif text-4xl text-white">98 %</p>
-            <p className="text-xs uppercase tracking-widest text-[#0E7490] mt-2">Mandats exclusifs</p>
+            <p className="font-serif text-3xl sm:text-4xl text-white">98 %</p>
+            <p className="text-[10px] sm:text-xs uppercase tracking-widest text-[#0E7490] mt-1.5">Mandats exclusifs</p>
           </div>
           <div>
-            <p className="font-serif text-4xl text-white">15 Jours</p>
-            <p className="text-xs uppercase tracking-widest text-[#0E7490] mt-2">Délai moyen mise en relation</p>
+            <p className="font-serif text-3xl sm:text-4xl text-white">15 Jours</p>
+            <p className="text-[10px] sm:text-xs uppercase tracking-widest text-[#0E7490] mt-1.5">Délai moyen mise en relation</p>
           </div>
         </div>
       </section>
 
       {/* ── Footer ── */}
-      <footer className="bg-[#050910] text-[#64748B] py-16 border-t border-[#1E293B] text-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-10 md:grid-cols-4">
+      <footer className={`bg-[#050910] text-[#64748B] ${isMobile ? 'py-10 px-4' : 'py-16 px-4 sm:px-6 lg:px-8'} border-t border-[#1E293B] text-xs`}>
+        <div className={`max-w-7xl mx-auto grid gap-8 sm:gap-10 ${isMobile ? 'grid-cols-1' : 'md:grid-cols-4'}`}>
           <div>
-            <span className="font-serif text-2xl uppercase tracking-widest text-white block">
+            <span className="font-serif text-xl sm:text-2xl uppercase tracking-widest text-white block">
               Horizons Prestige
             </span>
-            <p className="mt-3 leading-relaxed">
+            <p className="mt-2.5 leading-relaxed text-[#94A3B8]">
               Cabinet immobilier spécialisé dans la transaction et le conseil en investissement d’exception aux Antilles.
             </p>
           </div>
           <div>
-            <h4 className="uppercase tracking-widest text-white font-semibold mb-3">Bureaux Privés</h4>
+            <h4 className="uppercase tracking-widest text-white font-semibold mb-2">Bureaux Privés</h4>
             <p>Gustavia &bull; Saint-Barthélemy</p>
             <p className="mt-1">Fort-de-France &bull; Martinique</p>
             <p className="mt-1">Saint-François &bull; Guadeloupe</p>
           </div>
           <div>
-            <h4 className="uppercase tracking-widest text-white font-semibold mb-3">Discrétion &amp; Secret</h4>
-            <p className="leading-relaxed">Tous nos échanges et dossiers de commercialisation sont soumis à un accord de confidentialité strict (NDA).</p>
+            <h4 className="uppercase tracking-widest text-white font-semibold mb-2">Discrétion &amp; Secret</h4>
+            <p className="leading-relaxed text-[#94A3B8]">Tous nos échanges et dossiers de commercialisation sont soumis à un accord de confidentialité strict (NDA).</p>
           </div>
           <div>
-            <h4 className="uppercase tracking-widest text-white font-semibold mb-3">Contact Direct</h4>
-            <p className="text-white font-mono">+596 596 00 00 00</p>
+            <h4 className="uppercase tracking-widest text-white font-semibold mb-2">Contact Direct</h4>
+            <p className="text-white font-mono font-bold">+596 596 00 00 00</p>
             <p className="mt-1">vip@horizons-prestige.com</p>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-4 mt-12 pt-6 border-t border-[#1E293B] text-center text-[11px] text-[#475569]">
+        <div className="max-w-7xl mx-auto px-4 mt-8 pt-6 border-t border-[#1E293B] text-center text-[10px] sm:text-[11px] text-[#475569]">
           &copy; {new Date().getFullYear()} Horizons Prestige. Maquette interactive conçue par HBG Labs.
         </div>
       </footer>

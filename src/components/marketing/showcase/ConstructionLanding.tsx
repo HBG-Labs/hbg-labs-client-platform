@@ -268,32 +268,32 @@ export function ConstructionLanding({ isMobile = false }: { isMobile?: boolean }
       </section>
 
       {/* ── Section Parc Matériel (Au Cœur du Projet) ── */}
-      <section id="parc" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#22252C] pb-8">
+      <section id="parc" className={`${isMobile ? 'py-12 px-4' : 'py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}`}>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 border-b border-[#22252C] pb-6 sm:pb-8">
           <div>
-            <span className="text-xs font-mono uppercase tracking-widest text-[#E65100] font-bold">Autonomie Opérationnelle</span>
-            <h2 className="mt-2 text-3xl sm:text-5xl font-black text-white uppercase tracking-tight">
+            <span className="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-[#E65100] font-bold">Autonomie Opérationnelle</span>
+            <h2 className={`mt-2 ${isMobile ? 'text-2xl' : 'text-3xl sm:text-5xl'} font-black text-white uppercase tracking-tight`}>
               Notre Parc Matériel &amp; Engins
             </h2>
           </div>
-          <p className="text-sm text-[#9BA1B0] max-w-md">
+          <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-[#9BA1B0] max-w-md`}>
             Une flotte moderne renouvelée tous les 3 ans pour garantir un rendement maximal et zéro temps d’arrêt sur chantier.
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className={`mt-8 sm:mt-12 grid gap-4 sm:gap-6 ${isMobile ? 'grid-cols-1' : 'sm:grid-cols-2 lg:grid-cols-3'}`}>
           {ENGINS.map((engin) => (
             <div
               key={engin.name}
-              className="rounded-xl border border-[#2B2F38] bg-[#1A1C22] p-6 transition-all hover:border-[#E65100] flex flex-col justify-between"
+              className="rounded-xl border border-[#2B2F38] bg-[#1A1C22] p-5 sm:p-6 transition-all hover:border-[#E65100] flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between text-xs font-mono">
                   <span className="text-[#E65100] font-bold">{engin.category}</span>
-                  <span className="text-[#9BA1B0] bg-[#22252C] px-2.5 py-1 rounded">{engin.tonnage}</span>
+                  <span className="text-[#9BA1B0] bg-[#22252C] px-2 py-0.5 rounded text-[11px]">{engin.tonnage}</span>
                 </div>
 
-                <h3 className="mt-4 text-xl font-bold text-white uppercase">
+                <h3 className="mt-3 text-lg sm:text-xl font-bold text-white uppercase">
                   {engin.name}
                 </h3>
 
@@ -307,7 +307,7 @@ export function ConstructionLanding({ isMobile = false }: { isMobile?: boolean }
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-[#2B2F38] flex items-center justify-between text-[11px] text-[#6C7280]">
+              <div className="mt-5 pt-4 border-t border-[#2B2F38] flex items-center justify-between text-[11px] text-[#6C7280]">
                 <span>Disponibilité Immédiate</span>
                 <span className="text-white font-medium flex items-center gap-1">
                   <CheckCircle2 className="size-3.5 text-[#E65100]" /> Certifié VGP
@@ -319,17 +319,17 @@ export function ConstructionLanding({ isMobile = false }: { isMobile?: boolean }
       </section>
 
       {/* ── Réalisations & Chantiers Majeurs ── */}
-      <section id="chantiers" className="py-24 bg-[#181A20] border-y border-[#22252C]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <section id="chantiers" className={`${isMobile ? 'py-12 px-4' : 'py-24 px-4 sm:px-6 lg:px-8'} bg-[#181A20] border-y border-[#22252C]`}>
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-[#E65100] font-bold">Références</span>
-              <h2 className="mt-2 text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">
+              <span className="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-[#E65100] font-bold">Références</span>
+              <h2 className={`mt-2 ${isMobile ? 'text-2xl' : 'text-3xl sm:text-4xl'} font-black text-white uppercase tracking-tight`}>
                 Chantiers Livrés &amp; En Cours
               </h2>
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {[
                 { id: 'ALL', label: 'Tous' },
                 { id: 'GROS_OEUVRE', label: 'Gros Œuvre' },
@@ -340,7 +340,7 @@ export function ConstructionLanding({ isMobile = false }: { isMobile?: boolean }
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveFilter(tab.id)}
-                  className={`text-xs font-mono uppercase px-4 py-2 rounded-lg font-bold transition-all ${
+                  className={`text-[11px] sm:text-xs font-mono uppercase px-3 py-1.5 rounded-lg font-bold transition-all ${
                     activeFilter === tab.id
                       ? 'bg-[#E65100] text-white shadow-md'
                       : 'bg-[#22252C] text-[#9BA1B0] hover:bg-[#2B2F38]'
@@ -352,18 +352,18 @@ export function ConstructionLanding({ isMobile = false }: { isMobile?: boolean }
             </div>
           </div>
 
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
+          <div className={`mt-8 sm:mt-12 grid gap-6 sm:gap-8 ${isMobile ? 'grid-cols-1' : 'md:grid-cols-3'}`}>
             {filteredChantiers.map((ch) => (
-              <div key={ch.title} className="rounded-xl border border-[#2B2F38] bg-[#121316] p-6 flex flex-col justify-between">
+              <div key={ch.title} className="rounded-xl border border-[#2B2F38] bg-[#121316] p-5 sm:p-6 flex flex-col justify-between">
                 <div>
                   <span className="text-[10px] font-mono uppercase tracking-wider text-[#E65100] font-bold">
                     {ch.location}
                   </span>
-                  <h3 className="mt-2 text-lg font-bold text-white uppercase">{ch.title}</h3>
-                  <p className="mt-3 text-xs text-[#9BA1B0] leading-relaxed">{ch.description}</p>
+                  <h3 className="mt-2 text-base sm:text-lg font-bold text-white uppercase">{ch.title}</h3>
+                  <p className="mt-2.5 text-xs text-[#9BA1B0] leading-relaxed">{ch.description}</p>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-[#22252C] grid grid-cols-2 gap-2 text-xs font-mono">
+                <div className="mt-5 pt-4 border-t border-[#22252C] grid grid-cols-2 gap-2 text-xs font-mono">
                   <div>
                     <span className="text-[#6C7280] block text-[10px]">Volume / Surface</span>
                     <span className="text-white font-bold">{ch.surface}</span>
@@ -380,31 +380,31 @@ export function ConstructionLanding({ isMobile = false }: { isMobile?: boolean }
       </section>
 
       {/* ── Footer ── */}
-      <footer className="bg-[#0C0D0F] text-[#9BA1B0] py-16 border-t border-[#22252C] text-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-10 md:grid-cols-4">
+      <footer className={`bg-[#0C0D0F] text-[#9BA1B0] ${isMobile ? 'py-10 px-4' : 'py-16 px-4 sm:px-6 lg:px-8'} border-t border-[#22252C] text-xs`}>
+        <div className={`max-w-7xl mx-auto grid gap-8 sm:gap-10 ${isMobile ? 'grid-cols-1' : 'md:grid-cols-4'}`}>
           <div>
-            <span className="font-black text-xl tracking-wider text-white uppercase block">
+            <span className="font-black text-lg sm:text-xl tracking-wider text-white uppercase block">
               Kayo Construction
             </span>
-            <p className="mt-3 text-[#6C7280] leading-relaxed">
+            <p className="mt-2 text-[#6C7280] leading-relaxed">
               Entreprise générale de bâtiment, travaux publics, terrassement lourd et génie civil aux Antilles.
             </p>
           </div>
           <div>
-            <h4 className="uppercase tracking-widest text-white font-bold mb-3 font-mono">Siège Opérationnel</h4>
+            <h4 className="uppercase tracking-widest text-white font-bold mb-2 font-mono">Siège Opérationnel</h4>
             <p>ZI Cocotte &bull; Voie Principale</p>
             <p>97224 Ducos &bull; Martinique</p>
-            <p className="text-[#E65100] font-mono font-bold mt-2">+596 596 00 00 00</p>
+            <p className="text-[#E65100] font-mono font-bold mt-1.5">+596 596 00 00 00</p>
           </div>
           <div>
-            <h4 className="uppercase tracking-widest text-white font-bold mb-3 font-mono">Qualifications</h4>
-            <p className="flex items-center gap-2"><Check className="size-3.5 text-[#E65100]" /> Qualibat 1112 &bull; Terrassement</p>
-            <p className="flex items-center gap-2 mt-1"><Check className="size-3.5 text-[#E65100]" /> Qualibat 2112 &bull; Maçonnerie &amp; Béton armé</p>
-            <p className="flex items-center gap-2 mt-1"><Check className="size-3.5 text-[#E65100]" /> Garantie Décennale SMABTP</p>
+            <h4 className="uppercase tracking-widest text-white font-bold mb-2 font-mono">Qualifications</h4>
+            <p className="flex items-center gap-2"><Check className="size-3.5 text-[#E65100] shrink-0" /> Qualibat 1112 &bull; Terrassement</p>
+            <p className="flex items-center gap-2 mt-1"><Check className="size-3.5 text-[#E65100] shrink-0" /> Qualibat 2112 &bull; Maçonnerie</p>
+            <p className="flex items-center gap-2 mt-1"><Check className="size-3.5 text-[#E65100] shrink-0" /> Garantie Décennale SMABTP</p>
           </div>
           <div>
-            <h4 className="uppercase tracking-widest text-white font-bold mb-3 font-mono">Chiffrage Express</h4>
-            <p className="text-[#6C7280] mb-3">Transmettez vos CCTP et plans pour une étude technique sous 48h.</p>
+            <h4 className="uppercase tracking-widest text-white font-bold mb-2 font-mono">Chiffrage Express</h4>
+            <p className="text-[#6C7280] mb-2.5">Transmettez vos CCTP et plans pour une étude technique sous 48h.</p>
             <button
               type="button"
               onClick={() => {
@@ -417,7 +417,7 @@ export function ConstructionLanding({ isMobile = false }: { isMobile?: boolean }
             </button>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-4 mt-12 pt-6 border-t border-[#1F232B] text-center text-[11px] text-[#6C7280]">
+        <div className="max-w-7xl mx-auto px-4 mt-8 pt-6 border-t border-[#1F232B] text-center text-[10px] sm:text-[11px] text-[#6C7280]">
           &copy; {new Date().getFullYear()} KAYO Construction. Maquette interactive conçue par HBG Labs.
         </div>
       </footer>

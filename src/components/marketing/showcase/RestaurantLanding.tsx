@@ -223,53 +223,53 @@ export function RestaurantLanding({ isMobile = false }: { isMobile?: boolean }) 
       </section>
 
       {/* ── Notre Histoire & La Flamme ── */}
-      <section id="histoire" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-12 lg:grid-cols-2 items-center">
+      <section id="histoire" className={`${isMobile ? 'py-12 px-4' : 'py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}`}>
+        <div className={`grid gap-8 sm:gap-12 ${isMobile ? 'grid-cols-1' : 'lg:grid-cols-2'} items-center`}>
           <div>
-            <span className="text-xs uppercase tracking-widest text-[#D97736] font-semibold">Philosophie Culinaire</span>
-            <h2 className="mt-3 font-serif text-3xl sm:text-5xl text-[#F5EFEB] leading-tight">
+            <span className="text-[10px] sm:text-xs uppercase tracking-widest text-[#D97736] font-semibold">Philosophie Culinaire</span>
+            <h2 className={`mt-2 sm:mt-3 font-serif ${isMobile ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-5xl'} text-[#F5EFEB] leading-tight`}>
               Sublimer la braise et la mémoire de nos îles.
             </h2>
-            <p className="mt-6 text-sm sm:text-base text-[#C4B6AD] leading-relaxed">
+            <p className={`mt-4 sm:mt-6 ${isMobile ? 'text-xs' : 'text-sm sm:text-base'} text-[#C4B6AD] leading-relaxed`}>
               À <strong>Racines &amp; Braise</strong>, chaque pièce de poisson, de viande ou de légume ancien est cuite sur mesure au-dessus de braises de manguier, de bois d’Inde et de gaïac. 
               Une chaleur vivante qui exalte les sucs naturels sans jamais masquer la finesse des produits récoltés le matin même par nos pêcheurs et maraîchers partenaires.
             </p>
 
-            <div className="mt-8 grid grid-cols-2 gap-4 border-t border-[#24211D] pt-6 text-xs">
+            <div className="mt-6 sm:mt-8 grid grid-cols-2 gap-4 border-t border-[#24211D] pt-5 sm:pt-6 text-xs">
               <div>
-                <p className="font-serif text-2xl text-[#D97736]">100 %</p>
-                <p className="text-[#A89C94] mt-1">Pêche &amp; Maraîchage local</p>
+                <p className="font-serif text-xl sm:text-2xl text-[#D97736]">100 %</p>
+                <p className="text-[#A89C94] mt-1 text-[11px] sm:text-xs">Pêche &amp; Maraîchage local</p>
               </div>
               <div>
-                <p className="font-serif text-2xl text-[#D97736]">3 Essences</p>
-                <p className="text-[#A89C94] mt-1">De bois noble de fumage</p>
+                <p className="font-serif text-xl sm:text-2xl text-[#D97736]">3 Essences</p>
+                <p className="text-[#A89C94] mt-1 text-[11px] sm:text-xs">De bois noble de fumage</p>
               </div>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-[#2C2723] bg-[#1A1816] p-8 relative overflow-hidden">
-            <div className="space-y-6 text-xs text-[#C4B6AD]">
-              <div className="flex gap-4">
-                <Flame className="size-6 text-[#D97736] shrink-0" />
+          <div className="rounded-3xl border border-[#2C2723] bg-[#1A1816] p-6 sm:p-8 relative overflow-hidden">
+            <div className="space-y-5 sm:space-y-6 text-xs text-[#C4B6AD]">
+              <div className="flex gap-3.5 sm:gap-4">
+                <Flame className="size-5 sm:size-6 text-[#D97736] shrink-0" />
                 <div>
-                  <h3 className="font-serif text-lg text-[#F5EFEB]">Fumage &amp; Braisage Minute</h3>
-                  <p className="mt-1 leading-relaxed">Températures maîtrisées de 80°C à 320°C selon les textures.</p>
+                  <h3 className="font-serif text-base sm:text-lg text-[#F5EFEB]">Fumage &amp; Braisage Minute</h3>
+                  <p className="mt-1 leading-relaxed text-[11px] sm:text-xs">Températures maîtrisées de 80°C à 320°C selon les textures.</p>
                 </div>
               </div>
 
-              <div className="flex gap-4">
-                <Sparkles className="size-6 text-[#D97736] shrink-0" />
+              <div className="flex gap-3.5 sm:gap-4">
+                <Sparkles className="size-5 sm:size-6 text-[#D97736] shrink-0" />
                 <div>
-                  <h3 className="font-serif text-lg text-[#F5EFEB]">Légumes Racines Oubliés</h3>
-                  <p className="mt-1 leading-relaxed">Giraumon, manioc doux, igname pourpre, dachine rôtie sous la cendre.</p>
+                  <h3 className="font-serif text-base sm:text-lg text-[#F5EFEB]">Légumes Racines Oubliés</h3>
+                  <p className="mt-1 leading-relaxed text-[11px] sm:text-xs">Giraumon, manioc doux, igname pourpre, dachine rôtie sous la cendre.</p>
                 </div>
               </div>
 
-              <div className="flex gap-4">
-                <Wine className="size-6 text-[#D97736] shrink-0" />
+              <div className="flex gap-3.5 sm:gap-4">
+                <Wine className="size-5 sm:size-6 text-[#D97736] shrink-0" />
                 <div>
-                  <h3 className="font-serif text-lg text-[#F5EFEB]">Accords Mets &amp; Rhums Vivants</h3>
-                  <p className="mt-1 leading-relaxed">Plus de 60 références de rhums agricoles de dégustation.</p>
+                  <h3 className="font-serif text-base sm:text-lg text-[#F5EFEB]">Accords Mets &amp; Rhums Vivants</h3>
+                  <p className="mt-1 leading-relaxed text-[11px] sm:text-xs">Plus de 60 références de rhums agricoles de dégustation.</p>
                 </div>
               </div>
             </div>
@@ -278,21 +278,21 @@ export function RestaurantLanding({ isMobile = false }: { isMobile?: boolean }) 
       </section>
 
       {/* ── La Carte Interactive ── */}
-      <section id="carte" className="py-24 bg-[#141210] border-y border-[#24211D]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="carte" className={`${isMobile ? 'py-12 px-4' : 'py-24 px-4 sm:px-6 lg:px-8'} bg-[#141210] border-y border-[#24211D]`}>
+        <div className="max-w-5xl mx-auto">
           <div className="text-center max-w-xl mx-auto">
-            <span className="text-xs uppercase tracking-widest text-[#D97736] font-semibold">Expérience Sensorielle</span>
-            <h2 className="mt-2 font-serif text-3xl sm:text-4xl text-[#F5EFEB]">La Carte du Moment</h2>
+            <span className="text-[10px] sm:text-xs uppercase tracking-widest text-[#D97736] font-semibold">Expérience Sensorielle</span>
+            <h2 className={`mt-2 font-serif ${isMobile ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'} text-[#F5EFEB]`}>La Carte du Moment</h2>
           </div>
 
           {/* Onglets de la carte */}
-          <div className="mt-10 flex flex-wrap justify-center gap-2 border-b border-[#24211D] pb-6">
+          <div className="mt-6 sm:mt-10 flex flex-wrap justify-center gap-1.5 sm:gap-2 border-b border-[#24211D] pb-4 sm:pb-6">
             {MENU_CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
                 type="button"
                 onClick={() => setActiveTab(cat.id)}
-                className={`text-xs uppercase tracking-widest px-5 py-2.5 rounded-full font-medium transition-all ${
+                className={`text-[11px] sm:text-xs uppercase tracking-widest px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full font-medium transition-all ${
                   activeTab === cat.id
                     ? 'bg-[#D97736] text-white shadow-md'
                     : 'bg-[#1A1816] text-[#A89C94] hover:text-[#F5EFEB]'
@@ -304,26 +304,26 @@ export function RestaurantLanding({ isMobile = false }: { isMobile?: boolean }) 
           </div>
 
           {/* Plats de la catégorie sélectionnée */}
-          <div className="mt-12 space-y-6">
+          <div className="mt-8 sm:mt-12 space-y-4 sm:space-y-6">
             {currentCategory.items.map((item) => (
               <div
                 key={item.title}
-                className="rounded-2xl border border-[#2C2723] bg-[#0E0D0C] p-6 sm:p-7 flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 transition-colors hover:border-[#D97736]/60"
+                className="rounded-2xl border border-[#2C2723] bg-[#0E0D0C] p-5 sm:p-7 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 sm:gap-4 transition-colors hover:border-[#D97736]/60"
               >
                 <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <h3 className="font-serif text-xl sm:text-2xl text-[#F5EFEB]">{item.title}</h3>
+                  <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
+                    <h3 className="font-serif text-lg sm:text-2xl text-[#F5EFEB]">{item.title}</h3>
                     {'tag' in item && item.tag && (
-                      <span className="text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#D97736]/20 text-[#D97736] font-semibold">
+                      <span className="text-[9px] sm:text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#D97736]/20 text-[#D97736] font-semibold">
                         {item.tag}
                       </span>
                     )}
                   </div>
-                  <p className="mt-2 text-xs sm:text-sm text-[#A89C94] leading-relaxed max-w-2xl">
+                  <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-[#A89C94] leading-relaxed max-w-2xl">
                     {item.description}
                   </p>
                 </div>
-                <div className="font-serif text-2xl text-[#D97736] font-normal shrink-0">
+                <div className="font-serif text-xl sm:text-2xl text-[#D97736] font-normal shrink-0">
                   {item.price}
                 </div>
               </div>
@@ -333,10 +333,10 @@ export function RestaurantLanding({ isMobile = false }: { isMobile?: boolean }) 
       </section>
 
       {/* ── Horaires & Réservation ── */}
-      <section id="horaires" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-8 md:grid-cols-3">
-        <div className="rounded-2xl border border-[#2C2723] bg-[#141210] p-8">
-          <Clock className="size-6 text-[#D97736] mb-4" />
-          <h3 className="font-serif text-xl text-[#F5EFEB]">Horaires de Service</h3>
+      <section id="horaires" className={`${isMobile ? 'py-12 px-4 grid-cols-1' : 'py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:grid-cols-3'} grid gap-6 sm:gap-8`}>
+        <div className="rounded-2xl border border-[#2C2723] bg-[#141210] p-6 sm:p-8">
+          <Clock className="size-5 sm:size-6 text-[#D97736] mb-3 sm:mb-4" />
+          <h3 className="font-serif text-lg sm:text-xl text-[#F5EFEB]">Horaires de Service</h3>
           <div className="mt-4 space-y-2 text-xs text-[#A89C94]">
             <p className="flex justify-between border-b border-[#24211D] pb-2">
               <span>Mardi au Vendredi</span>
@@ -353,20 +353,20 @@ export function RestaurantLanding({ isMobile = false }: { isMobile?: boolean }) 
           </div>
         </div>
 
-        <div className="rounded-2xl border border-[#2C2723] bg-[#141210] p-8">
-          <MapPin className="size-6 text-[#D97736] mb-4" />
-          <h3 className="font-serif text-xl text-[#F5EFEB]">Localisation &amp; Accès</h3>
-          <p className="mt-4 text-xs text-[#A89C94] leading-relaxed">
+        <div className="rounded-2xl border border-[#2C2723] bg-[#141210] p-6 sm:p-8">
+          <MapPin className="size-5 sm:size-6 text-[#D97736] mb-3 sm:mb-4" />
+          <h3 className="font-serif text-lg sm:text-xl text-[#F5EFEB]">Localisation &amp; Accès</h3>
+          <p className="mt-3 sm:mt-4 text-xs text-[#A89C94] leading-relaxed">
             Anse Noire &bull; Vue panoramique sur la baie<br />
             97229 Les Anses-d’Arlet &bull; Martinique<br />
             Service voiturier disponible dès 19h00.
           </p>
         </div>
 
-        <div className="rounded-2xl border-2 border-[#D97736] bg-[#1A1816] p-8 flex flex-col justify-between">
+        <div className="rounded-2xl border-2 border-[#D97736] bg-[#1A1816] p-6 sm:p-8 flex flex-col justify-between">
           <div>
             <span className="text-[10px] uppercase tracking-widest text-[#D97736] font-semibold">Table d'Auteur</span>
-            <h3 className="font-serif text-2xl text-[#F5EFEB] mt-1">Réservez votre Moment</h3>
+            <h3 className="font-serif text-xl sm:text-2xl text-[#F5EFEB] mt-1">Réservez votre Moment</h3>
             <p className="mt-2 text-xs text-[#C4B6AD]">
               Nombre de couverts limité à 34 par service pour préserver l’intimité et l’attention portée à chaque convive.
             </p>
@@ -377,7 +377,7 @@ export function RestaurantLanding({ isMobile = false }: { isMobile?: boolean }) 
               setTableModalOpen(true);
               setTableSuccess(false);
             }}
-            className="mt-6 w-full py-3.5 rounded-full bg-[#D97736] text-white text-xs uppercase tracking-widest font-semibold hover:bg-[#E88645] transition-all"
+            className="mt-5 sm:mt-6 w-full py-3 rounded-full bg-[#D97736] text-white text-xs uppercase tracking-widest font-semibold hover:bg-[#E88645] transition-all cursor-pointer"
           >
             Réserver en ligne
           </button>
@@ -385,15 +385,15 @@ export function RestaurantLanding({ isMobile = false }: { isMobile?: boolean }) 
       </section>
 
       {/* ── Footer ── */}
-      <footer className="bg-[#080706] text-[#A89C94] py-16 border-t border-[#1C1A17] text-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <span className="font-serif text-2xl uppercase tracking-widest text-[#F5EFEB] block font-normal">
+      <footer className={`bg-[#080706] text-[#A89C94] ${isMobile ? 'py-10 px-4' : 'py-16 px-4 sm:px-6 lg:px-8'} border-t border-[#1C1A17] text-xs`}>
+        <div className="max-w-7xl mx-auto text-center space-y-3 sm:space-y-4">
+          <span className="font-serif text-xl sm:text-2xl uppercase tracking-widest text-[#F5EFEB] block font-normal">
             Racines &amp; Braise
           </span>
           <p className="text-xs text-[#7E746D] max-w-md mx-auto">
             Gastronomie caribéenne au feu de bois. Maquette interactive conçue et développée par HBG Labs.
           </p>
-          <p className="text-[11px] text-[#554E48] pt-4 border-t border-[#141210]">
+          <p className="text-[10px] sm:text-[11px] text-[#554E48] pt-3 sm:pt-4 border-t border-[#141210]">
             &copy; {new Date().getFullYear()} Racines &amp; Braise. Tous droits réservés.
           </p>
         </div>
