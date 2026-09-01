@@ -79,7 +79,7 @@ export function ShowcaseTotemCard({
             ? '0 24px 48px -12px rgba(0,0,0,0.5), 0 8px 20px -4px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.9)'
             : '0 16px 36px -10px rgba(0,0,0,0.35), 0 4px 12px -2px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.85)',
         }}
-        className="cursor-pointer group relative w-full aspect-[4/3] p-3 sm:p-4 bg-[#16171B] border-[6px] sm:border-[8px] border-[#1C1D22] shadow-2xl select-none"
+        className="cursor-pointer group relative w-full aspect-[16/10] p-3 sm:p-4 bg-[#16171B] border-[6px] sm:border-[8px] border-[#1C1D22] shadow-2xl select-none"
       >
         {/* Subtle Frame Outer Bevel Edge Highlight */}
         <div className="absolute inset-0 border border-white/10 pointer-events-none" />
@@ -140,7 +140,7 @@ export function ShowcaseTotemCard({
 
 /**
  * ── Landscape Desktop Mockup for SOIE & TERRE ──
- * Conçu spécifiquement pour le ratio horizontal 4:3
+ * Conçu spécifiquement pour le ratio horizontal panoramique 16:10
  */
 function SoieEtTerreLandscapeMockup() {
   return (
@@ -157,7 +157,7 @@ function SoieEtTerreLandscapeMockup() {
           <span>Boutique</span>
           <span>Contact</span>
         </div>
-        <div className="px-2.5 py-0.5 rounded-full bg-[#8C684F] text-white text-[9px] font-semibold tracking-wide shadow-2xs">
+        <div className="px-3 py-1 rounded-full bg-[#8C684F] text-white text-[9px] font-semibold tracking-wide whitespace-nowrap shadow-2xs">
           Prendre rendez-vous
         </div>
       </div>
@@ -257,7 +257,7 @@ function KayoConstructionLandscapeMockup() {
           <span>Chantiers</span>
           <span>Contact</span>
         </div>
-        <div className="px-2.5 py-0.5 rounded-md bg-[#E65100] text-white text-[9px] font-bold tracking-wide shadow-2xs">
+        <div className="px-3 py-1 rounded-md bg-[#E65100] text-white text-[9px] font-bold tracking-wide whitespace-nowrap shadow-2xs">
           Demander un devis
         </div>
       </div>
