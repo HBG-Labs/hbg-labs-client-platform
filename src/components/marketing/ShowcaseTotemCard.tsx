@@ -65,7 +65,7 @@ export function ShowcaseTotemCard({
         </h3>
       </button>
 
-      {/* ── Real Architectural Gallery Wall Picture Frame (Horizontal Landscape 4:3) ── */}
+      {/* ── Outer Interactive Card ── */}
       <div
         ref={cardRef}
         onClick={() => onOpen(project.id)}
@@ -76,57 +76,43 @@ export function ShowcaseTotemCard({
           transform: transform || 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
           transition: isHovered ? 'transform 0.1s ease-out' : 'transform 0.4s ease-out, box-shadow 0.4s ease-out',
           boxShadow: isHovered || isFocused
-            ? '0 24px 48px -12px rgba(0,0,0,0.5), 0 8px 20px -4px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.9)'
-            : '0 16px 36px -10px rgba(0,0,0,0.35), 0 4px 12px -2px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.85)',
+            ? '0 24px 48px -12px rgba(0,0,0,0.35), 0 8px 20px -4px rgba(0,0,0,0.2)'
+            : '0 16px 36px -10px rgba(0,0,0,0.2), 0 4px 12px -2px rgba(0,0,0,0.1)',
         }}
-        className="cursor-pointer group relative w-full aspect-[2.35/1] p-3 sm:p-4 bg-[#16171B] border-[6px] sm:border-[8px] border-[#1C1D22] shadow-2xl select-none"
+        className="cursor-pointer group relative w-full aspect-[2.35/1] rounded-2xl overflow-hidden shadow-xl border border-stone-300/40 select-none bg-white"
       >
-        {/* Subtle Frame Outer Bevel Edge Highlight */}
-        <div className="absolute inset-0 border border-white/10 pointer-events-none" />
+        {/* Landscape Desktop Layout (No scroll animation, full-bleed) */}
+        <div className="w-full h-full select-none">
+          {project.id === 'soie-et-terre' ? (
+            <SoieEtTerreLandscapeMockup />
+          ) : (
+            <KayoConstructionLandscapeMockup />
+          )}
+        </div>
 
-        {/* ── Gallery Passe-Partout (Matte Board) ── */}
-        <div className="relative w-full h-full p-2.5 sm:p-3.5 bg-[#F5F4F0] shadow-[inset_0_2px_6px_rgba(0,0,0,0.25)] flex flex-col justify-between">
-          
-          {/* Inner Artwork Cutout Window */}
-          <div className="relative w-full flex-1 overflow-hidden bg-white shadow-[inset_0_3px_8px_rgba(0,0,0,0.4),0_1px_2px_rgba(0,0,0,0.15)] border border-stone-400/30">
-            
-            {/* Static Landscape Desktop Layout (No scroll animation) */}
-            <div className="w-full h-full select-none">
-              {project.id === 'soie-et-terre' ? (
-                <SoieEtTerreLandscapeMockup />
-              ) : (
-                <KayoConstructionLandscapeMockup />
-              )}
-            </div>
+        {/* Anti-Reflective Glass Sheen */}
+        <div
+          className="absolute inset-0 pointer-events-none transition-opacity duration-300"
+          style={{
+            background: `linear-gradient(135deg, rgba(255,255,255,${glarePosition.opacity * 0.8}) 0%, transparent 60%)`,
+          }}
+        />
 
-            {/* Museum Anti-Reflective Glass Sheen */}
-            <div
-              className="absolute inset-0 pointer-events-none transition-opacity duration-300"
-              style={{
-                background: `linear-gradient(135deg, rgba(255,255,255,${glarePosition.opacity * 0.8}) 0%, transparent 60%)`,
-              }}
-            />
-
-            {/* Hover Action Pill */}
-            <div className="absolute inset-x-3 bottom-3 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-              <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-black/90 text-white text-[11px] font-bold uppercase tracking-wider shadow-lg">
-                <span>Explorer la maquette</span>
-                <ArrowUpRight className="size-3.5" />
-              </span>
-            </div>
-          </div>
-
-          {/* ── Museum Mat Bottom Label ── */}
-          <div className="pt-2 flex items-center justify-between text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-[#4A4D57]">
-            <span className="font-bold text-[#22242B] truncate max-w-[200px]">{project.name}</span>
-            <span className="text-[#7A7E8B]">HBG LABS &bull; CONCEPT DIGITAL</span>
-          </div>
+        {/* Hover Action Pill */}
+        <div className="absolute inset-x-3 bottom-3 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-black/90 text-white text-[11px] font-bold uppercase tracking-wider shadow-lg">
+            <span>Explorer la maquette</span>
+            <ArrowUpRight className="size-3.5" />
+          </span>
         </div>
       </div>
 
-      {/* ── Sector Label Below Frame ── */}
-      <div className="mt-2.5 text-center">
-        <span className="text-[11px] font-bold text-[#3B3E48] tracking-wide">
+      {/* ── Project Label Below Card ── */}
+      <div className="mt-3 flex items-center justify-between px-1">
+        <span className="text-[12px] font-bold text-[#1E2028] tracking-wide">
+          {project.name}
+        </span>
+        <span className="text-[11px] font-medium text-[#6B7280]">
           {project.sectorLabel}
         </span>
       </div>
