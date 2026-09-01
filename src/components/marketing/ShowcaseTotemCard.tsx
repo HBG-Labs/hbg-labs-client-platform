@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { ArrowUpRight, Sparkles, Star, Calendar, ShieldCheck, HardHat } from 'lucide-react';
+import { ArrowUpRight, Sparkles, Calendar, ShieldCheck, HardHat } from 'lucide-react';
 import type { ShowcaseProject } from '@/data/showcase';
 
 interface ShowcaseTotemCardProps {
@@ -168,69 +168,62 @@ function SoieEtTerreLandscapeMockup() {
         <div className="col-span-7 pr-2">
           <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#8C684F]/10 text-[#8C684F] text-[8px] font-bold uppercase tracking-wider mb-2">
             <Sparkles className="size-2.5" />
-            <span>Rituels Botaniques des Antilles</span>
+            <span>RITUELS DE BEAUTÉ • ANTILLES</span>
           </div>
 
-          <h4 className="font-serif text-[16px] sm:text-[19px] lg:text-[21px] font-medium text-[#2D2A26] leading-tight">
-            La beauté à l’état pur & naturel.
+          <h4 className="font-serif text-[16px] sm:text-[19px] lg:text-[21px] font-normal text-[#2B2520] leading-tight">
+            La beauté à l’état naturel.
           </h4>
 
-          <p className="mt-1.5 text-[9px] sm:text-[10px] text-[#6B655C] leading-relaxed line-clamp-2">
-            Des soins sensoriels d’exception formulés à partir d’ingrédients botaniques rares pour révéler votre éclat.
+          <p className="mt-1.5 text-[9px] sm:text-[10px] text-[#6B615B] leading-relaxed line-clamp-2">
+            Des soins inspirés de la nature des Antilles, pensés pour révéler votre éclat et vous offrir un véritable moment de bien-être.
           </p>
 
-          <div className="mt-3 flex items-center gap-3">
-            <span className="px-3 py-1 rounded-full bg-[#2D2A26] text-white text-[9px] font-medium">
-              Découvrir la carte
+          <div className="mt-3 flex items-center gap-2.5">
+            <span className="px-3 py-1 rounded-full bg-[#2B2520] text-white text-[8px] sm:text-[9px] font-bold uppercase tracking-wider">
+              DÉCOUVRIR NOS SOINS
             </span>
-            <div className="flex items-center gap-1 text-[9px] text-[#8C684F] font-semibold">
-              <div className="flex text-amber-500">
-                <Star className="size-2.5 fill-current" />
-                <Star className="size-2.5 fill-current" />
-                <Star className="size-2.5 fill-current" />
-                <Star className="size-2.5 fill-current" />
-                <Star className="size-2.5 fill-current" />
-              </div>
-              <span className="text-[#6B655C] text-[8px]">4.9 (180+ avis)</span>
-            </div>
+            <span className="px-3 py-1 rounded-full border border-[#2B2520] text-[#2B2520] text-[8px] sm:text-[9px] font-semibold uppercase tracking-wider">
+              PRENDRE RENDEZ-VOUS
+            </span>
           </div>
         </div>
 
         {/* Right Column: Clean Dedicated Hero Portrait */}
-        <div className="col-span-5 relative aspect-[16/11] rounded-xl overflow-hidden shadow-md border border-[#E8E4DC]">
+        <div className="col-span-5 relative aspect-[16/11] rounded-xl overflow-hidden shadow-md border border-[#E8DFD8]">
           <img
             src="/images/hero-editorial.jpg"
             alt="Soie & Terre Soins Botaniques"
             className="w-full h-full object-cover object-[center_25%]"
           />
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-2 text-white">
-            <p className="text-[8px] font-bold leading-tight">Soin Signature Hibiscus & Coco</p>
-            <p className="text-[7px] text-white/80">60 min &bull; 95 €</p>
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent p-2 text-white">
+            <p className="text-[8px] font-bold leading-tight">Rituel Signature Caraïbes</p>
+            <p className="text-[7px] text-white/80">120 min &bull; 190 €</p>
           </div>
         </div>
       </div>
 
-      {/* ── Below Hero: 3 Signature Treatments Cards ── */}
+      {/* ── Below Hero: 3 Signature Categories ── */}
       <div className="px-4 sm:px-6 pb-6 pt-2">
         <div className="text-[9px] uppercase tracking-widest font-bold text-[#8C684F] mb-2 flex items-center gap-1">
           <Calendar className="size-2.5" />
-          <span>Nos Rituels en Institut</span>
+          <span>Nos Soins &amp; Rituels</span>
         </div>
         <div className="grid grid-cols-3 gap-2">
-          <div className="p-2.5 rounded-lg bg-white border border-[#E8E4DC] shadow-2xs">
-            <span className="text-[7px] px-1.5 py-0.5 rounded bg-[#8C684F]/10 text-[#8C684F] font-bold">Best-seller</span>
-            <p className="mt-1 font-serif text-[10px] font-semibold text-[#2D2A26] truncate">Éclat Goyave & Hibiscus</p>
-            <p className="text-[8px] text-[#6B655C]">60 min &bull; 95 €</p>
+          <div className="p-2.5 rounded-lg bg-white border border-[#E8DFD8] shadow-2xs">
+            <span className="text-[7px] px-1.5 py-0.5 rounded bg-[#8C684F]/10 text-[#8C684F] font-bold">01 — VISAGE</span>
+            <p className="mt-1 font-serif text-[10px] font-semibold text-[#2B2520] truncate">Éclat &amp; Hydratation</p>
+            <p className="text-[8px] text-[#6B615B]">60 min &bull; 95 €</p>
           </div>
-          <div className="p-2.5 rounded-lg bg-white border border-[#E8E4DC] shadow-2xs">
-            <span className="text-[7px] px-1.5 py-0.5 rounded bg-[#8C684F]/10 text-[#8C684F] font-bold">Signature</span>
-            <p className="mt-1 font-serif text-[10px] font-semibold text-[#2D2A26] truncate">Gommage Sucre & Coco</p>
-            <p className="text-[8px] text-[#6B655C]">45 min &bull; 75 €</p>
+          <div className="p-2.5 rounded-lg bg-white border border-[#E8DFD8] shadow-2xs">
+            <span className="text-[7px] px-1.5 py-0.5 rounded bg-[#8C684F]/10 text-[#8C684F] font-bold">02 — CORPS</span>
+            <p className="mt-1 font-serif text-[10px] font-semibold text-[#2B2520] truncate">Gommage &amp; Argile</p>
+            <p className="text-[8px] text-[#6B615B]">50 min &bull; 85 €</p>
           </div>
-          <div className="p-2.5 rounded-lg bg-white border border-[#E8E4DC] shadow-2xs">
-            <span className="text-[7px] px-1.5 py-0.5 rounded bg-[#8C684F]/10 text-[#8C684F] font-bold">Détente</span>
-            <p className="mt-1 font-serif text-[10px] font-semibold text-[#2D2A26] truncate">Massage Bois Bandé</p>
-            <p className="text-[8px] text-[#6B655C]">75 min &bull; 120 €</p>
+          <div className="p-2.5 rounded-lg bg-white border border-[#E8DFD8] shadow-2xs">
+            <span className="text-[7px] px-1.5 py-0.5 rounded bg-[#8C684F]/10 text-[#8C684F] font-bold">03 — MASSAGES</span>
+            <p className="mt-1 font-serif text-[10px] font-semibold text-[#2B2520] truncate">Ylang-Ylang &amp; Bois Bandé</p>
+            <p className="text-[8px] text-[#6B615B]">75 min &bull; 120 €</p>
           </div>
         </div>
       </div>
