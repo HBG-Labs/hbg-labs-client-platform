@@ -53,9 +53,6 @@ function PlanCard({ plan, index }: PlanCardProps) {
                 <span className="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">
                   {formatAmountCompact(setup.unit_amount_cents, setup.currency)}
                 </span>
-                <span className="text-xs font-bold text-stone-500 tracking-wider">
-                  /H.T.
-                </span>
               </div>
               {monthly && (
                 <p className="mt-2 text-xs text-stone-500 font-medium">
