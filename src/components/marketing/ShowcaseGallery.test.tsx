@@ -4,28 +4,27 @@ import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '@/test/render';
 import { ShowcaseGallery } from './ShowcaseGallery';
 
-describe('ShowcaseGallery — Galerie de maquettes interactives', () => {
-  it('affiche le projet initial par défaut et permet de changer de secteur', async () => {
+describe('ShowcaseGallery — Galerie 3D et maquettes interactives', () => {
+  it('affiche les cartes 3D et permet de changer de catégorie', async () => {
     const user = userEvent.setup();
     renderWithProviders(<ShowcaseGallery />);
 
-    // Projet par défaut (Gastronomie)
-    expect(screen.getAllByText('Maison Sévérac').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText(/Haute cuisine française/i).length).toBeGreaterThanOrEqual(1);
+    // Catégorie active par défaut (Services)
+    expect(screen.getAllByText('Services & Devis').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('MAISON SÉVÉRAC').length).toBeGreaterThanOrEqual(1);
 
-    // Changement d'onglet vers Architecture
-    const archiTab = screen.getByRole('button', { name: /Architecture & Design/i });
-    await user.click(archiTab);
+    // Clic sur la carte Sites Vitrines
+    const vitrinesCard = screen.getAllByText('Sites Vitrines')[0]!;
+    await user.click(vitrinesCard);
 
-    expect(screen.getAllByText('Studio Vaneau').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText(/Architecture d’intérieur/i).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('STUDIO VANEAU').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('permet de basculer entre la vue ordinateur et la vue smartphone', async () => {
+  it('permet de basculer entre la vue grand écran et smartphone', async () => {
     const user = userEvent.setup();
     renderWithProviders(<ShowcaseGallery />);
 
-    // Vue ordinateur par défaut (présence de la barre d'URL)
+    // Vue ordinateur par défaut
     expect(screen.getByText(/https:\/\/www.maison-severac.fr/i)).toBeInTheDocument();
 
     // Bascule vers la vue mobile

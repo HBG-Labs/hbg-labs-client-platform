@@ -8,47 +8,40 @@ import {
   ShieldCheck,
   Zap,
   Lock,
-  ShoppingBag,
-  Utensils,
-  Home,
-  Hammer,
   CheckCircle2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 
-interface ProjectShowcase {
+interface PillarCategory {
   id: string;
-  category: string;
   badge: string;
   title: string;
   subtitle: string;
-  url: string;
-  icon: typeof Utensils;
-  stats: {
-    speed: string;
-    seo: string;
-    loadTime: string;
-    highlight: string;
-  };
-  features: string[];
-  ctaLabel: string;
-  // UI Mockup Data
-  theme: {
-    bg: string;
-    accent: string;
-    text: string;
-  };
-  mockup: {
+  tagline: string;
+  description: string;
+  podiumImage: string;
+  accentGlow: string;
+  glowColor: string;
+  project: {
     brandName: string;
-    navLinks: string[];
+    websiteUrl: string;
+    categoryLabel: string;
     heroTag: string;
     heroTitle: string;
     heroSubtitle: string;
     heroImage: string;
     badgeText: string;
-    secondaryImage: string;
     actionText: string;
+    themeBg: string;
+    themeAccent: string;
+    themeText: string;
+    stats: {
+      speed: string;
+      loadTime: string;
+      highlight: string;
+    };
+    features: string[];
     cards: Array<{
       title: string;
       price: string;
@@ -58,94 +51,44 @@ interface ProjectShowcase {
   };
 }
 
-const projects: ProjectShowcase[] = [
+const categories: PillarCategory[] = [
   {
-    id: 'gastronomie',
-    category: 'Gastronomie & Vins',
-    badge: 'Restaurant & Terroir',
-    title: 'Maison Sévérac',
-    subtitle: 'Haute cuisine française & cave d’exception',
-    url: 'maison-severac.fr',
-    icon: Utensils,
-    stats: {
-      speed: '99 / 100',
-      seo: '100 %',
-      loadTime: '0.3 s',
-      highlight: '+68 % de réservations en ligne',
-    },
-    features: [
-      'Système de réservation de table en direct',
-      'Menu immersif & carte des vins interactive',
-      'Bouton WhatsApp & géolocalisation Maps',
-      'Avis Google & Guide Michelin intégrés',
-    ],
-    ctaLabel: 'Créer un site de restaurant',
-    theme: {
-      bg: 'bg-[#121110]',
-      accent: 'text-[#D4AF37]',
-      text: 'text-stone-100',
-    },
-    mockup: {
-      brandName: 'MAISON SÉVÉRAC',
-      navLinks: ['La Carte', 'Réservation', 'La Cave', 'Le Chef', 'Contact'],
-      heroTag: 'RESTAURANT GASTRONOMIQUE • PARIS 1ER',
-      heroTitle: 'L’émotion du terroir, sublimée par l’audace culinaire',
-      heroSubtitle: 'Une table intimiste au cœur de la capitale où chaque assiette raconte une histoire d’artisan et de passion.',
-      heroImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80',
-      badgeText: 'Table récompensée au Guide 2026',
-      secondaryImage: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
-      actionText: 'Réserver une table',
-      cards: [
-        {
-          title: 'Menu Dégustation en 6 temps',
-          price: '95 €',
-          desc: 'Saint-Jacques snackées, émulsion safranée, pigeonneau rôti et déclinaison de chocolat noir fumé.',
-          tag: 'Le plus demandé',
-        },
-        {
-          title: 'Accords Mets & Grands Crus',
-          price: '55 €',
-          desc: 'Sélection rigoureuse de vignerons indépendants et flacons rares du terroir français.',
-        },
-      ],
-    },
-  },
-  {
-    id: 'architecture',
-    category: 'Architecture & Design',
-    badge: 'Studio & Intérieurs',
-    title: 'Studio Vaneau',
-    subtitle: 'Architecture d’intérieur & rénovation de prestige',
-    url: 'studiovaneau-architectes.fr',
-    icon: Home,
-    stats: {
-      speed: '100 / 100',
-      seo: '100 %',
-      loadTime: '0.2 s',
-      highlight: 'x3 sur les demandes de devis qualifiées',
-    },
-    features: [
-      'Galerie portfolio plein écran haute définition',
-      'Module interactif Avant / Après',
-      'Simulateur d’estimation de projet',
-      'Formulaire de contact sélectif & qualifié',
-    ],
-    ctaLabel: 'Créer un site d’architecte',
-    theme: {
-      bg: 'bg-[#18191B]',
-      accent: 'text-[#E0C5A8]',
-      text: 'text-zinc-100',
-    },
-    mockup: {
+    id: 'vitrines',
+    badge: 'Digital Goods',
+    title: 'Sites Vitrines',
+    subtitle: 'Notoriété & Image de marque',
+    tagline: 'L’élégance pour marquer les esprits',
+    description:
+      'Pour indépendants, cabinets d’architecture et entreprises souhaitant une présence en ligne soignée et percutante.',
+    podiumImage: '/images/podiums/podium-digital.jpg',
+    accentGlow: 'from-amber-400/20 via-rose-500/20 to-purple-600/20',
+    glowColor: 'rgba(244,63,94,0.35)',
+    project: {
       brandName: 'STUDIO VANEAU',
-      navLinks: ['Réalisations', 'Philosophie', 'Expertise', 'Presse', 'Estimer'],
-      heroTag: 'AGENCE D’ARCHITECTURE & D’AGENCEMENT PRIVÉ',
+      websiteUrl: 'studiovaneau-architectes.fr',
+      categoryLabel: 'Architecture & Intérieurs Parisiens',
+      heroTag: 'STUDIO D’ARCHITECTURE D’INTÉRIEUR & DESIGN PRIVÉ',
       heroTitle: 'Concevoir des espaces rares, équilibrés et durables',
-      heroSubtitle: 'Rénovation d’appartements haussmanniens et villas d’exception. Du premier croquis à la livraison clé en main.',
-      heroImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+      heroSubtitle:
+        'Rénovation d’appartements haussmanniens et villas d’exception. Du premier croquis à la livraison clé en main.',
+      heroImage:
+        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
       badgeText: 'Prix Design & Patrimoine 2025',
-      secondaryImage: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80',
-      actionText: 'Demander une étude de projet',
+      actionText: 'Demander une étude',
+      themeBg: 'bg-[#18191B]',
+      themeAccent: 'text-[#E0C5A8]',
+      themeText: 'text-zinc-100',
+      stats: {
+        speed: '100 / 100',
+        loadTime: '0.2 s',
+        highlight: 'x3 sur les demandes de devis qualifiées',
+      },
+      features: [
+        'Galerie portfolio plein écran haute définition',
+        'Module interactif Avant / Après',
+        'Simulateur d’estimation de projet',
+        'Formulaire de contact sélectif & qualifié',
+      ],
       cards: [
         {
           title: 'Appartement Haussmann • 180 m²',
@@ -162,103 +105,105 @@ const projects: ProjectShowcase[] = [
     },
   },
   {
-    id: 'ecommerce',
-    category: 'E-commerce & Créateurs',
-    badge: 'Maroquinerie & Luxe',
-    title: 'Maison Aurum',
-    subtitle: 'Maroquinerie d’artisan & horlogerie d’exception',
-    url: 'maisonaurum.com',
-    icon: ShoppingBag,
-    stats: {
-      speed: '98 / 100',
-      seo: '100 %',
-      loadTime: '0.4 s',
-      highlight: 'Tunnel d’achat Stripe en 1 clic',
-    },
-    features: [
-      'Catalogue produit fluide avec filtres instantanés',
-      'Paiement sécurisé Stripe & Apple Pay',
-      'Gestion des stocks et commandes automatisée',
-      'Expérience mobile ultra-rapide sans rechargement',
-    ],
-    ctaLabel: 'Créer une boutique en ligne',
-    theme: {
-      bg: 'bg-[#0E1116]',
-      accent: 'text-[#C9A96E]',
-      text: 'text-slate-100',
-    },
-    mockup: {
-      brandName: 'MAISON AURUM',
-      navLinks: ['Maroquinerie', 'Horlogerie', 'Savoir-Faire', 'Sur Mesure', 'Panier (0)'],
-      heroTag: 'FABRICATION ARTISANALE FRANÇAISE',
-      heroTitle: 'L’alliance du cuir pleine fleur et de la précision horlogère',
-      heroSubtitle: 'Chaque pièce est cousue main dans nos ateliers, numérotée et garantie à vie.',
-      heroImage: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80',
-      badgeText: 'Livraison express offerte en France',
-      secondaryImage: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
-      actionText: 'Découvrir la collection',
+    id: 'services',
+    badge: 'Services',
+    title: 'Services & Devis',
+    subtitle: 'Réservation & Conversion directe',
+    tagline: 'Automatisez la prise de rendez-vous',
+    description:
+      'Pour restaurants, artisans et professions de service qui souhaitent convertir leurs visiteurs en clients sans friction.',
+    podiumImage: '/images/podiums/podium-services.jpg',
+    accentGlow: 'from-fuchsia-500/25 via-purple-600/25 to-indigo-600/25',
+    glowColor: 'rgba(217,70,239,0.45)',
+    project: {
+      brandName: 'MAISON SÉVÉRAC',
+      websiteUrl: 'maison-severac.fr',
+      categoryLabel: 'Haute Cuisine & Table Gastronomique',
+      heroTag: 'RESTAURANT GASTRONOMIQUE • PARIS 1ER',
+      heroTitle: 'L’émotion du terroir, sublimée par l’audace culinaire',
+      heroSubtitle:
+        'Une table intimiste au cœur de la capitale où chaque assiette raconte une histoire d’artisan et de passion.',
+      heroImage:
+        'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80',
+      badgeText: 'Table récompensée au Guide 2026',
+      actionText: 'Réserver une table',
+      themeBg: 'bg-[#121110]',
+      themeAccent: 'text-[#D4AF37]',
+      themeText: 'text-stone-100',
+      stats: {
+        speed: '99 / 100',
+        loadTime: '0.3 s',
+        highlight: '+68 % de réservations en direct',
+      },
+      features: [
+        'Module de réservation de table en direct',
+        'Menu immersif & carte des vins interactive',
+        'Bouton WhatsApp & géolocalisation Maps',
+        'Avis Google & Guide Michelin intégrés',
+      ],
       cards: [
         {
-          title: 'Le Sac Voyageur 48h • Cuir Ébène',
-          price: '480 €',
-          desc: 'Cuir pleine fleur tannage végétal, doublure en lin brut, bouclerie en laiton massif.',
-          tag: 'Édition limitée',
+          title: 'Menu Dégustation en 6 temps',
+          price: '95 €',
+          desc: 'Saint-Jacques snackées, émulsion safranée, pigeonneau rôti et chocolat noir fumé.',
+          tag: 'Le plus demandé',
         },
         {
-          title: 'Chronographe Automatique • 39 mm',
-          price: '1 250 €',
-          desc: 'Mouvement mécanique haute précision, verre saphir inrayable, bracelet cuir sur mesure.',
+          title: 'Accords Mets & Grands Crus',
+          price: '55 €',
+          desc: 'Sélection rigoureuse de vignerons indépendants et flacons rares du terroir.',
         },
       ],
     },
   },
   {
-    id: 'artisanat',
-    category: 'Artisans & Rénovation',
-    badge: 'Ébénisterie & Bois',
-    title: 'Ateliers d’Anjou',
-    subtitle: 'Ébénisterie d’art & agencement sur mesure',
-    url: 'ateliersdanjou-ebeniste.fr',
-    icon: Hammer,
-    stats: {
-      speed: '100 / 100',
-      seo: '100 %',
-      loadTime: '0.2 s',
-      highlight: 'Numéro 1 sur les recherches locales',
-    },
-    features: [
-      'Présentation des réalisations par type de meuble',
-      'Formulaire de devis avec envoi de plans & photos',
-      'Référencement local Google Maps renforcé',
-      'Bandeau d’avis clients vérifiés avec photos',
-    ],
-    ctaLabel: 'Créer un site d’artisan',
-    theme: {
-      bg: 'bg-[#151412]',
-      accent: 'text-[#D89B58]',
-      text: 'text-amber-50',
-    },
-    mockup: {
-      brandName: 'ATELIERS D’ANJOU',
-      navLinks: ['Mobilier', 'Agencements', 'Bois & Essences', 'Devis en ligne', 'Atelier'],
-      heroTag: 'MAÎTRE ARTISAN ÉBÉNISTE DEPUIS 1994',
-      heroTitle: 'Du bois brut à la pièce unique conçue pour votre intérieur',
-      heroSubtitle: 'Création de tables de repas, bibliothèques monumentales et dressings intégrés en chêne, noyer et essences rares.',
-      heroImage: 'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=1200&q=80',
-      badgeText: 'Bois français éco-certifié PEFC',
-      secondaryImage: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
-      actionText: 'Demander un devis gratuit',
+    id: 'ecommerce',
+    badge: 'Physical Goods',
+    title: 'E-commerce',
+    subtitle: 'Boutiques & Vente en ligne',
+    tagline: 'Tunnel de vente fluide & Stripe',
+    description:
+      'Pour marques, créateurs et boutiques souhaitant vendre leurs produits physiques avec une expérience d’achat instantanée.',
+    podiumImage: '/images/podiums/podium-commerce.jpg',
+    accentGlow: 'from-purple-500/20 via-indigo-500/20 to-blue-500/20',
+    glowColor: 'rgba(129,140,248,0.4)',
+    project: {
+      brandName: 'MAISON AURUM',
+      websiteUrl: 'maisonaurum.com',
+      categoryLabel: 'Maroquinerie d’Artisan & Horlogerie',
+      heroTag: 'FABRICATION ARTISANALE FRANÇAISE',
+      heroTitle: 'L’alliance du cuir pleine fleur et de la précision horlogère',
+      heroSubtitle:
+        'Chaque pièce est cousue main dans nos ateliers, numérotée et garantie à vie.',
+      heroImage:
+        'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80',
+      badgeText: 'Livraison express offerte en France',
+      actionText: 'Découvrir la collection',
+      themeBg: 'bg-[#0E1116]',
+      themeAccent: 'text-[#C9A96E]',
+      themeText: 'text-slate-100',
+      stats: {
+        speed: '98 / 100',
+        loadTime: '0.4 s',
+        highlight: 'Paiement express Stripe en 1 clic',
+      },
+      features: [
+        'Catalogue produit ultra-rapide avec filtres instantanés',
+        'Paiement sécurisé Stripe & Apple Pay',
+        'Gestion des stocks et commandes automatisée',
+        'Expérience mobile optimisée sans rechargement',
+      ],
       cards: [
         {
-          title: 'Table de repas Live Edge en Noyer',
-          price: 'Sur mesure',
-          desc: 'Plateau massif 60 mm d’épaisseur, piètement acier thermo-laqué noir mat.',
-          tag: 'Best-seller',
+          title: 'Le Sac Voyageur 48h • Cuir Ébène',
+          price: '480 €',
+          desc: 'Cuir pleine fleur tannage végétal, doublure lin brut, bouclerie laiton massif.',
+          tag: 'Édition limitée',
         },
         {
-          title: 'Bibliothèque murale avec claustra',
-          price: 'Sur devis',
-          desc: 'Agencement toute hauteur avec rétro-éclairage LED intégré et niches de rangement.',
+          title: 'Chronographe Automatique • 39 mm',
+          price: '1 250 €',
+          desc: 'Mouvement mécanique haute précision, verre saphir inrayable, bracelet cuir.',
         },
       ],
     },
@@ -266,52 +211,106 @@ const projects: ProjectShowcase[] = [
 ];
 
 export function ShowcaseGallery() {
-  const [selectedProjectId, setSelectedProjectId] = useState<string>('gastronomie');
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('services');
   const [deviceMode, setDeviceMode] = useState<'desktop' | 'mobile'>('desktop');
 
-  const currentProject: ProjectShowcase =
-    projects.find((p) => p.id === selectedProjectId) ?? (projects[0] as ProjectShowcase);
+  const activeCategory: PillarCategory =
+    categories.find((c) => c.id === selectedCategoryId) ?? (categories[1] as PillarCategory);
+  const activeProject = activeCategory.project;
 
   return (
     <div className="w-full">
-      {/* ── 1. Sélecteur d'onglets de projets (Secteurs d'activité) ── */}
-      <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-        {projects.map((project) => {
-          const Icon = project.icon;
-          const isSelected = project.id === currentProject.id;
+      {/* ── 1. Cartes Flottantes 3D Pastel (Style Référence) ── */}
+      <div className="grid gap-6 sm:gap-8 md:grid-cols-3 pt-6 pb-12">
+        {categories.map((cat, index) => {
+          const isSelected = cat.id === activeCategory.id;
+          const isCenter = index === 1;
+
           return (
-            <button
-              key={project.id}
-              onClick={() => setSelectedProjectId(project.id)}
+            <div
+              key={cat.id}
+              onClick={() => setSelectedCategoryId(cat.id)}
               className={cn(
-                'inline-flex items-center gap-2 rounded-full px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer',
+                'group relative flex flex-col justify-between rounded-[32px] p-6 sm:p-8 cursor-pointer transition-all duration-300 ease-out',
+                'bg-gradient-to-b from-[#FAF8FD] via-[#F4F1FA] to-[#EBE7F7] border border-white/80',
+                isCenter ? 'md:-translate-y-4' : 'hover:-translate-y-2',
                 isSelected
-                  ? 'bg-ink text-white shadow-md scale-[1.02]'
-                  : 'bg-surface text-muted hover:text-ink hover:bg-surface-muted border border-border',
+                  ? 'ring-2 ring-purple-500/80 shadow-[0_25px_60px_rgba(168,85,247,0.22)]'
+                  : 'shadow-[0_20px_45px_rgba(140,120,220,0.12)] hover:shadow-[0_25px_55px_rgba(140,120,220,0.2)]',
               )}
             >
-              <Icon className={cn('size-4', isSelected ? 'text-accent' : 'text-muted')} />
-              <span>{project.category}</span>
-            </button>
+              {/* Reflet lumineux en arrière-plan */}
+              <div
+                className="absolute inset-0 rounded-[32px] pointer-events-none opacity-40 transition-opacity duration-300 group-hover:opacity-70"
+                style={{
+                  background: `radial-gradient(circle at 50% 30%, ${cat.glowColor}, transparent 70%)`,
+                }}
+              />
+
+              <div className="relative z-10">
+                {/* 3D Podium Graphic */}
+                <div className="relative mx-auto mb-6 flex h-48 w-full items-center justify-center overflow-hidden rounded-2xl">
+                  <img
+                    src={cat.podiumImage}
+                    alt={cat.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  {/* Halo néon sous le podium */}
+                  <div
+                    className="absolute -bottom-2 h-6 w-32 rounded-full blur-md opacity-80"
+                    style={{ backgroundColor: cat.glowColor }}
+                  />
+                </div>
+
+                {/* Titre & Description de la carte */}
+                <div className="text-center">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-purple-600/90 font-mono">
+                    {cat.badge}
+                  </span>
+                  <h3 className="mt-1.5 font-serif text-2xl sm:text-3xl font-normal text-[#161722]">
+                    {cat.title}
+                  </h3>
+                  <p className="mt-2 text-xs text-[#52546A] leading-relaxed line-clamp-2">
+                    {cat.description}
+                  </p>
+                </div>
+              </div>
+
+              {/* Bouton Pill noir style référence */}
+              <div className="relative z-10 mt-6 flex justify-center">
+                <button
+                  type="button"
+                  className={cn(
+                    'w-full max-w-[200px] rounded-2xl py-3 text-center text-xs font-semibold tracking-wide transition-all duration-200 shadow-sm cursor-pointer',
+                    isSelected
+                      ? 'bg-[#0B0C10] text-white shadow-md scale-[1.02]'
+                      : 'bg-[#151722] text-white/90 hover:bg-black hover:text-white',
+                  )}
+                >
+                  {isSelected ? '✦ Modèle affiché' : 'Explorer ce style'}
+                </button>
+              </div>
+            </div>
           );
         })}
       </div>
 
-      {/* ── 2. Commutateur d'affichage (Desktop / Mobile) & Info URL ── */}
-      <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-border/80 pb-4">
+      {/* ── 2. En-tête de la maquette interactive live ── */}
+      <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-border/80 pb-4">
         <div className="flex items-center gap-3">
           <span className="rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
-            {currentProject.badge}
+            Aperçu en direct
           </span>
-          <span className="font-serif text-lg font-normal text-ink">
-            {currentProject.title}
+          <span className="font-serif text-xl font-normal text-ink">
+            {activeProject.brandName}
           </span>
           <span className="hidden md:inline text-xs text-muted">
-            • {currentProject.subtitle}
+            • {activeProject.categoryLabel}
           </span>
         </div>
 
-        {/* Boutons de bascule d'écran */}
+        {/* Commutateur Grand écran / Smartphone */}
         <div className="flex items-center gap-1.5 rounded-full border border-border bg-surface p-1 shadow-xs">
           <button
             onClick={() => setDeviceMode('desktop')}
@@ -321,7 +320,6 @@ export function ShowcaseGallery() {
                 ? 'bg-ink text-white shadow-xs'
                 : 'text-muted hover:text-ink',
             )}
-            title="Afficher la vue ordinateur"
           >
             <Monitor className="size-3.5" />
             <span>Grand écran</span>
@@ -334,7 +332,6 @@ export function ShowcaseGallery() {
                 ? 'bg-ink text-white shadow-xs'
                 : 'text-muted hover:text-ink',
             )}
-            title="Afficher la vue smartphone"
           >
             <Smartphone className="size-3.5" />
             <span>Mobile</span>
@@ -342,26 +339,24 @@ export function ShowcaseGallery() {
         </div>
       </div>
 
-      {/* ── 3. Zone d'affichage de la maquette (Device Viewport) ── */}
+      {/* ── 3. Visualisation de la maquette (Desktop / Mobile) + Métriques ── */}
       <div className="mt-8 grid gap-8 lg:grid-cols-12 items-start">
-        {/* Cadre de visualisation interactif */}
+        {/* Vue de l'interface */}
         <div className="lg:col-span-8 flex justify-center">
           {deviceMode === 'desktop' ? (
-            /* 🖥️ Fenêtre de navigateur Safari stylisée */
+            /* 🖥️ Fenêtre Safari élégante */
             <div className="w-full overflow-hidden rounded-2xl border border-border/80 bg-surface shadow-2xl transition-all duration-300">
               {/* Barre de navigateur */}
               <div className="flex items-center justify-between border-b border-border/60 bg-surface-muted/90 px-4 py-3">
-                {/* Feux tricolores macOS */}
                 <div className="flex items-center gap-1.5">
                   <div className="size-3 rounded-full bg-red-400/80" />
                   <div className="size-3 rounded-full bg-amber-400/80" />
                   <div className="size-3 rounded-full bg-emerald-400/80" />
                 </div>
 
-                {/* Barre d'adresse URL */}
                 <div className="flex max-w-xs sm:max-w-sm flex-1 items-center justify-center gap-2 rounded-full border border-border/80 bg-surface px-4 py-1 text-[11px] font-mono text-muted shadow-2xs mx-2">
                   <Lock className="size-3 text-emerald-600" />
-                  <span className="truncate">https://www.{currentProject.url}</span>
+                  <span className="truncate">https://www.{activeProject.websiteUrl}</span>
                 </div>
 
                 <div className="flex items-center gap-1 text-muted">
@@ -369,74 +364,67 @@ export function ShowcaseGallery() {
                 </div>
               </div>
 
-              {/* Rendu du site en direct (Écran large) */}
-              <div className={cn('p-6 sm:p-8 select-none', currentProject.theme.bg, currentProject.theme.text)}>
-                {/* Header du site maquette */}
+              {/* Rendu du site en direct */}
+              <div className={cn('p-6 sm:p-8 select-none', activeProject.themeBg, activeProject.themeText)}>
                 <div className="flex items-center justify-between border-b border-white/10 pb-4">
                   <span className="font-serif text-lg tracking-wider font-semibold">
-                    {currentProject.mockup.brandName}
+                    {activeProject.brandName}
                   </span>
-                  <div className="hidden sm:flex items-center gap-6 text-xs text-white/70">
-                    {currentProject.mockup.navLinks.slice(0, 4).map((link) => (
-                      <span key={link} className="hover:text-white transition-colors cursor-pointer">
-                        {link}
-                      </span>
-                    ))}
-                  </div>
-                  <span className={cn('rounded-full px-3 py-1 text-[11px] font-semibold border border-white/20 bg-white/5')}>
-                    {currentProject.mockup.actionText}
+                  <span className="rounded-full px-3 py-1 text-[11px] font-semibold border border-white/20 bg-white/5">
+                    {activeProject.actionText}
                   </span>
                 </div>
 
-                {/* Hero du site maquette */}
                 <div className="mt-8 grid gap-6 sm:grid-cols-12 items-center">
                   <div className="sm:col-span-7">
-                    <span className={cn('text-[10px] font-mono tracking-widest uppercase font-semibold', currentProject.theme.accent)}>
-                      {currentProject.mockup.heroTag}
+                    <span className={cn('text-[10px] font-mono tracking-widest uppercase font-semibold', activeProject.themeAccent)}>
+                      {activeProject.heroTag}
                     </span>
                     <h4 className="mt-2 font-serif text-2xl sm:text-3xl font-normal leading-tight">
-                      {currentProject.mockup.heroTitle}
+                      {activeProject.heroTitle}
                     </h4>
                     <p className="mt-3 text-xs sm:text-sm text-white/75 leading-relaxed">
-                      {currentProject.mockup.heroSubtitle}
+                      {activeProject.heroSubtitle}
                     </p>
                     <div className="mt-5 flex items-center gap-3">
                       <span className="rounded-full bg-white text-ink px-4 py-2 text-xs font-semibold shadow-xs">
-                        {currentProject.mockup.actionText}
+                        {activeProject.actionText}
                       </span>
                       <span className="text-xs text-white/60 font-medium">
-                        {currentProject.mockup.badgeText}
+                        {activeProject.badgeText}
                       </span>
                     </div>
                   </div>
 
-                  <div className="sm:col-span-5 relative overflow-hidden rounded-xl shadow-lg group">
+                  <div className="sm:col-span-5 relative overflow-hidden rounded-xl shadow-lg">
                     <img
-                      src={currentProject.mockup.heroImage}
-                      alt={currentProject.mockup.heroTitle}
-                      className="h-48 sm:h-56 w-full object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
+                      src={activeProject.heroImage}
+                      alt={activeProject.heroTitle}
+                      className="h-48 sm:h-56 w-full object-cover rounded-xl"
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] text-white">
                       <span className="bg-black/60 backdrop-blur-sm px-2.5 py-0.5 rounded-full font-medium">
-                        ✦ Rendu 4K
+                        ✦ Rendu Retina 4K
                       </span>
-                      <span className="font-mono text-emerald-400 font-semibold">0.3s</span>
+                      <span className="font-mono text-emerald-400 font-semibold">
+                        {activeProject.stats.loadTime}
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Cartes de contenu / Menu / Produits */}
+                {/* Cartes de contenu */}
                 <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                  {currentProject.mockup.cards.map((card) => (
+                  {activeProject.cards.map((card) => (
                     <div
                       key={card.title}
                       className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-xs"
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-semibold">{card.title}</span>
-                        <span className={cn('text-xs font-serif font-bold', currentProject.theme.accent)}>
+                        <span className={cn('text-xs font-serif font-bold', activeProject.themeAccent)}>
                           {card.price}
                         </span>
                       </div>
@@ -454,37 +442,32 @@ export function ShowcaseGallery() {
               </div>
             </div>
           ) : (
-            /* 📱 Cadre de smartphone iPhone stylisé */
+            /* 📱 Cadre iPhone stylisé */
             <div className="w-full max-w-[340px] overflow-hidden rounded-[36px] border-[6px] border-[#2c2d30] bg-[#1a1b1e] shadow-2xl p-2 transition-all duration-300">
-              {/* Écran du téléphone */}
-              <div className={cn('rounded-[28px] overflow-hidden select-none p-4 pb-6 min-h-[520px]', currentProject.theme.bg, currentProject.theme.text)}>
-                {/* Dynamic Island / Encoche */}
-                <div className="mx-auto mb-4 h-4 w-24 rounded-full bg-black flex items-center justify-center">
-                  <div className="size-2 rounded-full bg-black/80" />
-                </div>
+              <div className={cn('rounded-[28px] overflow-hidden select-none p-4 pb-6 min-h-[500px]', activeProject.themeBg, activeProject.themeText)}>
+                {/* Dynamic Island */}
+                <div className="mx-auto mb-4 h-4 w-24 rounded-full bg-black flex items-center justify-center" />
 
-                {/* En-tête mobile */}
                 <div className="flex items-center justify-between border-b border-white/10 pb-3">
                   <span className="font-serif text-sm font-semibold tracking-wider">
-                    {currentProject.mockup.brandName}
+                    {activeProject.brandName}
                   </span>
-                  <span className={cn('rounded-full px-2.5 py-0.5 text-[10px] font-bold border border-white/20 bg-white/10')}>
+                  <span className="rounded-full px-2.5 py-0.5 text-[10px] font-bold border border-white/20 bg-white/10">
                     Menu ☰
                   </span>
                 </div>
 
-                {/* Hero mobile */}
                 <div className="mt-4">
-                  <span className={cn('text-[9px] font-mono tracking-wider font-semibold', currentProject.theme.accent)}>
-                    {currentProject.mockup.heroTag}
+                  <span className={cn('text-[9px] font-mono tracking-wider font-semibold', activeProject.themeAccent)}>
+                    {activeProject.heroTag}
                   </span>
                   <h5 className="mt-1.5 font-serif text-lg font-normal leading-snug">
-                    {currentProject.mockup.heroTitle}
+                    {activeProject.heroTitle}
                   </h5>
                   <div className="mt-3 relative rounded-lg overflow-hidden shadow-md">
                     <img
-                      src={currentProject.mockup.heroImage}
-                      alt={currentProject.mockup.heroTitle}
+                      src={activeProject.heroImage}
+                      alt={activeProject.heroTitle}
                       className="h-32 w-full object-cover rounded-lg"
                       loading="lazy"
                     />
@@ -493,24 +476,23 @@ export function ShowcaseGallery() {
                     </div>
                   </div>
                   <p className="mt-3 text-[11px] text-white/70 leading-snug">
-                    {currentProject.mockup.heroSubtitle}
+                    {activeProject.heroSubtitle}
                   </p>
                   <button className="mt-4 w-full rounded-full bg-white text-ink py-2 text-xs font-bold shadow-sm">
-                    {currentProject.mockup.actionText}
+                    {activeProject.actionText}
                   </button>
                 </div>
 
-                {/* Carte produit/service mobile */}
-                {currentProject.mockup.cards[0] && (
+                {activeProject.cards[0] && (
                   <div className="mt-4 rounded-lg border border-white/10 bg-white/5 p-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold">{currentProject.mockup.cards[0].title}</span>
-                      <span className={cn('text-xs font-serif font-bold', currentProject.theme.accent)}>
-                        {currentProject.mockup.cards[0].price}
+                      <span className="text-[11px] font-bold">{activeProject.cards[0].title}</span>
+                      <span className={cn('text-xs font-serif font-bold', activeProject.themeAccent)}>
+                        {activeProject.cards[0].price}
                       </span>
                     </div>
                     <p className="mt-1 text-[10px] text-white/70 leading-tight">
-                      {currentProject.mockup.cards[0].desc}
+                      {activeProject.cards[0].desc}
                     </p>
                   </div>
                 )}
@@ -519,7 +501,7 @@ export function ShowcaseGallery() {
           )}
         </div>
 
-        {/* ── 4. Fiche d'impact & performance (Colonne droite) ── */}
+        {/* Fiche technique & Métriques (Colonne droite) */}
         <div className="lg:col-span-4 flex flex-col justify-between rounded-2xl border border-border bg-surface p-6 sm:p-7 shadow-xs">
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-accent">
@@ -528,18 +510,18 @@ export function ShowcaseGallery() {
             </div>
 
             <h3 className="mt-3 font-serif text-2xl font-normal text-ink">
-              {currentProject.title}
+              {activeCategory.title}
             </h3>
             <p className="mt-2 text-xs text-muted leading-relaxed">
-              {currentProject.subtitle}
+              {activeCategory.tagline}
             </p>
 
-            {/* Jauges de performance réelles */}
+            {/* Jauges */}
             <div className="mt-6 grid grid-cols-2 gap-3 rounded-xl border border-border/80 bg-surface-muted/60 p-3.5">
               <div className="rounded-lg bg-surface p-2.5 border border-border/50 text-center">
                 <div className="flex items-center justify-center gap-1 text-emerald-600 font-bold text-base">
                   <Zap className="size-4" />
-                  <span>{currentProject.stats.speed}</span>
+                  <span>{activeProject.stats.speed}</span>
                 </div>
                 <span className="text-[10px] text-muted font-medium">Score Vitesse Google</span>
               </div>
@@ -547,24 +529,24 @@ export function ShowcaseGallery() {
               <div className="rounded-lg bg-surface p-2.5 border border-border/50 text-center">
                 <div className="flex items-center justify-center gap-1 text-emerald-600 font-bold text-base">
                   <CheckCircle2 className="size-4" />
-                  <span>{currentProject.stats.loadTime}</span>
+                  <span>{activeProject.stats.loadTime}</span>
                 </div>
                 <span className="text-[10px] text-muted font-medium">Temps de chargement</span>
               </div>
             </div>
 
-            {/* Statistique clé */}
+            {/* Impact */}
             <div className="mt-4 rounded-xl border border-accent/30 bg-accent/5 p-3 text-center">
               <span className="text-xs font-semibold text-ink">
-                🎯 {currentProject.stats.highlight}
+                🎯 {activeProject.stats.highlight}
               </span>
             </div>
 
-            {/* Liste des fonctionnalités incluses */}
+            {/* Fonctionnalités */}
             <div className="mt-6">
               <span className="text-xs font-semibold text-ink">Fonctionnalités intégrées :</span>
               <ul className="mt-3 space-y-2 text-xs text-muted">
-                {currentProject.features.map((feat) => (
+                {activeProject.features.map((feat) => (
                   <li key={feat} className="flex items-start gap-2">
                     <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-accent" />
                     <span>{feat}</span>
@@ -574,11 +556,10 @@ export function ShowcaseGallery() {
             </div>
           </div>
 
-          {/* Bouton d'action direct */}
           <div className="mt-8 pt-4 border-t border-border">
             <Button asChild fullWidth variant="primary" size="md">
-              <Link to={`/devis?secteur=${currentProject.id}`}>
-                {currentProject.ctaLabel}
+              <Link to={`/devis?secteur=${activeCategory.id}`}>
+                Créer un projet dans ce style
                 <ArrowRight className="size-4 ml-1" />
               </Link>
             </Button>
