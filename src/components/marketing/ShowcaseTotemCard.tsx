@@ -27,14 +27,14 @@ export function ShowcaseTotemCard({
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((y - centerY) / centerY) * -7;
-    const rotateY = ((x - centerX) / centerX) * 7;
+    const rotateX = ((y - centerY) / centerY) * -6;
+    const rotateY = ((x - centerX) / centerX) * 6;
 
     setTransform(`perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-8px) scale(1.02)`);
     setGlarePosition({
       x: (x / rect.width) * 100,
       y: (y / rect.height) * 100,
-      opacity: 0.35,
+      opacity: 0.3,
     });
   };
 
@@ -48,15 +48,15 @@ export function ShowcaseTotemCard({
     setIsHovered(true);
   };
 
-  // Backlight halo color based on brand accent
+  // Backlight halo cast on the architectural concrete wall
   const haloColor = isHovered || isFocused
     ? project.accentColor
-    : 'rgba(235, 175, 120, 0.3)';
+    : 'rgba(235, 160, 90, 0.45)';
 
   return (
     <div
-      className={`flex flex-col items-center transition-opacity duration-300 ${
-        isFocused ? 'opacity-100 scale-100' : 'opacity-85 hover:opacity-100'
+      className={`flex flex-col items-center transition-all duration-300 ${
+        isFocused ? 'opacity-100 scale-100' : 'opacity-70 hover:opacity-100 scale-[0.98] hover:scale-100'
       }`}
     >
       {/* ── Screen Label ── */}
@@ -65,7 +65,7 @@ export function ShowcaseTotemCard({
         onClick={() => onOpen(project.id)}
         className="mb-3 text-center cursor-pointer group/title"
       >
-        <h3 className="font-sans text-xs sm:text-sm font-bold uppercase tracking-wider text-stone-200 group-hover/title:text-accent transition-colors">
+        <h3 className="font-sans text-xs sm:text-sm font-black uppercase tracking-wider text-[#181A20] group-hover/title:text-accent transition-colors drop-shadow-xs">
           {project.name}
         </h3>
       </button>
@@ -81,17 +81,17 @@ export function ShowcaseTotemCard({
           transform: transform || 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
           transition: isHovered ? 'transform 0.1s ease-out' : 'transform 0.5s ease-out, box-shadow 0.4s ease-out',
           boxShadow: isHovered || isFocused
-            ? `0 0 50px 8px ${haloColor}55, 0 30px 60px -15px rgba(0,0,0,0.9), inset 0 0 0 1px rgba(255,255,255,0.2)`
-            : '0 0 35px 2px rgba(240, 180, 120, 0.2), 0 20px 40px -10px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.1)',
+            ? `0 0 55px 12px ${haloColor}70, 0 35px 65px -15px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(255,255,255,0.25)`
+            : '0 0 40px 6px rgba(245, 175, 100, 0.35), 0 25px 45px -10px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.15)',
         }}
-        className="cursor-pointer group relative w-full aspect-[9/16] rounded-[24px] sm:rounded-[28px] p-2 bg-[#121419] border-2 border-[#2B303C] overflow-hidden select-none"
+        className="cursor-pointer group relative w-full aspect-[9/16] rounded-[24px] sm:rounded-[28px] p-2 bg-[#101217] border-2 border-[#262B36] overflow-hidden select-none"
       >
         {/* Ambient Backlight Glow Behind Frame Layer */}
         <div
-          className="absolute inset-0 -z-10 rounded-[28px] blur-xl transition-opacity duration-500 pointer-events-none"
+          className="absolute inset-0 -z-10 rounded-[28px] blur-2xl transition-opacity duration-500 pointer-events-none"
           style={{
             backgroundColor: haloColor,
-            opacity: isHovered || isFocused ? 0.35 : 0.15,
+            opacity: isHovered || isFocused ? 0.6 : 0.3,
           }}
         />
 
@@ -145,7 +145,7 @@ export function ShowcaseTotemCard({
 
       {/* ── Micro Sector Tag Below ── */}
       <div className="mt-3 text-center">
-        <span className="text-[11px] font-medium text-stone-400 flex items-center justify-center gap-1">
+        <span className="text-[11px] font-bold text-[#3B3E48] flex items-center justify-center gap-1">
           <Sparkles className="size-3 text-accent" />
           {project.sectorLabel}
         </span>

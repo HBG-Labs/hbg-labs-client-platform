@@ -32,37 +32,33 @@ export function ShowcaseGallery() {
   return (
     <Section
       id="realisations"
-      className="relative bg-[#18191E] text-stone-100 py-24 sm:py-32 overflow-hidden border-y border-stone-800"
+      className="relative py-28 sm:py-36 overflow-hidden border-y border-stone-300/80 bg-[#E3E1DC]"
     >
-      {/* ── Studio Architectural Wall Backdrop & Ceiling Lighting ── */}
-      {/* Subtle concrete texture & ambient daylight gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#2D2E36] via-[#1C1D23] to-[#121317] pointer-events-none" />
-
-      {/* 4 Spotlights from ceiling projecting over each screen */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 grid grid-cols-4 pointer-events-none opacity-40">
-        <div className="h-full bg-gradient-to-b from-amber-200/10 via-amber-400/5 to-transparent blur-3xl" />
-        <div className="h-full bg-gradient-to-b from-orange-300/10 via-orange-400/5 to-transparent blur-3xl" />
-        <div className="h-full bg-gradient-to-b from-amber-400/10 via-amber-500/5 to-transparent blur-3xl" />
-        <div className="h-full bg-gradient-to-b from-sky-300/10 via-sky-400/5 to-transparent blur-3xl" />
-      </div>
+      {/* ── Realistic Studio Architectural Concrete Wall Background ── */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none"
+        style={{ backgroundImage: "url('/images/showcase-wall-bg.jpg')" }}
+      />
+      {/* Ambient depth overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-stone-900/5 via-transparent to-stone-900/15 pointer-events-none" />
 
       <Container width="wide" className="relative z-10">
-        {/* ── Header Area ── */}
+        {/* ── Header Area (True to reference image) ── */}
         <div className="text-center max-w-4xl mx-auto">
-          <p className="text-xs sm:text-sm font-medium tracking-widest text-stone-400 uppercase">
+          <p className="text-xs sm:text-sm font-semibold tracking-widest text-[#3B3E48] uppercase">
             Nos réalisations / Showcase
           </p>
 
-          <h2 className="mt-3 font-sans text-2xl sm:text-4xl md:text-5xl lg:text-[2.75rem] font-extrabold uppercase tracking-tight text-white leading-tight">
+          <h2 className="mt-3 font-sans text-2xl sm:text-4xl md:text-5xl lg:text-[2.65rem] font-black uppercase tracking-tight text-[#111215] leading-tight">
             Des expériences digitales pensées pour votre activité.
           </h2>
 
-          <p className="mt-3 text-sm sm:text-base text-stone-400 font-normal">
+          <p className="mt-3 text-sm sm:text-base text-[#4A4D57] font-medium">
             Chaque entreprise est unique. Votre site doit l’être aussi.
           </p>
 
           {/* ── Minimalist Inline Filter Bar (TOUS | SOIN & BEAUTÉ | ...) ── */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-y-2 text-xs sm:text-sm uppercase tracking-wider font-semibold text-stone-400">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-y-2 text-xs sm:text-sm uppercase tracking-wider font-bold text-[#3B3E48]">
             {FILTER_ITEMS.map((item, index) => {
               const isActive = activeFilter === item.id;
               return (
@@ -72,14 +68,14 @@ export function ShowcaseGallery() {
                     onClick={() => setActiveFilter(item.id)}
                     className={`px-3 py-1 transition-all duration-200 cursor-pointer ${
                       isActive
-                        ? 'text-white font-bold underline decoration-accent decoration-2 underline-offset-8 scale-105'
-                        : 'text-stone-400 hover:text-stone-200'
+                        ? 'text-[#111215] font-black underline decoration-[#111215] decoration-2 underline-offset-8 scale-105'
+                        : 'text-[#4A4D57] hover:text-[#111215]'
                     }`}
                   >
                     {item.label}
                   </button>
                   {index < FILTER_ITEMS.length - 1 && (
-                    <span className="text-stone-600 select-none px-1" aria-hidden="true">
+                    <span className="text-[#8E929E] select-none px-1.5 font-normal" aria-hidden="true">
                       |
                     </span>
                   )}
@@ -108,33 +104,33 @@ export function ShowcaseGallery() {
 
         {/* ── Studio Brushed Aluminum Plaque "HBGLabs" ── */}
         <div className="mt-14 flex justify-center">
-          <div className="relative inline-flex items-center gap-3 px-8 py-2.5 rounded-md bg-gradient-to-b from-[#4A4E5A] via-[#2F323A] to-[#202228] border border-white/20 shadow-[0_4px_20px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.4)] select-none">
+          <div className="relative inline-flex items-center gap-3 px-8 py-2.5 rounded-md bg-gradient-to-b from-[#E6E8EC] via-[#CED2D9] to-[#ADB3BD] border border-white/60 shadow-[0_6px_20px_rgba(0,0,0,0.25),inset_0_1px_2px_rgba(255,255,255,0.8)] select-none">
             {/* Corner metallic rivets */}
-            <div className="absolute top-1.5 left-2 size-1.5 rounded-full bg-stone-400/50 shadow-inner" />
-            <div className="absolute top-1.5 right-2 size-1.5 rounded-full bg-stone-400/50 shadow-inner" />
-            <div className="absolute bottom-1.5 left-2 size-1.5 rounded-full bg-stone-400/50 shadow-inner" />
-            <div className="absolute bottom-1.5 right-2 size-1.5 rounded-full bg-stone-400/50 shadow-inner" />
+            <div className="absolute top-1.5 left-2 size-1.5 rounded-full bg-stone-500/70 shadow-inner" />
+            <div className="absolute top-1.5 right-2 size-1.5 rounded-full bg-stone-500/70 shadow-inner" />
+            <div className="absolute bottom-1.5 left-2 size-1.5 rounded-full bg-stone-500/70 shadow-inner" />
+            <div className="absolute bottom-1.5 right-2 size-1.5 rounded-full bg-stone-500/70 shadow-inner" />
 
-            <span className="font-mono text-xs sm:text-sm font-black tracking-[0.25em] uppercase text-stone-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+            <span className="font-mono text-xs sm:text-sm font-black tracking-[0.25em] uppercase text-[#1E2128] drop-shadow-[0_1px_0px_rgba(255,255,255,0.8)]">
               HBGLabs
             </span>
           </div>
         </div>
 
         {/* ── Bottom Call To Action ── */}
-        <div className="mt-20 max-w-2xl mx-auto rounded-2xl border border-white/10 bg-[#1F2128]/80 backdrop-blur-md p-8 sm:p-10 text-center shadow-xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[11px] font-semibold uppercase tracking-wider mb-3">
+        <div className="mt-20 max-w-2xl mx-auto rounded-3xl border border-stone-300/80 bg-white/80 backdrop-blur-md p-8 sm:p-10 text-center shadow-xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[11px] font-bold uppercase tracking-wider mb-3">
             <Sparkles className="size-3" />
             Sur Mesure &bull; Studio Digital
           </div>
-          <h3 className="font-sans text-xl sm:text-2xl font-bold uppercase text-white tracking-tight">
+          <h3 className="font-sans text-xl sm:text-2xl font-black uppercase text-[#111215] tracking-tight">
             Votre activité mérite son propre univers digital.
           </h3>
-          <p className="mt-2 text-xs sm:text-sm text-stone-400 leading-relaxed">
+          <p className="mt-2 text-xs sm:text-sm text-[#4A4D57] leading-relaxed">
             Que vous soyez artisan, restaurateur, professionnel de l’immobilier ou entrepreneur, HBG Labs crée une expérience digitale pensée pour votre activité.
           </p>
           <div className="mt-6">
-            <Button asChild size="lg" variant="primary" className="rounded-full px-8 py-3 uppercase text-xs tracking-widest font-bold">
+            <Button asChild size="lg" variant="primary" className="rounded-full px-8 py-3 uppercase text-xs tracking-widest font-bold shadow-md">
               <Link to="/devis">
                 Démarrer mon projet
                 <ArrowRight className="size-4 ml-1" />
