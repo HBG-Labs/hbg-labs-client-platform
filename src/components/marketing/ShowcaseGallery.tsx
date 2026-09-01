@@ -26,6 +26,7 @@ interface ProjectShowcase {
   subtitle: string;
   url: string;
   icon: typeof Utensils;
+  previewImage?: string;
   stats: {
     speed: string;
     seo: string;
@@ -39,6 +40,7 @@ interface ProjectShowcase {
     bg: string;
     accent: string;
     text: string;
+    isDark?: boolean;
   };
   mockup: {
     brandName: string;
@@ -61,9 +63,62 @@ interface ProjectShowcase {
 
 const projects: ProjectShowcase[] = [
   {
+    id: 'beaute',
+    category: 'Soins Beauté & Spa',
+    badge: 'Institut & Rituels Caribéens',
+    title: 'Karay Beauty',
+    subtitle: 'Rituels de soins caribéens & beauté naturelle',
+    url: 'karaybeauty.fr',
+    icon: Sparkles,
+    previewImage: '/images/showcase/karay-beauty.jpg',
+    stats: {
+      speed: '100 / 100',
+      seo: '100 %',
+      loadTime: '0.2 s',
+      highlight: '+74 % de réservations de soins en ligne',
+    },
+    features: [
+      'Prise de rendez-vous en ligne 24h/24 (Planity / Calendly)',
+      'Présentation des rituels (Visage, Corps, Massages, Caraïbes)',
+      'Design chaleureux, solaire et épuré inspiré des Antilles',
+      'Paiement d’acompte & vente de bons cadeaux en ligne',
+    ],
+    ctaLabel: 'Créer un site d’institut ou spa',
+    theme: {
+      bg: 'bg-[#FAF8F5]',
+      accent: 'text-[#8C6D38]',
+      text: 'text-[#1A1A1A]',
+      isDark: false,
+    },
+    mockup: {
+      brandName: 'KARAY BEAUTY',
+      navLinks: ['Accueil', 'Nos soins', 'L’expérience', 'À propos', 'Contact'],
+      heroTag: 'RITUELS DE BEAUTÉ CARIBÉENS',
+      heroTitle: 'Révélez votre beauté naturelle.',
+      heroSubtitle: 'Des soins inspirés des richesses naturelles des Antilles, pensés pour révéler votre éclat.',
+      heroImage: '/images/showcase/karay-beauty.jpg',
+      badgeText: 'Botanique tropicale & savoir-faire local',
+      secondaryImage: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80',
+      actionText: 'Prendre rendez-vous',
+      cards: [
+        {
+          title: 'Soins du visage & Éclat',
+          price: 'Dès 65 €',
+          desc: 'Hydratation profonde, régénération cellulaire et éclat du teint aux extraits botaniques tropicaux.',
+          tag: 'Soin Signature',
+        },
+        {
+          title: 'Rituels caribéens & Massages',
+          price: 'Dès 85 €',
+          desc: 'Gommage aux sels marins, modelage relaxant aux huiles précieuses et évasion sensorielle.',
+        },
+      ],
+    },
+  },
+  {
     id: 'coiffure',
-    category: 'Coiffure & Soins Beauté',
-    badge: 'Salon Privé & Institut',
+    category: 'Coiffure & Salon Privé',
+    badge: 'Salon Privé & Coloriste',
     title: 'L’Atelier Botanique',
     subtitle: 'Maison de coiffure, colorations végétales & rituels de soin',
     url: 'latelier-botanique.fr',
@@ -85,6 +140,7 @@ const projects: ProjectShowcase[] = [
       bg: 'bg-[#141214]',
       accent: 'text-[#E8A598]',
       text: 'text-rose-50',
+      isDark: true,
     },
     mockup: {
       brandName: 'L’ATELIER BOTANIQUE',
@@ -136,6 +192,7 @@ const projects: ProjectShowcase[] = [
       bg: 'bg-[#121110]',
       accent: 'text-[#D4AF37]',
       text: 'text-stone-100',
+      isDark: true,
     },
     mockup: {
       brandName: 'MAISON SÉVÉRAC',
@@ -187,6 +244,7 @@ const projects: ProjectShowcase[] = [
       bg: 'bg-[#18191B]',
       accent: 'text-[#E0C5A8]',
       text: 'text-zinc-100',
+      isDark: true,
     },
     mockup: {
       brandName: 'STUDIO VANEAU',
@@ -238,6 +296,7 @@ const projects: ProjectShowcase[] = [
       bg: 'bg-[#0E1116]',
       accent: 'text-[#C9A96E]',
       text: 'text-slate-100',
+      isDark: true,
     },
     mockup: {
       brandName: 'MAISON AURUM',
@@ -289,6 +348,7 @@ const projects: ProjectShowcase[] = [
       bg: 'bg-[#151412]',
       accent: 'text-[#D89B58]',
       text: 'text-amber-50',
+      isDark: true,
     },
     mockup: {
       brandName: 'ATELIERS D’ANJOU',
@@ -318,7 +378,7 @@ const projects: ProjectShowcase[] = [
 ];
 
 export function ShowcaseGallery() {
-  const [selectedProjectId, setSelectedProjectId] = useState<string>('coiffure');
+  const [selectedProjectId, setSelectedProjectId] = useState<string>('beaute');
   const [deviceMode, setDeviceMode] = useState<'desktop' | 'mobile'>('desktop');
 
   const currentProject: ProjectShowcase =
@@ -421,89 +481,102 @@ export function ShowcaseGallery() {
                 </div>
               </div>
 
-              {/* Rendu du site en direct (Écran large) */}
-              <div className={cn('p-6 sm:p-8 select-none', currentProject.theme.bg, currentProject.theme.text)}>
-                {/* Header du site maquette */}
-                <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                  <span className="font-serif text-lg tracking-wider font-semibold">
-                    {currentProject.mockup.brandName}
-                  </span>
-                  <div className="hidden sm:flex items-center gap-6 text-xs text-white/70">
-                    {currentProject.mockup.navLinks.slice(0, 4).map((link) => (
-                      <span key={link} className="hover:text-white transition-colors cursor-pointer">
-                        {link}
-                      </span>
-                    ))}
-                  </div>
-                  <span className={cn('rounded-full px-3 py-1 text-[11px] font-semibold border border-white/20 bg-white/5')}>
-                    {currentProject.mockup.actionText}
-                  </span>
+              {/* Rendu du site */}
+              {currentProject.previewImage ? (
+                /* Affichage du visuel haute fidélité officiel avec barre de défilement stylisée */
+                <div className="relative max-h-[520px] overflow-y-auto overflow-x-hidden select-none bg-[#FAF8F5]">
+                  <img
+                    src={currentProject.previewImage}
+                    alt={currentProject.title}
+                    className="w-full h-auto object-cover"
+                    loading="eager"
+                  />
                 </div>
-
-                {/* Hero du site maquette */}
-                <div className="mt-8 grid gap-6 sm:grid-cols-12 items-center">
-                  <div className="sm:col-span-7">
-                    <span className={cn('text-[10px] font-mono tracking-widest uppercase font-semibold', currentProject.theme.accent)}>
-                      {currentProject.mockup.heroTag}
+              ) : (
+                /* Rendu interactif vectoriel */
+                <div className={cn('p-6 sm:p-8 select-none', currentProject.theme.bg, currentProject.theme.text)}>
+                  {/* Header du site maquette */}
+                  <div className={cn('flex items-center justify-between border-b pb-4', currentProject.theme.isDark ? 'border-white/10' : 'border-black/10')}>
+                    <span className="font-serif text-lg tracking-wider font-semibold">
+                      {currentProject.mockup.brandName}
                     </span>
-                    <h4 className="mt-2 font-serif text-2xl sm:text-3xl font-normal leading-tight">
-                      {currentProject.mockup.heroTitle}
-                    </h4>
-                    <p className="mt-3 text-xs sm:text-sm text-white/75 leading-relaxed">
-                      {currentProject.mockup.heroSubtitle}
-                    </p>
-                    <div className="mt-5 flex items-center gap-3">
-                      <span className="rounded-full bg-white text-ink px-4 py-2 text-xs font-semibold shadow-xs">
-                        {currentProject.mockup.actionText}
-                      </span>
-                      <span className="text-xs text-white/60 font-medium">
-                        {currentProject.mockup.badgeText}
-                      </span>
+                    <div className={cn('hidden sm:flex items-center gap-6 text-xs', currentProject.theme.isDark ? 'text-white/70' : 'text-black/70')}>
+                      {currentProject.mockup.navLinks.slice(0, 4).map((link) => (
+                        <span key={link} className="hover:opacity-100 transition-opacity cursor-pointer">
+                          {link}
+                        </span>
+                      ))}
                     </div>
+                    <span className={cn('rounded-full px-3 py-1 text-[11px] font-semibold border', currentProject.theme.isDark ? 'border-white/20 bg-white/5' : 'border-black/15 bg-black/5')}>
+                      {currentProject.mockup.actionText}
+                    </span>
                   </div>
 
-                  <div className="sm:col-span-5 relative overflow-hidden rounded-xl shadow-lg group">
-                    <img
-                      src={currentProject.mockup.heroImage}
-                      alt={currentProject.mockup.heroTitle}
-                      className="h-48 sm:h-56 w-full object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] text-white">
-                      <span className="bg-black/60 backdrop-blur-sm px-2.5 py-0.5 rounded-full font-medium">
-                        ✦ Rendu 4K
+                  {/* Hero du site maquette */}
+                  <div className="mt-8 grid gap-6 sm:grid-cols-12 items-center">
+                    <div className="sm:col-span-7">
+                      <span className={cn('text-[10px] font-mono tracking-widest uppercase font-semibold', currentProject.theme.accent)}>
+                        {currentProject.mockup.heroTag}
                       </span>
-                      <span className="font-mono text-emerald-400 font-semibold">0.3s</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Cartes de contenu / Menu / Produits */}
-                <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                  {currentProject.mockup.cards.map((card) => (
-                    <div
-                      key={card.title}
-                      className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-xs"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold">{card.title}</span>
-                        <span className={cn('text-xs font-serif font-bold', currentProject.theme.accent)}>
-                          {card.price}
+                      <h4 className="mt-2 font-serif text-2xl sm:text-3xl font-normal leading-tight">
+                        {currentProject.mockup.heroTitle}
+                      </h4>
+                      <p className={cn('mt-3 text-xs sm:text-sm leading-relaxed', currentProject.theme.isDark ? 'text-white/75' : 'text-black/75')}>
+                        {currentProject.mockup.heroSubtitle}
+                      </p>
+                      <div className="mt-5 flex items-center gap-3">
+                        <span className={cn('rounded-full px-4 py-2 text-xs font-semibold shadow-xs', currentProject.theme.isDark ? 'bg-white text-ink' : 'bg-ink text-white')}>
+                          {currentProject.mockup.actionText}
+                        </span>
+                        <span className={cn('text-xs font-medium', currentProject.theme.isDark ? 'text-white/60' : 'text-black/60')}>
+                          {currentProject.mockup.badgeText}
                         </span>
                       </div>
-                      <p className="mt-2 text-[11px] text-white/70 leading-relaxed">
-                        {card.desc}
-                      </p>
-                      {card.tag && (
-                        <span className="mt-3 inline-block rounded-full bg-white/10 px-2 py-0.5 text-[9px] font-semibold text-white/90">
-                          {card.tag}
-                        </span>
-                      )}
                     </div>
-                  ))}
+
+                    <div className="sm:col-span-5 relative overflow-hidden rounded-xl shadow-lg group">
+                      <img
+                        src={currentProject.mockup.heroImage}
+                        alt={currentProject.mockup.heroTitle}
+                        className="h-48 sm:h-56 w-full object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] text-white">
+                        <span className="bg-black/60 backdrop-blur-sm px-2.5 py-0.5 rounded-full font-medium">
+                          ✦ Rendu 4K
+                        </span>
+                        <span className="font-mono text-emerald-400 font-semibold">0.2s</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Cartes de contenu / Menu / Produits */}
+                  <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                    {currentProject.mockup.cards.map((card) => (
+                      <div
+                        key={card.title}
+                        className={cn('rounded-xl border p-4 backdrop-blur-xs', currentProject.theme.isDark ? 'border-white/10 bg-white/5' : 'border-black/10 bg-black/5')}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-semibold">{card.title}</span>
+                          <span className={cn('text-xs font-serif font-bold', currentProject.theme.accent)}>
+                            {card.price}
+                          </span>
+                        </div>
+                        <p className={cn('mt-2 text-[11px] leading-relaxed', currentProject.theme.isDark ? 'text-white/70' : 'text-black/70')}>
+                          {card.desc}
+                        </p>
+                        {card.tag && (
+                          <span className={cn('mt-3 inline-block rounded-full px-2 py-0.5 text-[9px] font-semibold', currentProject.theme.isDark ? 'bg-white/10 text-white/90' : 'bg-black/10 text-black/90')}>
+                            {card.tag}
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           ) : (
             /* 📱 Cadre de smartphone iPhone stylisé */
@@ -516,11 +589,11 @@ export function ShowcaseGallery() {
                 </div>
 
                 {/* En-tête mobile */}
-                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <div className={cn('flex items-center justify-between border-b pb-3', currentProject.theme.isDark ? 'border-white/10' : 'border-black/10')}>
                   <span className="font-serif text-sm font-semibold tracking-wider">
                     {currentProject.mockup.brandName}
                   </span>
-                  <span className={cn('rounded-full px-2.5 py-0.5 text-[10px] font-bold border border-white/20 bg-white/10')}>
+                  <span className={cn('rounded-full px-2.5 py-0.5 text-[10px] font-bold border', currentProject.theme.isDark ? 'border-white/20 bg-white/10' : 'border-black/15 bg-black/5')}>
                     Menu ☰
                   </span>
                 </div>
@@ -535,33 +608,33 @@ export function ShowcaseGallery() {
                   </h5>
                   <div className="mt-3 relative rounded-lg overflow-hidden shadow-md">
                     <img
-                      src={currentProject.mockup.heroImage}
+                      src={currentProject.previewImage ?? currentProject.mockup.heroImage}
                       alt={currentProject.mockup.heroTitle}
-                      className="h-32 w-full object-cover rounded-lg"
+                      className="h-36 w-full object-cover rounded-lg"
                       loading="lazy"
                     />
                     <div className="absolute bottom-2 left-2 bg-black/70 backdrop-blur-xs px-2 py-0.5 rounded text-[9px] text-white">
                       100 % Tactile & Fluide
                     </div>
                   </div>
-                  <p className="mt-3 text-[11px] text-white/70 leading-snug">
+                  <p className={cn('mt-3 text-[11px] leading-snug', currentProject.theme.isDark ? 'text-white/70' : 'text-black/70')}>
                     {currentProject.mockup.heroSubtitle}
                   </p>
-                  <button className="mt-4 w-full rounded-full bg-white text-ink py-2 text-xs font-bold shadow-sm">
+                  <button className={cn('mt-4 w-full rounded-full py-2 text-xs font-bold shadow-sm', currentProject.theme.isDark ? 'bg-white text-ink' : 'bg-ink text-white')}>
                     {currentProject.mockup.actionText}
                   </button>
                 </div>
 
                 {/* Carte produit/service mobile */}
                 {currentProject.mockup.cards[0] && (
-                  <div className="mt-4 rounded-lg border border-white/10 bg-white/5 p-3">
+                  <div className={cn('mt-4 rounded-lg border p-3', currentProject.theme.isDark ? 'border-white/10 bg-white/5' : 'border-black/10 bg-black/5')}>
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold">{currentProject.mockup.cards[0].title}</span>
                       <span className={cn('text-xs font-serif font-bold', currentProject.theme.accent)}>
                         {currentProject.mockup.cards[0].price}
                       </span>
                     </div>
-                    <p className="mt-1 text-[10px] text-white/70 leading-tight">
+                    <p className={cn('mt-1 text-[10px] leading-tight', currentProject.theme.isDark ? 'text-white/70' : 'text-black/70')}>
                       {currentProject.mockup.cards[0].desc}
                     </p>
                   </div>

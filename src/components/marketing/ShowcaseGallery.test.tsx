@@ -9,9 +9,9 @@ describe('ShowcaseGallery — Galerie de maquettes interactives', () => {
     const user = userEvent.setup();
     renderWithProviders(<ShowcaseGallery />);
 
-    // Projet par défaut (Coiffure & Soins Beauté)
-    expect(screen.getAllByText('L’Atelier Botanique').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText(/Maison de coiffure/i).length).toBeGreaterThanOrEqual(1);
+    // Projet par défaut (Soins Beauté & Spa — Karay Beauty)
+    expect(screen.getAllByText('Karay Beauty').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/Rituels de soins caribéens/i).length).toBeGreaterThanOrEqual(1);
 
     // Changement d'onglet vers Gastronomie & Vins
     const gastroTab = screen.getByRole('button', { name: /Gastronomie & Vins/i });
@@ -26,7 +26,7 @@ describe('ShowcaseGallery — Galerie de maquettes interactives', () => {
     renderWithProviders(<ShowcaseGallery />);
 
     // Vue ordinateur par défaut (présence de la barre d'URL)
-    expect(screen.getByText(/https:\/\/www.latelier-botanique.fr/i)).toBeInTheDocument();
+    expect(screen.getByText(/https:\/\/www.karaybeauty.fr/i)).toBeInTheDocument();
 
     // Bascule vers la vue mobile
     const mobileBtn = screen.getByRole('button', { name: /Mobile/i });
