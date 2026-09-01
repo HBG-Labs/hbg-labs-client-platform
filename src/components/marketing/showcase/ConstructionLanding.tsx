@@ -175,10 +175,19 @@ export function ConstructionLanding() {
       </header>
 
       {/* ── Hero Section ── */}
-      <section className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 border-b border-[#22252C] overflow-hidden bg-gradient-to-b from-[#181A20] to-[#121316]">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-[#E65100]/5 blur-3xl pointer-events-none" />
+      <section className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 border-b border-[#22252C] overflow-hidden bg-[#121316]">
+        {/* Background Excavator Photo */}
+        <div
+          className="absolute inset-0 w-full h-full bg-cover bg-center"
+          style={{
+            backgroundImage: "url('/images/showcase/kayo-construction-hero.jpg')",
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-[#121316] via-[#121316]/90 to-[#121316]/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#121316] via-transparent to-[#121316]/75" />
+        </div>
 
-        <div className="max-w-7xl mx-auto grid gap-12 lg:grid-cols-12 items-center">
+        <div className="relative z-10 max-w-7xl mx-auto grid gap-12 lg:grid-cols-12 items-center">
           <div className="lg:col-span-7">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-[#22252C] border border-[#323742] text-[#E65100] text-xs font-mono font-semibold uppercase tracking-wider mb-6">
               <HardHat className="size-4" />

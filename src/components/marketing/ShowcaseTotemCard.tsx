@@ -189,13 +189,24 @@ function SoieEtTerreLandscapeMockup() {
 
 /**
  * ── Landscape Desktop Mockup for KAYO CONSTRUCTION ──
- * Conçu spécifiquement pour le ratio horizontal panoramique (Sans défilement)
+ * Reproduction fidèle 1:1 du vrai site Kayo Construction avec fond pelleteuse immersif
  */
 function KayoConstructionLandscapeMockup() {
   return (
     <div className="relative w-full h-full overflow-hidden bg-[#121316] text-[#F4F5F7] font-sans antialiased text-[11px] sm:text-[12px] leading-snug flex flex-col">
+      {/* Background Excavator Photo Full Bleed */}
+      <div
+        className="absolute inset-0 w-full h-full bg-cover bg-center"
+        style={{
+          backgroundImage: "url('/images/showcase/kayo-construction-hero.jpg')",
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-[#121316]/95 via-[#121316]/80 to-[#121316]/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#121316]/90 via-transparent to-black/40" />
+      </div>
+
       {/* Mini Desktop Topbar */}
-      <div className="h-7 sm:h-8 px-3 sm:px-5 bg-[#181A1F] border-b border-[#2A2E38] flex items-center justify-between shrink-0">
+      <div className="relative z-10 h-7 sm:h-8 px-3 sm:px-5 bg-[#181A1F]/90 backdrop-blur-md border-b border-[#2A2E38] flex items-center justify-between shrink-0">
         <div className="flex items-center gap-1.5">
           <span className="size-1.5 rounded-full bg-[#E65100]" />
           <span className="font-sans font-black text-[10px] sm:text-[11px] tracking-wider text-white">KAYO CONSTRUCTION</span>
@@ -212,12 +223,12 @@ function KayoConstructionLandscapeMockup() {
       </div>
 
       {/* Hero Widescreen 2-Column Banner */}
-      <div className="p-3 sm:p-5 flex-1 grid grid-cols-12 gap-4 items-center">
+      <div className="relative z-10 p-3 sm:p-5 flex-1 grid grid-cols-12 gap-4 items-center">
         {/* Left Column: Industrial Presentation */}
         <div className="col-span-7 pr-2 flex flex-col justify-center">
           <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#E65100]/20 border border-[#E65100]/30 text-[#FF8A50] text-[7.5px] font-black uppercase tracking-wider mb-1.5 w-fit">
             <HardHat className="size-2.5" />
-            <span>Gros Œuvre &bull; VRD &bull; Génie Civil</span>
+            <span>Entreprise Générale de BTP &bull; Gros Œuvre</span>
           </div>
 
           <h4 className="font-sans text-[15px] sm:text-[18px] lg:text-[20px] font-black text-white leading-tight uppercase tracking-tight">
@@ -226,31 +237,40 @@ function KayoConstructionLandscapeMockup() {
           </h4>
 
           <p className="mt-1 text-[8.5px] sm:text-[9.5px] text-[#A0A6B5] leading-relaxed line-clamp-2">
-            340+ chantiers livrés aux Antilles. 45 engins en parc propre et équipes certifiées parasismique.
+            Des équipes expérimentées, 45 engins lourds en parc propre et une maîtrise totale des contraintes sismiques et cycloniques des Antilles.
           </p>
 
-          <div className="mt-2.5 flex items-center gap-2.5">
-            <span className="px-2.5 py-1 rounded-md bg-[#E65100] text-white text-[7.5px] font-bold uppercase tracking-wider">
-              Étude de projet
+          <div className="mt-2.5 flex items-center gap-2">
+            <span className="px-2.5 py-1 rounded-md bg-[#E65100] text-white text-[7.5px] font-bold uppercase tracking-wider shadow-sm">
+              Étudier mon projet de construction &rarr;
             </span>
-            <div className="flex items-center gap-2 text-[7.5px] font-mono text-[#DCDFE4]">
-              <span className="text-[#FF8A50] font-bold text-[9px]">45</span> Engins
-              <span className="text-stone-600">|</span>
-              <span className="text-[#FF8A50] font-bold text-[9px]">340+</span> Chantiers
-            </div>
+            <span className="px-2.5 py-1 rounded-md bg-[#22252C]/80 border border-[#323742] text-white text-[7.5px] font-semibold uppercase tracking-wider">
+              Découvrir le parc matériel
+            </span>
           </div>
         </div>
 
-        {/* Right Column: Site Excavator Image */}
-        <div className="col-span-5 relative h-full max-h-[140px] rounded-lg overflow-hidden shadow-md border border-[#2A2E38]">
-          <img
-            src="/images/showcase/kayo-construction.jpg"
-            alt="Kayo Construction Chantiers"
-            className="w-full h-full object-cover object-[center_35%]"
-          />
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-1.5 text-white">
-            <p className="text-[7.5px] font-bold text-white uppercase leading-tight">Parc Engins Propre</p>
-            <p className="text-[6.5px] text-[#FF8A50]">Pelles chenilles 22T &bull; Camions 8x4</p>
+        {/* Right Column: 4 Stats Cards */}
+        <div className="col-span-5 grid grid-cols-2 gap-1.5">
+          <div className="bg-[#1A1C22]/85 backdrop-blur-sm border border-[#2B2F38] rounded-md p-2">
+            <p className="font-mono text-[13px] sm:text-[15px] font-black text-[#E65100]">340+</p>
+            <p className="text-[7.5px] font-bold text-white uppercase tracking-wider leading-tight">Chantiers livrés</p>
+            <p className="text-[6.5px] text-[#6C7280] leading-tight mt-0.5">Bâtiment, voirie</p>
+          </div>
+          <div className="bg-[#1A1C22]/85 backdrop-blur-sm border border-[#2B2F38] rounded-md p-2">
+            <p className="font-mono text-[13px] sm:text-[15px] font-black text-white">45</p>
+            <p className="text-[7.5px] font-bold text-white uppercase tracking-wider leading-tight">Engins lourds</p>
+            <p className="text-[6.5px] text-[#6C7280] leading-tight mt-0.5">Propriété exclusive</p>
+          </div>
+          <div className="bg-[#1A1C22]/85 backdrop-blur-sm border border-[#2B2F38] rounded-md p-2">
+            <p className="font-mono text-[13px] sm:text-[15px] font-black text-white">18 Ans</p>
+            <p className="text-[7.5px] font-bold text-white uppercase tracking-wider leading-tight">D'expérience</p>
+            <p className="text-[6.5px] text-[#6C7280] leading-tight mt-0.5">Implantation locale</p>
+          </div>
+          <div className="bg-[#1A1C22]/85 backdrop-blur-sm border border-[#2B2F38] rounded-md p-2">
+            <p className="font-mono text-[13px] sm:text-[15px] font-black text-[#E65100]">100 %</p>
+            <p className="text-[7.5px] font-bold text-white uppercase tracking-wider leading-tight">Délais tenus</p>
+            <p className="text-[6.5px] text-[#6C7280] leading-tight mt-0.5">Pénalités : 0</p>
           </div>
         </div>
       </div>
