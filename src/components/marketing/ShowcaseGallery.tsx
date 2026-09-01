@@ -93,8 +93,8 @@ export function ShowcaseGallery() {
             </div>
           </div>
 
-          {/* ── 4 Wall-Mounted Interactive Picture Frames Grid ── */}
-          <div className="mt-10 sm:mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-5 xl:gap-7 items-start max-w-6xl xl:max-w-7xl 2xl:max-w-[1400px] mx-auto">
+          {/* ── 4 Wall-Mounted Interactive Large Picture Frames (2x2 Grid) ── */}
+          <div className="mt-10 sm:mt-14 grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 xl:gap-12 items-start max-w-5xl xl:max-w-6xl mx-auto">
             {SHOWCASE_PROJECTS.map((project) => {
               const isFocused =
                 activeFilter === null || activeFilter === project.category;
