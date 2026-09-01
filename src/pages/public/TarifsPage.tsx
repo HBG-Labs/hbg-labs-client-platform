@@ -6,6 +6,7 @@ import { Alert } from '@/components/ui/Alert';
 import { Container, Section, SectionHeading } from '@/components/ui/Layout';
 import { Accordion, AccordionItem } from '@/components/ui/Accordion';
 import { PricingGrid } from '@/components/marketing/PricingGrid';
+import { ProcessMarquee } from '@/components/marketing/ProcessMarquee';
 import { CtaBanner } from '@/components/marketing/CtaBanner';
 
 const optionsList = [
@@ -277,7 +278,7 @@ export function TarifsPage() {
 
       {/* 4. Processus en 5 étapes */}
       <Section tone="muted">
-        <Container>
+        <div className="w-full max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Méthodologie"
             title="Comment se déroule votre projet ?"
@@ -285,21 +286,10 @@ export function TarifsPage() {
             align="center"
           />
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {processSteps.map((step) => (
-              <div
-                key={step.step}
-                className="relative rounded-none border border-stone-200 bg-white p-5 flex flex-col justify-between"
-              >
-                <div>
-                  <span className="font-serif text-3xl font-normal text-stone-400">{step.step}</span>
-                  <h3 className="mt-2 text-base font-semibold text-ink">{step.title}</h3>
-                  <p className="mt-2 text-xs leading-relaxed text-muted">{step.description}</p>
-                </div>
-              </div>
-            ))}
+          <div className="mt-12">
+            <ProcessMarquee steps={processSteps} />
           </div>
-        </Container>
+        </div>
       </Section>
 
       {/* 5. FAQ Tarifs */}
