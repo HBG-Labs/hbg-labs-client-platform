@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Maximize2, Sparkles } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import type { ShowcaseProject } from '@/data/showcase';
 
 interface ShowcaseTotemCardProps {
@@ -27,19 +27,19 @@ export function ShowcaseTotemCard({
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((y - centerY) / centerY) * -5;
-    const rotateY = ((x - centerX) / centerX) * 5;
+    const rotateX = ((y - centerY) / centerY) * -4;
+    const rotateY = ((x - centerX) / centerX) * 4;
 
-    setTransform(`perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-6px) scale(1.02)`);
+    setTransform(`perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-6px) scale(1.01)`);
     setGlarePosition({
       x: (x / rect.width) * 100,
       y: (y / rect.height) * 100,
-      opacity: 0.25,
+      opacity: 0.18,
     });
   };
 
   const handleMouseLeave = () => {
-    setTransform('perspective(1200px) rotateX(0deg) rotateY(0deg) translateY(0px) scale(1)');
+    setTransform('perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale(1)');
     setGlarePosition({ x: 50, y: 50, opacity: 0 });
     setIsHovered(false);
   };
@@ -48,15 +48,10 @@ export function ShowcaseTotemCard({
     setIsHovered(true);
   };
 
-  // Backlight halo cast on the architectural concrete wall
-  const haloColor = isHovered || isFocused
-    ? project.accentColor
-    : 'rgba(235, 160, 90, 0.4)';
-
   return (
     <div
       className={`flex flex-col items-center transition-all duration-300 ${
-        isFocused ? 'opacity-100 scale-100' : 'opacity-70 hover:opacity-100 scale-[0.98] hover:scale-100'
+        isFocused ? 'opacity-100 scale-100' : 'opacity-65 hover:opacity-100 scale-[0.98] hover:scale-100'
       }`}
     >
       {/* ── Screen Label ── */}
@@ -70,7 +65,7 @@ export function ShowcaseTotemCard({
         </h3>
       </button>
 
-      {/* ── 3D Architectural Shadowbox Frame (Outer Molded Bevel) ── */}
+      {/* ── Real Architectural Gallery Wall Picture Frame (Sharp 90° corners, Mat board) ── */}
       <div
         ref={cardRef}
         onClick={() => onOpen(project.id)}
@@ -78,79 +73,65 @@ export function ShowcaseTotemCard({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{
-          transform: transform || 'perspective(1200px) rotateX(0deg) rotateY(0deg)',
-          transition: isHovered ? 'transform 0.1s ease-out' : 'transform 0.5s ease-out, box-shadow 0.4s ease-out',
+          transform: transform || 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
+          transition: isHovered ? 'transform 0.1s ease-out' : 'transform 0.4s ease-out, box-shadow 0.4s ease-out',
           boxShadow: isHovered || isFocused
-            ? `0 0 55px 12px ${haloColor}70, 0 30px 60px -15px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.25), inset 0 -3px 6px rgba(0,0,0,0.6)`
-            : '0 0 35px 5px rgba(245, 175, 100, 0.3), 0 20px 40px -10px rgba(0,0,0,0.45), inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -2px 4px rgba(0,0,0,0.5)',
+            ? '0 24px 48px -12px rgba(0,0,0,0.5), 0 8px 20px -4px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.9)'
+            : '0 16px 36px -10px rgba(0,0,0,0.35), 0 4px 12px -2px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.85)',
         }}
-        className="cursor-pointer group relative w-full aspect-[9/16] rounded-[24px] sm:rounded-[28px] p-2.5 sm:p-3 bg-gradient-to-b from-[#252830] via-[#1A1C22] to-[#121318] border-[3px] border-[#363A47] overflow-hidden select-none"
+        className="cursor-pointer group relative w-full aspect-[3/4] p-2.5 sm:p-3 bg-[#16171B] border-[6px] sm:border-[8px] border-[#1C1D22] shadow-2xl select-none"
       >
-        {/* Ambient Backlight Glow Behind Frame Layer */}
-        <div
-          className="absolute inset-0 -z-10 rounded-[28px] blur-2xl transition-opacity duration-500 pointer-events-none"
-          style={{
-            backgroundColor: haloColor,
-            opacity: isHovered || isFocused ? 0.65 : 0.3,
-          }}
-        />
+        {/* Subtle Frame Outer Bevel Edge Highlight */}
+        <div className="absolute inset-0 border border-white/10 pointer-events-none" />
 
-        {/* ── Recessed Shadowbox Alcove (Deep Cavity Layer) ── */}
-        <div className="relative w-full h-full rounded-[16px] sm:rounded-[20px] p-2 sm:p-2.5 bg-[#090A0D] shadow-[inset_0_10px_25px_rgba(0,0,0,0.9),inset_0_1px_3px_rgba(255,255,255,0.1),inset_0_-4px_10px_rgba(0,0,0,0.8)] flex flex-col justify-center items-center">
+        {/* ── Gallery Passe-Partout (Matte Board) ── */}
+        <div className="relative w-full h-full p-2.5 sm:p-3 bg-[#F5F4F0] shadow-[inset_0_2px_6px_rgba(0,0,0,0.25)] flex flex-col justify-between">
           
-          {/* ── Floating Inner OLED Mockup Screen ── */}
-          <div className="relative w-full h-full rounded-[10px] sm:rounded-[14px] overflow-hidden bg-black shadow-[0_12px_28px_rgba(0,0,0,0.7),0_2px_6px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.1)] flex flex-col">
+          {/* Inner Artwork Cutout Window */}
+          <div className="relative w-full flex-1 overflow-hidden bg-stone-900 shadow-[inset_0_3px_8px_rgba(0,0,0,0.4),0_1px_2px_rgba(0,0,0,0.15)] border border-stone-400/40">
             
-            {/* Scrollable Website Image */}
-            <div className="relative w-full h-full overflow-hidden bg-stone-900">
-              <img
-                src={project.mockupImage}
-                alt={`Maquette ${project.name} par HBG Labs`}
-                loading="lazy"
-                className={`w-full object-cover object-top transition-transform ease-in-out ${
-                  isHovered ? 'duration-[6000ms] -translate-y-[45%]' : 'duration-[1200ms] translate-y-0'
-                }`}
-                style={{
-                  height: '250%',
-                  maxHeight: 'none',
-                }}
-              />
+            {/* Scrollable Website Mockup Art */}
+            <img
+              src={project.mockupImage}
+              alt={`Maquette ${project.name} par HBG Labs`}
+              loading="lazy"
+              className={`w-full object-cover object-top transition-transform ease-in-out ${
+                isHovered ? 'duration-[5000ms] -translate-y-[45%]' : 'duration-[1000ms] translate-y-0'
+              }`}
+              style={{
+                height: '240%',
+                maxHeight: 'none',
+              }}
+            />
 
-              {/* Glass Glare Reflection on Mouse Move */}
-              <div
-                className="absolute inset-0 pointer-events-none transition-opacity duration-300"
-                style={{
-                  background: `radial-gradient(circle 260px at ${glarePosition.x}% ${glarePosition.y}%, rgba(255,255,255,${glarePosition.opacity}), transparent 75%)`,
-                }}
-              />
+            {/* Museum Anti-Reflective Glass Sheen */}
+            <div
+              className="absolute inset-0 pointer-events-none transition-opacity duration-300"
+              style={{
+                background: `linear-gradient(135deg, rgba(255,255,255,${glarePosition.opacity * 0.8}) 0%, transparent 60%)`,
+              }}
+            />
 
-              {/* Bottom Gradient for Contrast */}
-              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none" />
-
-              {/* Floating Explore Action Badge */}
-              <div className="absolute inset-x-2 bottom-3.5 flex items-center justify-center pointer-events-none">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-white text-[10px] sm:text-[11px] font-semibold tracking-wide shadow-lg group-hover:bg-white group-hover:text-black group-hover:border-white transition-all duration-300 group-hover:scale-105">
-                  <Maximize2 className="size-3" />
-                  <span>Explorer la maquette</span>
-                </span>
-              </div>
-
-              {/* Live Indicator Top Corner */}
-              <div className="absolute top-2.5 right-2.5 pointer-events-none">
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/65 backdrop-blur-md border border-white/15 text-[10px] font-mono text-white/90">
-                  <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  LIVE
-                </span>
-              </div>
+            {/* Hover Action Pill */}
+            <div className="absolute inset-x-2 bottom-2.5 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-black/90 text-white text-[10px] font-bold uppercase tracking-wider shadow-md">
+                <span>Explorer</span>
+                <ArrowUpRight className="size-3" />
+              </span>
             </div>
+          </div>
+
+          {/* ── Museum Mat Bottom Label ── */}
+          <div className="pt-1.5 flex items-center justify-between text-[9px] font-mono uppercase tracking-widest text-[#4A4D57]">
+            <span className="font-bold text-[#22242B] truncate max-w-[120px]">{project.name}</span>
+            <span className="text-[#7A7E8B]">HBG LABS</span>
           </div>
         </div>
       </div>
 
-      {/* ── Micro Sector Tag Below ── */}
-      <div className="mt-3 text-center">
-        <span className="text-[11px] font-bold text-[#3B3E48] flex items-center justify-center gap-1">
-          <Sparkles className="size-3 text-accent" />
+      {/* ── Sector Label Below Frame ── */}
+      <div className="mt-2.5 text-center">
+        <span className="text-[11px] font-bold text-[#3B3E48] tracking-wide">
           {project.sectorLabel}
         </span>
       </div>

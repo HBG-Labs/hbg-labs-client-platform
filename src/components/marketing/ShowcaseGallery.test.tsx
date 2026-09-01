@@ -17,10 +17,10 @@ describe('ShowcaseGallery component', () => {
     expect(screen.getByRole('button', { name: 'RESTAURATION' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'IMMOBILIER' })).toBeInTheDocument();
 
-    expect(screen.getByText('SOIE & TERRE')).toBeInTheDocument();
-    expect(screen.getByText('KAYO CONSTRUCTION')).toBeInTheDocument();
-    expect(screen.getByText('RACINES & BRAISE')).toBeInTheDocument();
-    expect(screen.getByText('HORIZONS PRESTIGE')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'SOIE & TERRE' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'KAYO CONSTRUCTION' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'RACINES & BRAISE' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'HORIZONS PRESTIGE' })).toBeInTheDocument();
   });
 
   it('change le filtre actif au clic', async () => {
@@ -37,7 +37,7 @@ describe('ShowcaseGallery component', () => {
     const user = userEvent.setup();
     renderWithProviders(<ShowcaseGallery />);
 
-    const firstCard = screen.getByText('SOIE & TERRE');
+    const firstCard = screen.getByRole('heading', { name: 'SOIE & TERRE' });
     await user.click(firstCard);
 
     expect(screen.getByText(/Retour au site HBG Labs/i)).toBeInTheDocument();
