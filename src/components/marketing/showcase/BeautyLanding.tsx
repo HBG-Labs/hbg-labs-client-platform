@@ -7,6 +7,7 @@ import {
   Leaf, 
   X, 
   Menu, 
+  ShoppingBag,
   ShieldCheck, 
   Heart, 
   ChevronLeft, 
@@ -76,6 +77,39 @@ const CATEGORIES_SOINS: SoinCategory[] = [
   },
 ];
 
+const PRODUITS = [
+  {
+    id: 'p1',
+    name: 'Huile Solaire',
+    subtitle: 'Huile nourrissante aux plantes tropicales',
+    volume: '100 ml',
+    price: '48 €',
+    tag: 'Culte',
+    description: 'Concentré de 7 huiles précieuses de coco, roucou et jojoba pour sublimer le hâle et nourrir la peau.',
+    image: '/images/showcase/soie-huile-solaire.jpg',
+  },
+  {
+    id: 'p2',
+    name: 'Élixir Éclat',
+    subtitle: 'Sérum visage illuminateur',
+    volume: '30 ml',
+    price: '56 €',
+    tag: 'Best-seller',
+    description: 'Infusion antioxydante d’extraits d’hibiscus, goyave sauvage et vitamine C végétale pour un teint rayonnant.',
+    image: '/images/showcase/soie-elixir-eclat.jpg',
+  },
+  {
+    id: 'p3',
+    name: 'Gommage Terre',
+    subtitle: 'Gommage corps aux minéraux et actifs naturels',
+    volume: '200 ml',
+    price: '42 €',
+    tag: 'Botanique',
+    description: 'Formule exfoliante douce associant cristaux de sucre de canne bio, sable volcanique et pulpe d’aloé.',
+    image: '/images/showcase/soie-gommage-terre.jpg',
+  },
+];
+
 const TEMOIGNAGES = [
   {
     author: 'Camille R.',
@@ -125,6 +159,7 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
   const [selectedSoin, setSelectedSoin] = useState<string>('RITUELS SIGNATURE (120 min • 190 €)');
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const [cartToast, setCartToast] = useState<string | null>(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -146,8 +181,26 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
     setBookingSuccess(true);
   };
 
+  const handleAddToCart = (productName: string) => {
+    setCartToast(productName);
+    setTimeout(() => setCartToast(null), 3000);
+  };
+
   return (
     <div className="relative w-full bg-[#FAF8F5] text-[#2B2520] font-sans antialiased selection:bg-[#8C684F]/20 selection:text-[#2B2520]">
+      
+      {/* ── Toast Notification for Cart ── */}
+      {cartToast && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-[#2B2520] text-white shadow-2xl animate-fade-in border border-white/10">
+          <div className="size-6 rounded-full bg-[#8C684F] flex items-center justify-center text-white">
+            <Check className="size-3.5" />
+          </div>
+          <p className="text-xs font-medium">
+            <span className="font-bold">{cartToast}</span> ajouté à votre panier sensoriel.
+          </p>
+        </div>
+      )}
+
       {/* ── 1. HEADER / NAVIGATION (Sticky glassmorphism) ── */}
       <header className="sticky top-0 z-40 w-full transition-all duration-300 backdrop-blur-md bg-[#FAF8F5]/90 border-b border-[#E8DFD8]/80">
         <div className={`max-w-7xl mx-auto ${isMobile ? 'px-4 h-16' : 'px-6 sm:px-8 h-20'} flex items-center justify-between`}>
@@ -167,6 +220,7 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
               <a href="#soins" className="hover:text-[#2B2520] transition-colors py-2">Nos soins</a>
               <a href="#rituel-signature" className="hover:text-[#2B2520] transition-colors py-2">Rituels</a>
               <a href="#philosophie" className="hover:text-[#2B2520] transition-colors py-2">L’expérience</a>
+              <a href="#produits" className="hover:text-[#2B2520] transition-colors py-2">Boutique</a>
               <a href="#contact" className="hover:text-[#2B2520] transition-colors py-2">Contact</a>
             </nav>
           )}
@@ -202,6 +256,7 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
             <a href="#soins" onClick={() => setMenuMobileOpen(false)}>Nos soins</a>
             <a href="#rituel-signature" onClick={() => setMenuMobileOpen(false)}>Rituels</a>
             <a href="#philosophie" onClick={() => setMenuMobileOpen(false)}>L’expérience</a>
+            <a href="#produits" onClick={() => setMenuMobileOpen(false)}>Boutique</a>
             <a href="#contact" onClick={() => setMenuMobileOpen(false)}>Contact</a>
             <div className="pt-3 border-t border-[#E8DFD8]">
               <button
@@ -521,7 +576,69 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
         </div>
       </section>
 
-      {/* ── 6. SECTION EXPÉRIENCE & VALEURS ── */}
+      {/* ── 6. SECTION PRODUITS COSMÉTIQUES ── */}
+      <section id="produits" className={`${isMobile ? 'py-12 px-4' : 'py-24 sm:py-32'} bg-[#FAF8F5] border-b border-[#E8DFD8]`}>
+        <div className={`max-w-7xl mx-auto ${isMobile ? 'px-0' : 'px-6 sm:px-8'}`}>
+          
+          <div className={`text-center max-w-2xl mx-auto ${isMobile ? 'mb-8' : 'mb-16 sm:mb-20'}`}>
+            <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-[#8C684F] mb-2">
+              Notre Ligne Botanique
+            </p>
+            <h2 className={`font-serif ${isMobile ? 'text-2xl' : 'text-3xl sm:text-4xl lg:text-5xl'} font-light text-[#2B2520]`}>
+              La nature au cœur de nos soins.
+            </h2>
+            <p className={`mt-2 ${isMobile ? 'text-xs' : 'text-sm sm:text-base'} text-[#6B6259]`}>
+              Prolongez l’expérience chez vous avec nos créations cosmétiques artisanales, formulées et confectionnées dans nos ateliers caribéens.
+            </p>
+          </div>
+
+          <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-1 md:grid-cols-3 gap-8'}`}>
+            {PRODUITS.map((prod) => (
+              <div
+                key={prod.id}
+                className="group p-5 sm:p-6 rounded-3xl bg-[#F7F4EE] border border-[#E8DFD8] hover:border-[#8C684F]/50 transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  {/* Product Image */}
+                  <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-white mb-5 shadow-xs">
+                    <img
+                      src={prod.image}
+                      alt={prod.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#2B2520]/90 text-white text-[9px] font-bold uppercase tracking-widest backdrop-blur-xs">
+                      {prod.tag}
+                    </div>
+                  </div>
+
+                  <div className="flex items-baseline justify-between mb-1">
+                    <h3 className="font-serif text-lg font-bold text-[#2B2520]">{prod.name}</h3>
+                    <span className="font-serif font-bold text-base text-[#8C684F]">{prod.price}</span>
+                  </div>
+                  
+                  <p className="text-xs font-semibold text-[#8C684F] mb-1.5">{prod.subtitle}</p>
+                  <p className="text-xs text-[#6B6259] leading-relaxed">{prod.description}</p>
+                  <span className="text-[10px] font-mono text-[#8C684F]/80 block mt-2">Flacon verre {prod.volume}</span>
+                </div>
+
+                <div className="mt-5 pt-4 border-t border-[#E8DFD8]">
+                  <button
+                    type="button"
+                    onClick={() => handleAddToCart(prod.name)}
+                    className="w-full py-2.5 rounded-full bg-white hover:bg-[#2B2520] text-[#2B2520] hover:text-white border border-[#2B2520]/20 hover:border-[#2B2520] text-xs font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
+                  >
+                    <ShoppingBag className="size-3.5" />
+                    <span>Ajouter au panier</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* ── 7. SECTION EXPÉRIENCE & VALEURS ── */}
       <section className={`${isMobile ? 'py-12 px-4' : 'py-20 sm:py-28'} bg-[#F0EAE1]`}>
         <div className={`max-w-7xl mx-auto ${isMobile ? 'px-0' : 'px-6 sm:px-8'}`}>
           <div className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12'}`}>
@@ -833,6 +950,7 @@ export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
                 <li><a href="#soins" className="hover:text-white transition-colors">Carte des soins</a></li>
                 <li><a href="#rituel-signature" className="hover:text-white transition-colors">Rituel Signature</a></li>
                 <li><a href="#philosophie" className="hover:text-white transition-colors">Notre Philosophie</a></li>
+                <li><a href="#produits" className="hover:text-white transition-colors">Cosmétiques</a></li>
               </ul>
             </div>
 
