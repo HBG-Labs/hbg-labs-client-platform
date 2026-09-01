@@ -32,12 +32,16 @@ export function ShowcaseGallery() {
   return (
     <Section
       id="realisations"
-      className="relative pt-28 sm:pt-40 md:pt-48 lg:pt-56 pb-20 sm:pb-28 lg:pb-32 overflow-hidden border-y border-stone-300/80 bg-[#E3E1DC]"
+      className="relative pt-24 sm:pt-36 md:pt-44 lg:pt-48 pb-20 sm:pb-28 lg:pb-32 overflow-hidden border-b border-stone-300/80 bg-[#E3E1DC]"
     >
-      {/* ── 4K Calibrated Studio Architectural Concrete Wall Background ── */}
+      {/* ── Studio Architectural Concrete Wall Background glued directly to top bar ── */}
       <div
-        className="absolute inset-0 bg-cover bg-[center_top] xl:bg-center bg-no-repeat pointer-events-none 2xl:bg-contain"
-        style={{ backgroundImage: "url('/images/showcase-wall-bg.jpg')" }}
+        className="absolute inset-0 bg-cover bg-top pointer-events-none"
+        style={{
+          backgroundImage: "url('/images/showcase-wall-bg.jpg')",
+          backgroundPosition: 'center top',
+          backgroundRepeat: 'no-repeat',
+        }}
       />
       {/* Ambient soft lighting overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-stone-900/5 via-transparent to-stone-900/15 pointer-events-none" />
