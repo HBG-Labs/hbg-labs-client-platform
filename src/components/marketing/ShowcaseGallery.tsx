@@ -140,29 +140,14 @@ export function ShowcaseGallery() {
                     </div>
                   </div>
 
-                  {/* Right Column: Interactive Device Mockup Frame */}
+                  {/* Right Column: Clean Design Preview Frame */}
                   <div className={`lg:col-span-7 ${isReversed ? 'lg:col-start-1' : ''}`}>
                     <div 
                       onClick={() => handleOpenProject(project.id)}
-                      className="cursor-pointer group/frame relative rounded-2xl border border-white/15 bg-[#181C26] overflow-hidden shadow-2xl transition-transform duration-300 group-hover:scale-[1.01]"
+                      className="cursor-pointer group/frame relative rounded-2xl border border-white/10 bg-[#161922] overflow-hidden shadow-2xl transition-all duration-300 hover:border-white/25 hover:shadow-accent/5"
                     >
-                      {/* Safari Top Bar Mockup */}
-                      <div className="h-9 bg-[#1F2432] border-b border-white/10 px-4 flex items-center justify-between select-none">
-                        <div className="flex items-center gap-1.5">
-                          <div className="size-2.5 rounded-full bg-[#EF4444]" />
-                          <div className="size-2.5 rounded-full bg-[#F59E0B]" />
-                          <div className="size-2.5 rounded-full bg-[#10B981]" />
-                        </div>
-                        <div className="w-60 max-w-[60%] h-5 bg-[#12151E] rounded-md px-3 flex items-center justify-center text-[10px] text-[#64748B] font-mono truncate">
-                          https://{project.slug}.hbg-labs.com
-                        </div>
-                        <div className="flex items-center gap-2 text-[#64748B]">
-                          <Maximize2 className="size-3.5 group-hover/frame:text-white transition-colors" />
-                        </div>
-                      </div>
-
                       {/* Screen Preview Container */}
-                      <div className="relative aspect-[16/10] overflow-hidden bg-black flex items-center justify-center">
+                      <div className="relative aspect-[16/10] overflow-hidden bg-[#0A0B0E] flex items-center justify-center">
                         <img
                           src={project.mockupImage}
                           alt={`Maquette interactive ${project.name} par HBG Labs`}
@@ -170,11 +155,19 @@ export function ShowcaseGallery() {
                           className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover/frame:scale-105"
                         />
 
+                        {/* Top-right subtle badge */}
+                        <div className="absolute top-4 right-4 z-10">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-white/90 text-[11px] font-medium tracking-wide">
+                            <span className="size-1.5 rounded-full bg-accent animate-pulse" />
+                            Concept interactif
+                          </span>
+                        </div>
+
                         {/* Hover Overlay Hint */}
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/frame:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                          <span className="inline-flex items-center gap-2 bg-white/95 text-black px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
-                            <Maximize2 className="size-3.5" />
-                            Explorer la maquette interactive
+                        <div className="absolute inset-0 bg-black/45 opacity-0 group-hover/frame:opacity-100 transition-opacity duration-200 flex items-center justify-center p-4">
+                          <span className="inline-flex items-center gap-2 bg-white text-black px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider shadow-2xl transition-transform duration-200 group-hover/frame:scale-105">
+                            <Maximize2 className="size-4" />
+                            Explorer le concept en plein écran
                           </span>
                         </div>
                       </div>

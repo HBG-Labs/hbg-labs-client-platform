@@ -161,15 +161,10 @@ export function ProjectViewerModal({
             {renderLanding()}
           </div>
         ) : (
-          /* ── Mockup Mobile Smartphone Frame ── */
-          <div className="my-auto relative w-full max-w-[390px] h-[844px] bg-[#12141A] rounded-[52px] p-3 shadow-2xl ring-1 ring-white/10 border-4 border-[#2B3140] flex flex-col">
-            {/* Dynamic Island */}
-            <div className="absolute top-6 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full z-50 flex items-center justify-end px-3">
-              <div className="size-2 rounded-full bg-[#1A1D26]" />
-            </div>
-
+          /* ── Clean Mobile Viewport Container ── */
+          <div className="my-auto relative w-full max-w-[390px] h-[844px] bg-black rounded-[36px] p-2 shadow-2xl ring-1 ring-white/15 border-2 border-[#2B3140] flex flex-col">
             {/* Screen Content */}
-            <div className="w-full h-full rounded-[40px] overflow-y-auto overflow-x-hidden bg-white">
+            <div className="w-full h-full rounded-[28px] overflow-y-auto overflow-x-hidden bg-white">
               {renderLanding()}
             </div>
           </div>
