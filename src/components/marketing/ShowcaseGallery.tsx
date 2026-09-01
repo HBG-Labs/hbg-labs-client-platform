@@ -32,7 +32,7 @@ export function ShowcaseGallery() {
   return (
     <Section
       id="realisations"
-      className="relative py-20 sm:py-28 lg:py-32 overflow-hidden border-y border-stone-300/80 bg-[#E3E1DC]"
+      className="relative pt-28 sm:pt-40 md:pt-48 lg:pt-56 pb-20 sm:pb-28 lg:pb-32 overflow-hidden border-y border-stone-300/80 bg-[#E3E1DC]"
     >
       {/* ── 4K Calibrated Studio Architectural Concrete Wall Background ── */}
       <div
