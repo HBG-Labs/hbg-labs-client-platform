@@ -43,7 +43,7 @@ export const SHOWCASE_PROJECTS: ShowcaseProject[] = [
       'Navigation sensorielle & mobile-first',
       'Design épuré Studio Éditorial',
     ],
-    mockupImage: '/images/showcase/luxury-studio.jpg',
+    mockupImage: '/images/showcase/soie-et-terre.jpg',
   },
   {
     id: 'kayo-construction',
@@ -67,7 +67,7 @@ export const SHOWCASE_PROJECTS: ShowcaseProject[] = [
       'Formulaire de devis express géolocalisé',
       'Architecture technique parasismique & VRD',
     ],
-    mockupImage: '/images/showcase/artisan-craft.jpg',
+    mockupImage: '/images/showcase/kayo-construction.jpg',
   },
   {
     id: 'racines-et-braise',
@@ -91,7 +91,7 @@ export const SHOWCASE_PROJECTS: ShowcaseProject[] = [
       'Galerie gastronomique plein écran',
       'Mise en valeur du terroir et de la braise',
     ],
-    mockupImage: '/images/showcase/gourmet-dining.jpg',
+    mockupImage: '/images/showcase/racines-et-braise.jpg',
   },
   {
     id: 'horizons-prestige',
@@ -115,6 +115,6 @@ export const SHOWCASE_PROJECTS: ShowcaseProject[] = [
       'Gestion des favoris en temps réel',
       'Téléchargement de dossiers confidentiels',
     ],
-    mockupImage: '/images/showcase/ecommerce-store.jpg',
+    mockupImage: '/images/showcase/horizons-prestige.jpg',
   },
 ];
