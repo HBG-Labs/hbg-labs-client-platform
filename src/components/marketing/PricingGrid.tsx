@@ -14,15 +14,9 @@ import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
 /**
  * Grille tarifaire (§7).
  *
- * Tous les montants proviennent de `plan_prices`. Aucun chiffre n'est écrit
- * dans ce fichier : une grille figée dans le code continuerait d'annoncer
- * l'ancien tarif après un changement, et le paiement porterait sur un autre
- * montant que celui affiché.
- *
- * `is_starting_price` déclenche la mention « À partir de », imposée par §7 : le
- * tarif de création dépend du périmètre réel du projet.
+ * Le tarif de création est mis en avant en valeur principale en haut de carte,
+ * et le tarif mensuel d'hébergement & maintenance (HBG Care) est positionné en bas.
  */
-
 function PlanCard({ plan }: { plan: PublicPlan }) {
   const monthly = monthlyPrice(plan);
   const setup = setupPrice(plan);
@@ -31,7 +25,7 @@ function PlanCard({ plan }: { plan: PublicPlan }) {
   return (
     <div
       className={cn(
-        'relative flex flex-col rounded-2xl border bg-surface p-6 sm:p-8 transition-all duration-200',
+        'relative flex flex-col justify-between rounded-2xl border bg-surface p-6 sm:p-8 transition-all duration-200',
         plan.is_featured ? 'border-accent shadow-md ring-1 ring-accent' : 'border-border hover:border-ink/30',
       )}
     >
@@ -44,62 +38,92 @@ function PlanCard({ plan }: { plan: PublicPlan }) {
       )}
 
       <div>
-        <h3 className="font-serif text-2xl font-normal text-ink">{plan.name}</h3>
-        {plan.tagline && <p className="mt-1.5 text-sm text-muted">{plan.tagline}</p>}
-      </div>
+        <div>
+          <h3 className="font-serif text-2xl font-normal text-ink">{plan.name}</h3>
+          {plan.tagline && <p className="mt-1.5 text-sm text-muted">{plan.tagline}</p>}
+        </div>
 
-      <div className="mt-6 border-y border-border py-6">
-        {monthly ? (
-          <p className="flex items-baseline gap-1.5">
-            <span className="font-serif text-4xl font-normal tracking-tight text-ink">
-              {formatAmountCompact(monthly.unit_amount_cents, monthly.currency)}
-            </span>
-            <span className="text-muted">par mois</span>
-          </p>
-        ) : (
-          <p className="font-serif text-2xl font-normal text-ink">Sur devis</p>
+        {/* ── 1. Prix de création (mis en valeur en haut) ── */}
+        <div className="mt-6 border-y border-border py-6">
+          {setup ? (
+            <div>
+              <p className="text-xs font-sans uppercase tracking-wider text-muted font-medium">
+                {setup.is_starting_price ? 'Création à partir de' : 'Création'}
+              </p>
+              <p className="mt-1 flex items-baseline gap-1.5">
+                <span className="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">
+                  {formatAmountCompact(setup.unit_amount_cents, setup.currency)}
+                </span>
+              </p>
+            </div>
+          ) : plan.requires_quote ? (
+            <div>
+              <p className="text-xs font-sans uppercase tracking-wider text-muted font-medium">
+                Création
+              </p>
+              <p className="mt-1 font-serif text-3xl sm:text-4xl font-normal tracking-tight text-ink">
+                Sur devis
+              </p>
+            </div>
+          ) : monthly ? (
+            <div>
+              <p className="text-xs font-sans uppercase tracking-wider text-muted font-medium">
+                Abonnement
+              </p>
+              <p className="mt-1 flex items-baseline gap-1.5">
+                <span className="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">
+                  {formatAmountCompact(monthly.unit_amount_cents, monthly.currency)}
+                </span>
+                <span className="text-muted">/ mois</span>
+              </p>
+            </div>
+          ) : (
+            <p className="font-serif text-2xl font-normal text-ink">Sur devis</p>
+          )}
+        </div>
+
+        {plan.description && (
+          <p className="mt-6 text-sm leading-relaxed text-muted">{plan.description}</p>
         )}
 
-        <p className="mt-2 text-sm text-muted">
-          {setup ? (
-            <>
-              Création {setup.is_starting_price && 'à partir de '}
-              <span className="font-medium text-foreground">
-                {formatAmountCompact(setup.unit_amount_cents, setup.currency)}
+        <ul className="mt-6 space-y-3">
+          {plan.plan_features.map((feature) => (
+            <li key={feature.id} className="flex gap-2.5 text-sm">
+              {feature.is_included ? (
+                <Check className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden="true" />
+              ) : (
+                <Minus className="mt-0.5 size-4 shrink-0 text-muted/40" aria-hidden="true" />
+              )}
+              <span
+                className={cn(feature.is_included ? 'text-ink' : 'text-muted/60 line-through')}
+                title={feature.detail ?? undefined}
+              >
+                {feature.label}
               </span>
-            </>
-          ) : plan.requires_quote ? (
-            'Création sur mesure, tarif établi après étude'
-          ) : null}
-        </p>
+              <span className="sr-only">
+                {feature.is_included ? 'inclus' : 'non inclus'}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      {plan.description && (
-        <p className="mt-6 text-sm leading-relaxed text-muted">{plan.description}</p>
-      )}
+      {/* ── 2. Prix mensuel (positionné en bas au-dessus du bouton) ── */}
+      <div className="mt-8 pt-4 border-t border-border/80">
+        {monthly ? (
+          <p className="mb-4 text-center text-xs text-muted">
+            Hébergement &amp; maintenance :{' '}
+            <span className="font-semibold text-ink">
+              {formatAmountCompact(monthly.unit_amount_cents, monthly.currency)}
+            </span>{' '}
+            / mois
+          </p>
+        ) : (
+          <p className="mb-4 text-center text-xs text-muted">
+            Maintenance &amp; hébergement sur devis
+          </p>
+        )}
 
-      <ul className="mt-6 flex-1 space-y-3">
-        {plan.plan_features.map((feature) => (
-          <li key={feature.id} className="flex gap-2.5 text-sm">
-            {feature.is_included ? (
-              <Check className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden="true" />
-            ) : (
-              <Minus className="mt-0.5 size-4 shrink-0 text-muted/40" aria-hidden="true" />
-            )}
-            <span
-              className={cn(feature.is_included ? 'text-ink' : 'text-muted/60 line-through')}
-              title={feature.detail ?? undefined}
-            >
-              {feature.label}
-            </span>
-            <span className="sr-only">
-              {feature.is_included ? 'inclus' : 'non inclus'}
-            </span>
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-8">
         <Button asChild fullWidth variant={plan.is_featured ? 'primary' : 'outline'}>
           <Link
             to={
