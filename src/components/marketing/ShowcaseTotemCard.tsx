@@ -79,7 +79,7 @@ export function ShowcaseTotemCard({
             ? '0 24px 48px -12px rgba(0,0,0,0.35), 0 8px 20px -4px rgba(0,0,0,0.2)'
             : '0 16px 36px -10px rgba(0,0,0,0.2), 0 4px 12px -2px rgba(0,0,0,0.1)',
         }}
-        className="cursor-pointer group relative w-full aspect-[2.35/1] rounded-2xl overflow-hidden shadow-xl border border-stone-300/40 select-none bg-white"
+        className="cursor-pointer group relative w-full aspect-[2.35/1] rounded-none overflow-hidden shadow-xl select-none"
       >
         {/* Landscape Desktop Layout (No scroll animation, full-bleed) */}
         <div className="w-full h-full select-none">
