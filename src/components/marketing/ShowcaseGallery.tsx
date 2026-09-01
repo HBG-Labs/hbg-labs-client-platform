@@ -4,7 +4,7 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { SHOWCASE_PROJECTS, type ShowcaseSector } from '@/data/showcase';
 import { ShowcaseTotemCard } from './ShowcaseTotemCard';
 import { ProjectViewerModal } from './showcase/ProjectViewerModal';
-import { Container, Section } from '@/components/ui/Layout';
+import { Container } from '@/components/ui/Layout';
 import { Button } from '@/components/ui/Button';
 
 type FilterType = 'ALL' | ShowcaseSector;
@@ -30,104 +30,110 @@ export function ShowcaseGallery() {
   };
 
   return (
-    <Section
+    <section
       id="realisations"
-      className="relative pt-24 sm:pt-36 md:pt-44 lg:pt-48 pb-20 sm:pb-28 lg:pb-32 overflow-hidden border-b border-stone-300/80 bg-[#E3E1DC]"
+      className="relative w-full bg-[#E5E3DE] overflow-hidden border-b border-stone-300/80"
     >
-      {/* ── Studio Architectural Concrete Wall Background glued directly to top bar ── */}
-      <div
-        className="absolute inset-0 bg-cover bg-top pointer-events-none"
-        style={{
-          backgroundImage: "url('/images/showcase-wall-bg.jpg')",
-          backgroundPosition: 'center top',
-          backgroundRepeat: 'no-repeat',
-        }}
-      />
-      {/* Ambient soft lighting overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-stone-900/5 via-transparent to-stone-900/15 pointer-events-none" />
+      {/* ── Realistic Studio Architectural Concrete Wall at 100% Natural Size ── */}
+      <div className="relative w-full max-w-[2000px] mx-auto">
+        {/* Natural Uncropped Wall Background */}
+        <div
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          style={{
+            backgroundImage: "url('/images/showcase-wall-bg.jpg')",
+            backgroundSize: '100% auto',
+            backgroundPosition: 'center top',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
 
-      <Container width="wide" className="relative z-10 max-w-7xl mx-auto">
-        {/* ── Header Area (True to reference image) ── */}
-        <div className="text-center max-w-3xl mx-auto">
-          <p className="text-xs sm:text-sm font-semibold tracking-widest text-[#3B3E48] uppercase">
-            Nos réalisations / Showcase
-          </p>
+        <Container width="wide" className="relative z-10 max-w-7xl mx-auto pt-16 sm:pt-24 md:pt-28 lg:pt-32 pb-16 sm:pb-20">
+          {/* ── Header Area (True to reference image) ── */}
+          <div className="text-center max-w-3xl mx-auto">
+            <p className="text-xs sm:text-sm font-semibold tracking-widest text-[#3B3E48] uppercase">
+              Nos réalisations / Showcase
+            </p>
 
-          <h2 className="mt-2.5 font-sans text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-black uppercase tracking-tight text-[#111215] leading-tight">
-            Des expériences digitales pensées pour votre activité.
-          </h2>
+            <h2 className="mt-2 font-sans text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-black uppercase tracking-tight text-[#111215] leading-tight">
+              Des expériences digitales pensées pour votre activité.
+            </h2>
 
-          <p className="mt-2 text-xs sm:text-sm md:text-base text-[#4A4D57] font-medium">
-            Chaque entreprise est unique. Votre site doit l’être aussi.
-          </p>
+            <p className="mt-2 text-xs sm:text-sm md:text-base text-[#4A4D57] font-medium">
+              Chaque entreprise est unique. Votre site doit l’être aussi.
+            </p>
 
-          {/* ── Minimalist Inline Filter Bar (TOUS | SOIN & BEAUTÉ | ...) ── */}
-          <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-y-2 text-xs sm:text-sm uppercase tracking-wider font-bold text-[#3B3E48]">
-            {FILTER_ITEMS.map((item, index) => {
-              const isActive = activeFilter === item.id;
+            {/* ── Minimalist Inline Filter Bar (TOUS | SOIN & BEAUTÉ | ...) ── */}
+            <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-y-2 text-xs sm:text-sm uppercase tracking-wider font-bold text-[#3B3E48]">
+              {FILTER_ITEMS.map((item, index) => {
+                const isActive = activeFilter === item.id;
+                return (
+                  <div key={item.id} className="inline-flex items-center">
+                    <button
+                      type="button"
+                      onClick={() => setActiveFilter(item.id)}
+                      className={`px-3 py-1 transition-all duration-200 cursor-pointer ${
+                        isActive
+                          ? 'text-[#111215] font-black underline decoration-[#111215] decoration-2 underline-offset-8 scale-105'
+                          : 'text-[#4A4D57] hover:text-[#111215]'
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                    {index < FILTER_ITEMS.length - 1 && (
+                      <span className="text-[#8E929E] select-none px-1.5 font-normal" aria-hidden="true">
+                        |
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ── 4 Wall-Mounted Interactive Screens Grid (Fitted in Central Wall Area) ── */}
+          <div className="mt-10 sm:mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-5 xl:gap-7 items-start max-w-5xl xl:max-w-6xl mx-auto">
+            {SHOWCASE_PROJECTS.map((project) => {
+              const isFocused =
+                activeFilter === 'ALL' || activeFilter === project.category;
+
               return (
-                <div key={item.id} className="inline-flex items-center">
-                  <button
-                    type="button"
-                    onClick={() => setActiveFilter(item.id)}
-                    className={`px-3 py-1 transition-all duration-200 cursor-pointer ${
-                      isActive
-                        ? 'text-[#111215] font-black underline decoration-[#111215] decoration-2 underline-offset-8 scale-105'
-                        : 'text-[#4A4D57] hover:text-[#111215]'
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                  {index < FILTER_ITEMS.length - 1 && (
-                    <span className="text-[#8E929E] select-none px-1.5 font-normal" aria-hidden="true">
-                      |
-                    </span>
-                  )}
-                </div>
+                <ShowcaseTotemCard
+                  key={project.id}
+                  project={project}
+                  isFocused={isFocused}
+                  onOpen={handleOpenProject}
+                />
               );
             })}
           </div>
-        </div>
+        </Container>
+      </div>
 
-        {/* ── 4 Wall-Mounted Interactive Screens Grid ── */}
-        <div className="mt-12 sm:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-6 xl:gap-8 items-start max-w-6xl mx-auto">
-          {SHOWCASE_PROJECTS.map((project) => {
-            const isFocused =
-              activeFilter === 'ALL' || activeFilter === project.category;
-
-            return (
-              <ShowcaseTotemCard
-                key={project.id}
-                project={project}
-                isFocused={isFocused}
-                onOpen={handleOpenProject}
-              />
-            );
-          })}
-        </div>
-
-        {/* ── Bottom Call To Action ── */}
-        <div className="mt-20 max-w-2xl mx-auto rounded-3xl border border-stone-300/80 bg-white/80 backdrop-blur-md p-8 sm:p-10 text-center shadow-xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[11px] font-bold uppercase tracking-wider mb-3">
-            <Sparkles className="size-3" />
-            Sur Mesure &bull; Studio Digital
+      {/* ── Bottom Call To Action ── */}
+      <div className="relative z-10 bg-gradient-to-b from-transparent via-[#E5E3DE]/80 to-[#DCD9D3] pt-6 pb-20 sm:pb-24">
+        <Container width="wide">
+          <div className="max-w-2xl mx-auto rounded-3xl border border-stone-300/90 bg-white/85 backdrop-blur-md p-8 sm:p-10 text-center shadow-xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[11px] font-bold uppercase tracking-wider mb-3">
+              <Sparkles className="size-3" />
+              Sur Mesure &bull; Studio Digital
+            </div>
+            <h3 className="font-sans text-xl sm:text-2xl font-black uppercase text-[#111215] tracking-tight">
+              Votre activité mérite son propre univers digital.
+            </h3>
+            <p className="mt-2 text-xs sm:text-sm text-[#4A4D57] leading-relaxed">
+              Que vous soyez artisan, restaurateur, professionnel de l’immobilier ou entrepreneur, HBG Labs crée une expérience digitale pensée pour votre activité.
+            </p>
+            <div className="mt-6">
+              <Button asChild size="lg" variant="primary" className="rounded-full px-8 py-3 uppercase text-xs tracking-widest font-bold shadow-md">
+                <Link to="/devis">
+                  Démarrer mon projet
+                  <ArrowRight className="size-4 ml-1" />
+                </Link>
+              </Button>
+            </div>
           </div>
-          <h3 className="font-sans text-xl sm:text-2xl font-black uppercase text-[#111215] tracking-tight">
-            Votre activité mérite son propre univers digital.
-          </h3>
-          <p className="mt-2 text-xs sm:text-sm text-[#4A4D57] leading-relaxed">
-            Que vous soyez artisan, restaurateur, professionnel de l’immobilier ou entrepreneur, HBG Labs crée une expérience digitale pensée pour votre activité.
-          </p>
-          <div className="mt-6">
-            <Button asChild size="lg" variant="primary" className="rounded-full px-8 py-3 uppercase text-xs tracking-widest font-bold shadow-md">
-              <Link to="/devis">
-                Démarrer mon projet
-                <ArrowRight className="size-4 ml-1" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </Container>
+        </Container>
+      </div>
 
       {/* ── Interactive Project Viewer Modal ── */}
       <ProjectViewerModal
@@ -135,6 +141,6 @@ export function ShowcaseGallery() {
         onClose={() => setModalOpen(false)}
         initialProjectId={selectedProjectId}
       />
-    </Section>
+    </section>
   );
 }
