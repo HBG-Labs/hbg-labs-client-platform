@@ -102,21 +102,6 @@ export function ShowcaseGallery() {
           })}
         </div>
 
-        {/* ── Studio Brushed Aluminum Plaque "HBGLabs" ── */}
-        <div className="mt-12 sm:mt-14 flex justify-center">
-          <div className="relative inline-flex items-center gap-3 px-8 py-2.5 rounded-md bg-gradient-to-b from-[#E6E8EC] via-[#CED2D9] to-[#ADB3BD] border border-white/60 shadow-[0_6px_20px_rgba(0,0,0,0.25),inset_0_1px_2px_rgba(255,255,255,0.8)] select-none">
-            {/* Corner metallic rivets */}
-            <div className="absolute top-1.5 left-2 size-1.5 rounded-full bg-stone-500/70 shadow-inner" />
-            <div className="absolute top-1.5 right-2 size-1.5 rounded-full bg-stone-500/70 shadow-inner" />
-            <div className="absolute bottom-1.5 left-2 size-1.5 rounded-full bg-stone-500/70 shadow-inner" />
-            <div className="absolute bottom-1.5 right-2 size-1.5 rounded-full bg-stone-500/70 shadow-inner" />
-
-            <span className="font-mono text-xs sm:text-sm font-black tracking-[0.25em] uppercase text-[#1E2128] drop-shadow-[0_1px_0px_rgba(255,255,255,0.8)]">
-              HBGLabs
-            </span>
-          </div>
-        </div>
-
         {/* ── Bottom Call To Action ── */}
         <div className="mt-20 max-w-2xl mx-auto rounded-3xl border border-stone-300/80 bg-white/80 backdrop-blur-md p-8 sm:p-10 text-center shadow-xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[11px] font-bold uppercase tracking-wider mb-3">

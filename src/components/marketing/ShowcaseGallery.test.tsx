@@ -22,8 +22,6 @@ describe('ShowcaseGallery component', () => {
     expect(screen.getByText('KAYO CONSTRUCTION')).toBeInTheDocument();
     expect(screen.getByText('RACINES & BRAISE')).toBeInTheDocument();
     expect(screen.getByText('HORIZONS PRESTIGE')).toBeInTheDocument();
-
-    expect(screen.getByText('HBGLabs')).toBeInTheDocument();
   });
 
   it('change le filtre actif au clic', async () => {
