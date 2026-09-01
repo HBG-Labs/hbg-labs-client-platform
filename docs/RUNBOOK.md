@@ -269,3 +269,67 @@ raison précise : `VITE_APP_ENV` décrit l'intention du poste de travail, pas
 l'identité de la base visée. Copier l'URL et la clé de service de la production
 dans un `.env` resté en `development` suffirait à contourner le premier
 contrôle. Le second, lui, tient quelle que soit la machine.
+
+---
+
+## 8. Dérive entre le dépôt et la base
+
+**Symptôme.** `npx supabase migration list` affiche des lignes où une seule des
+deux colonnes est remplie :
+
+```text
+20260831215000   local ✔   distant ✖    → écrite, jamais appliquée
+20260901014306   local ✖   distant ✔    → appliquée, jamais écrite
+```
+
+**Cause, dans les deux cas : l'éditeur SQL du tableau de bord Supabase.** Le SQL
+qu'on y exécute est enregistré dans l'historique des migrations sous un
+horodatage inventé sur le moment, et n'existe nulle part dans le dépôt. Le
+raccourci est tentant — la correction est immédiate, et elle marche.
+
+Ce qu'il coûte se voit plus tard : une installation neuve ne reproduit plus la
+production, le changement n'a été ni relu ni testé, et le prochain `db push`
+peut le défaire sans prévenir. Ce dernier point est le plus vicieux : si un
+fichier local pose un prix à 490 € et qu'une correction manuelle l'a porté à
+580 €, appliquer la migration locale ramène silencieusement 490 €.
+
+**Diagnostic.** Lire ce qui a réellement été exécuté :
+
+```sql
+select version, name, array_to_string(statements, ' ;; ')
+  from supabase_migrations.schema_migrations
+ where version > '<dernière version connue du dépôt>'
+ order by version;
+```
+
+Puis comparer l'état réel de la base avec ce qu'affirme le fichier local. C'est
+la comparaison qui tranche, pas la lecture des deux SQL côte à côte : seule
+compte la question « appliquer ce fichier changerait-il quelque chose ? ».
+
+**Réparation, une fois la réponse connue.**
+
+*Si l'état de la base correspond déjà au fichier local* — le fichier a été mis à
+jour après coup pour intégrer les corrections manuelles — il n'y a rien à
+exécuter, seulement un registre à remettre d'aplomb :
+
+```bash
+npx supabase migration repair --status applied  <version-locale>
+npx supabase migration repair --status reverted <versions-orphelines>
+```
+
+`migration repair` n'exécute ni n'annule aucun SQL : il ne touche que la table
+`supabase_migrations.schema_migrations`. C'est de la comptabilité, et elle se
+refait dans l'autre sens si l'on s'est trompé.
+
+*Si l'état diverge*, ne rien réparer : transcrire d'abord le changement manquant
+dans une nouvelle migration datée, l'appliquer par `db push`, et seulement
+ensuite aligner le registre.
+
+**Vérifier.** `npx supabase migration list` ne doit plus afficher aucune ligne à
+une seule colonne.
+
+**Éviter.** Toute modification de schéma ou de catalogue passe par un fichier de
+migration et par `npm run db:push`. L'éditeur SQL reste précieux pour LIRE —
+c'est d'ailleurs par lui qu'on diagnostique — et pour les gestes documentés qui
+n'ont pas leur place dans une migration, comme marquer une base « production »
+ou programmer une tâche `pg_cron` dont l'URL dépend du projet.
