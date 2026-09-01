@@ -2,7 +2,7 @@
  * Données des 4 concepts de maquettes interactives pour le Showcase HBG Labs.
  */
 
-export type ShowcaseSector = 'ALL' | 'BEAUTY' | 'BTP' | 'RESTAURANT' | 'REAL_ESTATE';
+export type ShowcaseSector = 'BEAUTY' | 'BTP' | 'RESTAURANT' | 'REAL_ESTATE';
 
 export interface ShowcaseProject {
   id: string;

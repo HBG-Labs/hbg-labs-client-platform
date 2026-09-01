@@ -5,7 +5,7 @@ import { renderWithProviders } from '@/test/render';
 import { ShowcaseGallery } from './ShowcaseGallery';
 
 describe('ShowcaseGallery component', () => {
-  it('affiche le titre principal et les 4 projets phares', () => {
+  it('affiche le titre principal et le premier projet par défaut', () => {
     renderWithProviders(<ShowcaseGallery />);
 
     expect(
@@ -13,22 +13,33 @@ describe('ShowcaseGallery component', () => {
     ).toBeInTheDocument();
 
     expect(screen.getByText('SOIE & TERRE')).toBeInTheDocument();
-    expect(screen.getByText('KAYO CONSTRUCTION')).toBeInTheDocument();
-    expect(screen.getByText('RACINES & BRAISE')).toBeInTheDocument();
-    expect(screen.getByText('HORIZONS PRESTIGE')).toBeInTheDocument();
+    expect(screen.queryByText('Tous')).not.toBeInTheDocument();
   });
 
-  it('filtre les projets selon la catégorie sélectionnée', async () => {
+  it('bascule entre les univers métiers au clic sur les filtres', async () => {
     const user = userEvent.setup();
     renderWithProviders(<ShowcaseGallery />);
 
+    // Test BTP
     const btpFilter = screen.getByRole('button', { name: 'Artisan & BTP' });
     await user.click(btpFilter);
 
     expect(screen.getByText('KAYO CONSTRUCTION')).toBeInTheDocument();
     expect(screen.queryByText('SOIE & TERRE')).not.toBeInTheDocument();
+
+    // Test Restauration
+    const restoFilter = screen.getByRole('button', { name: 'Restauration' });
+    await user.click(restoFilter);
+
+    expect(screen.getByText('RACINES & BRAISE')).toBeInTheDocument();
+    expect(screen.queryByText('KAYO CONSTRUCTION')).not.toBeInTheDocument();
+
+    // Test Immobilier
+    const realEstateFilter = screen.getByRole('button', { name: 'Immobilier' });
+    await user.click(realEstateFilter);
+
+    expect(screen.getByText('HORIZONS PRESTIGE')).toBeInTheDocument();
     expect(screen.queryByText('RACINES & BRAISE')).not.toBeInTheDocument();
-    expect(screen.queryByText('HORIZONS PRESTIGE')).not.toBeInTheDocument();
   });
 
   it('ouvre la vue immersive au clic sur Voir le projet', async () => {

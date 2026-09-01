@@ -12,7 +12,6 @@ import { Container, Section } from '@/components/ui/Layout';
 import { Button } from '@/components/ui/Button';
 
 const FILTER_TABS: { id: ShowcaseSector; label: string }[] = [
-  { id: 'ALL', label: 'Tous' },
   { id: 'BEAUTY', label: 'Soin & Beauté' },
   { id: 'BTP', label: 'Artisan & BTP' },
   { id: 'RESTAURANT', label: 'Restauration' },
@@ -20,15 +19,13 @@ const FILTER_TABS: { id: ShowcaseSector; label: string }[] = [
 ];
 
 export function ShowcaseGallery() {
-  const [selectedCategory, setSelectedCategory] = useState<ShowcaseSector>('ALL');
+  const [selectedCategory, setSelectedCategory] = useState<ShowcaseSector>('BEAUTY');
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string>(
     SHOWCASE_PROJECTS[0]?.id ?? 'soie-et-terre'
   );
 
-  const filteredProjects = selectedCategory === 'ALL'
-    ? SHOWCASE_PROJECTS
-    : SHOWCASE_PROJECTS.filter((p) => p.category === selectedCategory);
+  const filteredProjects = SHOWCASE_PROJECTS.filter((p) => p.category === selectedCategory);
 
   const handleOpenProject = (id: string) => {
     setSelectedProjectId(id);
