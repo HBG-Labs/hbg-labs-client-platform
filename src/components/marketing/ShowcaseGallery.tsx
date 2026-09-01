@@ -7,10 +7,9 @@ import { ProjectViewerModal } from './showcase/ProjectViewerModal';
 import { Container } from '@/components/ui/Layout';
 import { Button } from '@/components/ui/Button';
 
-type FilterType = 'ALL' | ShowcaseSector;
+type FilterType = ShowcaseSector;
 
 const FILTER_ITEMS: { id: FilterType; label: string }[] = [
-  { id: 'ALL', label: 'TOUS' },
   { id: 'BEAUTY', label: 'SOIN & BEAUTÉ' },
   { id: 'BTP', label: 'ARTISAN & BTP' },
   { id: 'RESTAURANT', label: 'RESTAURATION' },
@@ -18,7 +17,7 @@ const FILTER_ITEMS: { id: FilterType; label: string }[] = [
 ];
 
 export function ShowcaseGallery() {
-  const [activeFilter, setActiveFilter] = useState<FilterType>('ALL');
+  const [activeFilter, setActiveFilter] = useState<FilterType | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string>(
     SHOWCASE_PROJECTS[0]?.id ?? 'soie-et-terre'
@@ -27,6 +26,10 @@ export function ShowcaseGallery() {
   const handleOpenProject = (id: string) => {
     setSelectedProjectId(id);
     setModalOpen(true);
+  };
+
+  const handleFilterClick = (sectorId: FilterType) => {
+    setActiveFilter((prev) => (prev === sectorId ? null : sectorId));
   };
 
   return (
@@ -62,7 +65,7 @@ export function ShowcaseGallery() {
               Chaque entreprise est unique. Votre site doit l’être aussi.
             </p>
 
-            {/* ── Minimalist Inline Filter Bar (TOUS | SOIN & BEAUTÉ | ...) ── */}
+            {/* ── Minimalist Inline Filter Bar (SOIN & BEAUTÉ | ARTISAN & BTP | ...) ── */}
             <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-y-2 text-xs sm:text-sm uppercase tracking-wider font-bold text-[#3B3E48]">
               {FILTER_ITEMS.map((item, index) => {
                 const isActive = activeFilter === item.id;
@@ -70,7 +73,7 @@ export function ShowcaseGallery() {
                   <div key={item.id} className="inline-flex items-center">
                     <button
                       type="button"
-                      onClick={() => setActiveFilter(item.id)}
+                      onClick={() => handleFilterClick(item.id)}
                       className={`px-3 py-1 transition-all duration-200 cursor-pointer ${
                         isActive
                           ? 'text-[#111215] font-black underline decoration-[#111215] decoration-2 underline-offset-8 scale-105'
@@ -94,7 +97,7 @@ export function ShowcaseGallery() {
           <div className="mt-10 sm:mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-5 xl:gap-7 items-start max-w-5xl xl:max-w-6xl mx-auto">
             {SHOWCASE_PROJECTS.map((project) => {
               const isFocused =
-                activeFilter === 'ALL' || activeFilter === project.category;
+                activeFilter === null || activeFilter === project.category;
 
               return (
                 <ShowcaseTotemCard

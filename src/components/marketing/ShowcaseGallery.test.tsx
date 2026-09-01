@@ -12,7 +12,6 @@ describe('ShowcaseGallery component', () => {
       screen.getByText('Des expériences digitales pensées pour votre activité.')
     ).toBeInTheDocument();
 
-    expect(screen.getByRole('button', { name: 'TOUS' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'SOIN & BEAUTÉ' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'ARTISAN & BTP' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'RESTAURATION' })).toBeInTheDocument();
