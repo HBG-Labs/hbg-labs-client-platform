@@ -10,12 +10,6 @@ import {
 import { usePublicPlans } from '@/features/pricing/usePublicPlans';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
 
-const COLUMN_GRADIENTS = [
-  'bg-white',
-  'bg-gradient-to-b from-[#F3E8FF]/80 via-[#FAF5FF]/30 to-white/95',
-  'bg-white',
-];
-
 const CTA_LABELS = [
   'Lancer la discussion',
   'Découvrir nos offres',
@@ -31,17 +25,10 @@ function PlanCard({ plan, index }: PlanCardProps) {
   const monthly = monthlyPrice(plan);
   const setup = setupPrice(plan);
   const purchasable = isPurchasable(plan);
-
-  const backgroundGradient = COLUMN_GRADIENTS[index % COLUMN_GRADIENTS.length];
   const ctaLabel = CTA_LABELS[index % CTA_LABELS.length];
 
   return (
-    <div
-      className={cn(
-        'relative flex flex-col justify-between p-7 sm:p-9 transition-all duration-200',
-        backgroundGradient,
-      )}
-    >
+    <div className="relative flex flex-col justify-between p-7 sm:p-9 bg-white transition-all duration-200">
       <div>
         {/* ── Header: Title & Optional Featured Badge ── */}
         <div className="flex items-center justify-between gap-3 min-h-[36px]">
@@ -49,7 +36,7 @@ function PlanCard({ plan, index }: PlanCardProps) {
             {plan.name}
           </h3>
           {plan.is_featured && (
-            <span className="rounded-full bg-[#E9D5FF] text-[#6B21A8] text-xs font-semibold px-3 py-1 shadow-2xs whitespace-nowrap">
+            <span className="rounded-full bg-stone-100 border border-stone-200 text-stone-700 text-xs font-semibold px-3 py-1 whitespace-nowrap">
               Juste le meilleur
             </span>
           )}
@@ -194,7 +181,7 @@ export function PricingGrid({ limit, className }: PricingGridProps) {
   return (
     <div
       className={cn(
-        'grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-stone-200/80 border border-stone-200/80 rounded-3xl overflow-hidden bg-white/90 shadow-sm relative',
+        'grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-stone-200 border border-stone-200 rounded-none bg-white relative',
         className,
       )}
     >
