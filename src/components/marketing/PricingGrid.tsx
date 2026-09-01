@@ -30,16 +30,11 @@ function PlanCard({ plan, index }: PlanCardProps) {
   return (
     <div className="relative flex flex-col justify-between p-7 sm:p-9 bg-white transition-all duration-200">
       <div>
-        {/* ── Header: Title & Optional Featured Badge ── */}
+        {/* ── Header: Title ── */}
         <div className="flex items-center justify-between gap-3 min-h-[36px]">
           <h3 className="font-serif text-3xl sm:text-4xl font-normal text-ink">
             {plan.name}
           </h3>
-          {plan.is_featured && (
-            <span className="rounded-full bg-stone-100 border border-stone-200 text-stone-700 text-xs font-semibold px-3 py-1 whitespace-nowrap">
-              Juste le meilleur
-            </span>
-          )}
         </div>
 
         {/* ── Subtitle / Tagline ── */}
