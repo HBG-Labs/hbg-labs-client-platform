@@ -5,33 +5,9 @@
 --
 -- §57 : « Ne pas utiliser de données fictives dans les fonctionnalités
 --         finales. » Il n'y a donc ici ni faux client, ni site d'exemple, ni
---         facture inventée — un tableau de bord affichant douze clients
---         imaginaires donne l'illusion d'un produit qui fonctionne et masque
---         tout ce qui ne fonctionne pas encore.
+--         facture inventée.
 --
--- Ce qui suit est la GRILLE TARIFAIRE RÉELLE de HBG Labs, telle que §7 la
--- définit. C'est une donnée de production, pas un jeu d'essai : le site public
--- l'affiche, et le Checkout s'y adosse.
---
--- Les jeux de test multi-tenant (organisations A et B, utilisateurs A et B)
--- sont créés et détruits par la suite de tests, dans tests/rls/, jamais ici.
---
---
--- IDEMPOTENT
---
--- Rejouable sans effet de bord : ON CONFLICT met à jour plutôt que de
--- dupliquer. `supabase db reset` comme un simple réamorçage donnent le même
--- résultat.
---
---
--- LES IDENTIFIANTS STRIPE RESTENT NULS
---
--- `stripe_product_id` et `stripe_price_id` ne sont pas renseignés : le
--- catalogue Stripe n'existe pas encore (phase 8). Y écrire des valeurs
--- plausibles ferait échouer le Checkout au moment du paiement, avec une erreur
--- Stripe incompréhensible pour le client. Tant que ces colonnes sont NULLes,
--- l'interface présente l'offre et oriente vers le devis — comportement exact
--- attendu par §57.
+-- Ce qui suit est la GRILLE TARIFAIRE RÉELLE de HBG Labs.
 -- =============================================================================
 
 
@@ -43,30 +19,27 @@ values
   (
     'STARTER',
     'Starter',
-    'Votre présence en ligne, simplement.',
-    'Un site vitrine professionnel, rapide et responsive, avec l''hébergement inclus. '
-    'Idéal pour une activité qui démarre ou une première présence sur le web.',
+    'L’essentiel pour être visible sur le web.',
+    'Site vitrine 1 à 3 pages, moderne, rapide et responsive. Idéal pour les indépendants et petites activités locales.',
     false,
     false,
     10
   ),
   (
     'PRO',
-    'Pro',
-    'Votre site, entretenu au quotidien.',
-    'Un site sur mesure, avec hébergement ET maintenance continue : mises à jour, '
-    'sauvegardes, corrections et modifications de contenu prises en charge par HBG Labs.',
+    'Business',
+    'Un site professionnel pensé pour développer votre activité.',
+    'Site 4 à 6 pages sur mesure avec animations, Google Maps, formulaires avancés et statistiques intégrées.',
     false,
     true,
     20
   ),
   (
     'BUSINESS',
-    'Business',
-    'Un projet sur mesure, accompagné de bout en bout.',
-    'Conception entièrement personnalisée, fonctionnalités spécifiques, accompagnement '
-    'dédié. Le périmètre et le tarif de création sont établis après étude de votre projet.',
-    true,
+    'Premium',
+    'Une expérience web haut de gamme pour une entreprise ambitieuse.',
+    'Site 7 à 10 pages sur mesure, design premium, animations avancées, SEO poussé et formation incluse.',
+    false,
     false,
     30
   )
@@ -82,29 +55,10 @@ on conflict (code) do update
 -- -----------------------------------------------------------------------------
 -- Prix
 -- -----------------------------------------------------------------------------
--- Montants EN CENTIMES. 19 €/mois → 1900.
---
--- Les frais de création sont marqués `is_starting_price` : §7 dit « à partir
--- de 590 € ». L'interface DOIT afficher la mention « à partir de » ; sans
--- elle, le devis contredirait le prix annoncé.
---
--- BUSINESS n'a pas de prix de création : il est sur devis. Il a bien un prix
--- d'abonnement, lui ferme (79 €/mois).
-
--- Upsert explicite en UPDATE puis INSERT du reliquat, plutôt qu'un ON
--- CONFLICT.
---
--- L'index qui protège l'unicité, `plan_prices_one_active_per_combination`, est
--- à la fois PARTIEL (`where is_active`) et porté par une EXPRESSION
--- (`coalesce(recurring_interval, 'month')`). L'inférence de conflit doit alors
--- reproduire l'expression au caractère près pour désigner le bon index, et
--- échoue à la moindre divergence de formulation — avec une erreur qui ne
--- pointe pas vers sa cause.
---
--- Le couple UPDATE/INSERT ci-dessous ne dépend d'aucune inférence : il énonce
--- la clé métier en toutes lettres. `is not distinct from` gère le cas NULL de
--- la périodicité, là où `=` renverrait NULL et ne rapprocherait jamais deux
--- prix ONE_TIME.
+-- Montants EN CENTIMES.
+-- STARTER : 490 € (Setup) + 29 € / mois (HBG Care)
+-- BUSINESS : 890 € (Setup) + 49 € / mois (HBG Care Plus)
+-- PREMIUM : 1 490 € (Setup) + 79 € / mois (HBG Care Pro)
 with target as (
   select
     p.id as plan_id,
@@ -114,10 +68,11 @@ with target as (
     v.is_starting_price
   from (values
     -- code,       nature,                        périodicité,                    montant, « à partir de »
-    ('STARTER',  'ONE_TIME'::public.price_kind,  null::public.billing_interval,    59000, true),
-    ('STARTER',  'RECURRING',                    'month',                           1900, false),
+    ('STARTER',  'ONE_TIME'::public.price_kind,  null::public.billing_interval,    49000, true),
+    ('STARTER',  'RECURRING',                    'month',                           2900, false),
     ('PRO',      'ONE_TIME',                     null,                             89000, true),
     ('PRO',      'RECURRING',                    'month',                           4900, false),
+    ('BUSINESS', 'ONE_TIME',                     null,                            149000, true),
     ('BUSINESS', 'RECURRING',                    'month',                           7900, false)
   ) as v(plan_code, kind, recurring_interval, unit_amount_cents, is_starting_price)
   join public.plans p on p.code = v.plan_code
@@ -150,40 +105,43 @@ select t.plan_id, t.kind, t.recurring_interval, t.unit_amount_cents, 'EUR', t.is
 -- -----------------------------------------------------------------------------
 -- Caractéristiques des offres
 -- -----------------------------------------------------------------------------
--- La grille comparative de la page /tarifs. `is_included = false` affiche la
--- ligne barrée plutôt que de l'omettre : le client voit ce que l'offre
--- supérieure lui apporterait.
 insert into public.plan_features (plan_id, label, is_included, detail, sort_order)
 select p.id, v.label, v.is_included, v.detail, v.sort_order
 from (values
   -- ---- STARTER ----
-  ('STARTER', 'Site vitrine responsive',            true,  'Affichage optimisé sur mobile, tablette et ordinateur.', 10),
-  ('STARTER', 'Jusqu''à 5 pages',                   true,  null, 20),
-  ('STARTER', 'Nom de domaine configuré',           true,  'Configuration DNS et raccordement au site.', 30),
-  ('STARTER', 'Certificat SSL',                     true,  'Connexion chiffrée HTTPS, renouvellement automatique.', 40),
-  ('STARTER', 'Hébergement infogéré',               true,  'Hébergement Vercel, supervision incluse.', 50),
-  ('STARTER', 'Formulaire de contact',              true,  null, 60),
-  ('STARTER', 'Optimisation SEO de base',           true,  'Titres, méta-descriptions, sitemap, robots.txt.', 70),
-  ('STARTER', 'Modifications de contenu incluses',  false, 'Disponible à partir de l''offre Pro.', 80),
-  ('STARTER', 'Support prioritaire',                false, 'Disponible à partir de l''offre Pro.', 90),
+  ('STARTER', 'Site vitrine 1 à 3 pages',            true,  'Design moderne, responsive mobile, tablette et ordinateur.', 10),
+  ('STARTER', 'Formulaire de contact & WhatsApp',    true,  'Bouton d''action directe et réseaux sociaux.', 20),
+  ('STARTER', 'Nom de domaine & certificat SSL',     true,  'Connexion chiffrée HTTPS, configuration DNS incluse.', 30),
+  ('STARTER', 'Hébergement infogéré',               true,  'Hébergement haute performance et supervision continue.', 40),
+  ('STARTER', 'SEO technique de base',               true,  'Titres, méta-descriptions, indexation Google.', 50),
+  ('STARTER', '1 série de modifications',            true,  'Ajustements avant mise en ligne définitive.', 60),
+  ('STARTER', 'Délai indicatif : 5 à 7 jours',       true,  'Livraison rapide clé en main.', 70),
+  ('STARTER', 'HBG Care : Hébergement (29 €/mois)',  true,  'Hébergement, sauvegardes et surveillance.', 80),
+  ('STARTER', 'Modifications mensuelles incluses',   false, 'Disponible à partir de l''offre Business.', 90),
 
-  -- ---- PRO ----
-  ('PRO', 'Tout ce que comprend Starter',           true,  null, 10),
-  ('PRO', 'Pages illimitées',                       true,  null, 20),
-  ('PRO', 'Maintenance continue',                   true,  'Mises à jour techniques, sauvegardes et corrections.', 30),
-  ('PRO', 'Modifications de contenu incluses',      true,  'Textes, photos, horaires : vous demandez, nous appliquons.', 40),
-  ('PRO', 'Support prioritaire',                    true,  'Réponse sous 24 h ouvrées.', 50),
-  ('PRO', 'Suivi de disponibilité',                 true,  'Supervision du site et alerte en cas d''indisponibilité.', 60),
-  ('PRO', 'Optimisation des performances',          true,  'Images optimisées, chargement différé, mise en cache.', 70),
-  ('PRO', 'Fonctionnalités sur mesure',             false, 'Disponible avec l''offre Business.', 80),
+  -- ---- BUSINESS (PRO) ----
+  ('PRO', 'Site 4 à 6 pages sur mesure',             true,  'Design entièrement personnalisé à votre identité.', 10),
+  ('PRO', 'Animations & micro-interactions',         true,  'Expérience visuelle soignée et fluide.', 20),
+  ('PRO', 'Formulaire de contact avancé & Devis',    true,  'Champs personnalisés et alertes directes.', 30),
+  ('PRO', 'Google Maps & Réseaux sociaux',           true,  'Localisation interactive et liens vers vos profils.', 40),
+  ('PRO', 'Optimisation des performances & SEO',     true,  'Chargement ultra-rapide et balisage optimisé.', 50),
+  ('PRO', 'Google Analytics & Statistiques',         true,  'Suivi de fréquentation et tableau de bord.', 60),
+  ('PRO', 'Jusqu''à 2 séries de modifications',      true,  'Affinement du design et des contenus.', 70),
+  ('PRO', 'Délai indicatif : 7 à 14 jours',          true,  'Mise en ligne soignée et vérifiée.', 80),
+  ('PRO', 'HBG Care Plus : Hébergement + 30 min modifs/mois (49 €/mois)', true, 'Hébergement + 30 min de modifications/mois incluses.', 90),
+  ('PRO', 'Support prioritaire sous 24 h',           true,  'Assistance réactive.', 100),
 
-  -- ---- BUSINESS ----
-  ('BUSINESS', 'Tout ce que comprend Pro',          true,  null, 10),
-  ('BUSINESS', 'Conception entièrement sur mesure', true,  'Maquettes et développement spécifiques à votre activité.', 20),
-  ('BUSINESS', 'Fonctionnalités spécifiques',       true,  'Réservation, espace client, catalogue, intégrations métier.', 30),
-  ('BUSINESS', 'Accompagnement dédié',              true,  'Un interlocuteur unique tout au long du projet.', 40),
-  ('BUSINESS', 'Intégrations tierces',              true,  'Outils de gestion, CRM, paiement en ligne.', 50),
-  ('BUSINESS', 'Support prioritaire renforcé',      true,  'Réponse sous 4 h ouvrées.', 60)
+  -- ---- PREMIUM (BUSINESS) ----
+  ('BUSINESS', 'Site 7 à 10 pages sur mesure',       true,  'Expérience haut de gamme complète.', 10),
+  ('BUSINESS', 'Animations avancées & UX sur mesure', true, 'Design exclusif pour maximiser l''impact.', 20),
+  ('BUSINESS', 'Formulaires avancés & Outils externes', true, 'Intégration CRM, formulaires interactifs.', 30),
+  ('BUSINESS', 'SEO technique avancé & Vitesse max', true,  'Optimisation poussée pour les moteurs de recherche.', 40),
+  ('BUSINESS', 'Statistiques et suivi d''audience',  true,  'Rapports de consultation réguliers.', 50),
+  ('BUSINESS', 'Jusqu''à 3 séries de modifications', true,  'Accompagnement et finitions pointues.', 60),
+  ('BUSINESS', 'Formation rapide à la gestion du site', true, 'Prise en main guidée de vos outils.', 70),
+  ('BUSINESS', 'Délai indicatif : 2 à 3 semaines',   true,  'Développement et tests complets.', 80),
+  ('BUSINESS', 'HBG Care Pro : Hébergement + 1 h modifs/mois + rapport (79 €/mois)', true, 'Hébergement + 1 h de modifications/mois + rapport mensuel.', 90),
+  ('BUSINESS', 'Support prioritaire direct',         true,  'Assistance dédiée.', 100)
 ) as v(plan_code, label, is_included, detail, sort_order)
 join public.plans p on p.code = v.plan_code
 on conflict (plan_id, label) do update
@@ -195,8 +153,6 @@ on conflict (plan_id, label) do update
 -- -----------------------------------------------------------------------------
 -- Contrôle de cohérence
 -- -----------------------------------------------------------------------------
--- Un seed silencieusement incomplet est pire qu'un seed en échec : le site
--- afficherait une grille tarifaire partielle sans que rien ne le signale.
 do $$
 declare
   v_plans integer;
@@ -211,8 +167,8 @@ begin
     raise exception 'Seed incomplet : % plan(s) au lieu de 3.', v_plans;
   end if;
 
-  if v_prices < 5 then
-    raise exception 'Seed incomplet : % prix actif(s) au lieu de 5.', v_prices;
+  if v_prices < 6 then
+    raise exception 'Seed incomplet : % prix actif(s) au lieu de 6.', v_prices;
   end if;
 
   raise notice 'Seed HBG Labs : % plans, % prix actifs, % caractéristiques.',
