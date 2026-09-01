@@ -153,7 +153,7 @@ const GALERIE_IMAGES = [
   },
 ];
 
-export function BeautyLanding() {
+export function BeautyLanding({ isMobile = false }: { isMobile?: boolean }) {
   const [menuMobileOpen, setMenuMobileOpen] = useState(false);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [selectedSoin, setSelectedSoin] = useState<string>('RITUELS SIGNATURE (120 min • 190 €)');
@@ -202,66 +202,70 @@ export function BeautyLanding() {
       )}
 
       {/* ── 1. HEADER / NAVIGATION (Sticky glassmorphism) ── */}
-      <header className="sticky top-0 z-40 w-full transition-all duration-300 backdrop-blur-md bg-[#FAF8F5]/85 border-b border-[#E8DFD8]/80">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 h-20 flex items-center justify-between">
+      <header className="sticky top-0 z-40 w-full transition-all duration-300 backdrop-blur-md bg-[#FAF8F5]/90 border-b border-[#E8DFD8]/80">
+        <div className={`max-w-7xl mx-auto ${isMobile ? 'px-4 h-16' : 'px-6 sm:px-8 h-20'} flex items-center justify-between`}>
           
           {/* Logo */}
-          <a href="#accueil" className="flex items-center gap-2.5 group">
-            <span className="size-2.5 rounded-full bg-[#8C684F] transition-transform duration-300 group-hover:scale-125" />
-            <span className="font-serif text-xl sm:text-2xl font-bold tracking-[0.2em] text-[#2B2520]">
+          <a href="#accueil" className="flex items-center gap-2 group">
+            <span className="size-2 rounded-full bg-[#8C684F] transition-transform duration-300 group-hover:scale-125" />
+            <span className={`font-serif ${isMobile ? 'text-lg tracking-[0.15em]' : 'text-xl sm:text-2xl tracking-[0.2em]'} font-bold text-[#2B2520]`}>
               SOIE &amp; TERRE
             </span>
           </a>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8 text-xs font-medium uppercase tracking-[0.15em] text-[#6B6259]">
-            <a href="#accueil" className="hover:text-[#2B2520] transition-colors py-2">Accueil</a>
-            <a href="#soins" className="hover:text-[#2B2520] transition-colors py-2">Nos soins</a>
-            <a href="#rituel-signature" className="hover:text-[#2B2520] transition-colors py-2">Rituels</a>
-            <a href="#philosophie" className="hover:text-[#2B2520] transition-colors py-2">L’expérience</a>
-            <a href="#produits" className="hover:text-[#2B2520] transition-colors py-2">Boutique</a>
-            <a href="#contact" className="hover:text-[#2B2520] transition-colors py-2">Contact</a>
-          </nav>
+          {!isMobile && (
+            <nav className="hidden lg:flex items-center gap-8 text-xs font-medium uppercase tracking-[0.15em] text-[#6B6259]">
+              <a href="#accueil" className="hover:text-[#2B2520] transition-colors py-2">Accueil</a>
+              <a href="#soins" className="hover:text-[#2B2520] transition-colors py-2">Nos soins</a>
+              <a href="#rituel-signature" className="hover:text-[#2B2520] transition-colors py-2">Rituels</a>
+              <a href="#philosophie" className="hover:text-[#2B2520] transition-colors py-2">L’expérience</a>
+              <a href="#produits" className="hover:text-[#2B2520] transition-colors py-2">Boutique</a>
+              <a href="#contact" className="hover:text-[#2B2520] transition-colors py-2">Contact</a>
+            </nav>
+          )}
 
           {/* Right CTA */}
-          <div className="hidden sm:flex items-center gap-4">
-            <button
-              type="button"
-              onClick={() => handleOpenBooking()}
-              className="px-6 py-2.5 rounded-full border border-[#2B2520]/60 hover:border-[#2B2520] text-[#2B2520] hover:bg-[#2B2520] hover:text-white transition-all duration-300 text-[11px] font-bold uppercase tracking-[0.18em] cursor-pointer shadow-2xs"
-            >
-              Prendre rendez-vous
-            </button>
-          </div>
+          {!isMobile && (
+            <div className="hidden sm:flex items-center gap-4">
+              <button
+                type="button"
+                onClick={() => handleOpenBooking()}
+                className="px-6 py-2.5 rounded-full border border-[#2B2520]/60 hover:border-[#2B2520] text-[#2B2520] hover:bg-[#2B2520] hover:text-white transition-all duration-300 text-[11px] font-bold uppercase tracking-[0.18em] cursor-pointer shadow-2xs"
+              >
+                Prendre rendez-vous
+              </button>
+            </div>
+          )}
 
           {/* Mobile Menu Button */}
           <button
             type="button"
             onClick={() => setMenuMobileOpen(!menuMobileOpen)}
-            className="lg:hidden p-2 text-[#2B2520] hover:opacity-75 cursor-pointer"
+            className={`${isMobile ? 'block' : 'lg:hidden'} p-2 text-[#2B2520] hover:opacity-75 cursor-pointer`}
             aria-label="Ouvrir le menu"
           >
-            {menuMobileOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+            {menuMobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
         </div>
 
         {/* Mobile Navigation Drawer */}
         {menuMobileOpen && (
-          <div className="lg:hidden px-6 py-8 bg-[#FAF8F5] border-b border-[#E8DFD8] flex flex-col gap-5 text-sm font-medium uppercase tracking-widest text-[#2B2520] shadow-xl">
+          <div className="px-6 py-6 bg-[#FAF8F5] border-b border-[#E8DFD8] flex flex-col gap-4 text-xs font-medium uppercase tracking-widest text-[#2B2520] shadow-xl">
             <a href="#accueil" onClick={() => setMenuMobileOpen(false)}>Accueil</a>
             <a href="#soins" onClick={() => setMenuMobileOpen(false)}>Nos soins</a>
             <a href="#rituel-signature" onClick={() => setMenuMobileOpen(false)}>Rituels</a>
             <a href="#philosophie" onClick={() => setMenuMobileOpen(false)}>L’expérience</a>
             <a href="#produits" onClick={() => setMenuMobileOpen(false)}>Boutique</a>
             <a href="#contact" onClick={() => setMenuMobileOpen(false)}>Contact</a>
-            <div className="pt-4 border-t border-[#E8DFD8]">
+            <div className="pt-3 border-t border-[#E8DFD8]">
               <button
                 type="button"
                 onClick={() => {
                   setMenuMobileOpen(false);
                   handleOpenBooking();
                 }}
-                className="w-full py-3 rounded-full bg-[#2B2520] text-white text-xs font-bold uppercase tracking-widest"
+                className="w-full py-2.5 rounded-full bg-[#2B2520] text-white text-[11px] font-bold uppercase tracking-widest"
               >
                 Prendre rendez-vous
               </button>
@@ -273,7 +277,7 @@ export function BeautyLanding() {
       {/* ── 2. HERO SECTION (Plein écran avec l'image fournie) ── */}
       <section 
         id="accueil"
-        className="relative min-h-[92vh] flex items-center justify-start overflow-hidden"
+        className={`relative ${isMobile ? 'min-h-[600px] py-10' : 'min-h-[92vh]'} flex items-center justify-start overflow-hidden`}
       >
         {/* Background Image (Fournie par l'utilisateur) */}
         <div 
@@ -288,45 +292,45 @@ export function BeautyLanding() {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 py-20 lg:py-28 w-full">
+        <div className={`relative z-10 max-w-7xl mx-auto ${isMobile ? 'px-4 py-8' : 'px-6 sm:px-8 py-20 lg:py-28'} w-full`}>
           <div className="max-w-2xl text-white">
             
             {/* Top Label */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white/95 text-[11px] font-semibold tracking-[0.25em] uppercase mb-6">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white/95 text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] uppercase mb-4 sm:mb-6">
               <Sparkles className="size-3 text-[#D4B996]" />
               <span>Rituels de Beauté &bull; Antilles</span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight text-white leading-[1.08]">
+            <h1 className={`font-serif ${isMobile ? 'text-3xl' : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl'} font-light tracking-tight text-white leading-[1.12]`}>
               La beauté <br />
               <span className="italic font-normal">à l’état naturel.</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="mt-6 text-sm sm:text-base md:text-lg text-[#EAE3D9] font-light leading-relaxed max-w-xl">
+            <p className={`mt-4 ${isMobile ? 'text-xs leading-relaxed' : 'text-sm sm:text-base md:text-lg'} text-[#EAE3D9] font-light leading-relaxed max-w-xl`}>
               Des soins inspirés de la nature des Antilles, pensés pour révéler votre éclat et vous offrir un véritable moment de bien-être.
             </p>
 
             {/* CTA Buttons */}
-            <div className="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            <div className={`mt-6 sm:mt-9 flex ${isMobile ? 'flex-col gap-3 w-full' : 'flex-col sm:flex-row items-stretch sm:items-center gap-4'}`}>
               <a
                 href="#soins"
-                className="px-8 py-3.5 rounded-full bg-[#FAF8F5] text-[#2B2520] hover:bg-white text-xs font-bold uppercase tracking-[0.2em] transition-all duration-300 text-center shadow-lg hover:shadow-xl hover:scale-102"
+                className="px-6 sm:px-8 py-3 rounded-full bg-[#FAF8F5] text-[#2B2520] hover:bg-white text-[11px] sm:text-xs font-bold uppercase tracking-[0.18em] transition-all duration-300 text-center shadow-lg hover:shadow-xl hover:scale-102"
               >
                 Découvrir nos soins
               </a>
               <button
                 type="button"
                 onClick={() => handleOpenBooking()}
-                className="px-8 py-3.5 rounded-full border border-white/80 hover:border-white text-white hover:bg-white/10 text-xs font-bold uppercase tracking-[0.2em] transition-all duration-300 text-center backdrop-blur-xs cursor-pointer"
+                className="px-6 sm:px-8 py-3 rounded-full border border-white/80 hover:border-white text-white hover:bg-white/10 text-[11px] sm:text-xs font-bold uppercase tracking-[0.18em] transition-all duration-300 text-center backdrop-blur-xs cursor-pointer"
               >
                 Prendre rendez-vous
               </button>
             </div>
 
             {/* Bottom Mention */}
-            <div className="mt-14 pt-8 border-t border-white/20 flex items-center gap-6 text-[11px] font-mono uppercase tracking-[0.25em] text-[#D4B996]">
+            <div className={`mt-8 sm:mt-14 pt-6 sm:pt-8 border-t border-white/20 flex flex-wrap items-center gap-4 sm:gap-6 text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.2em] text-[#D4B996]`}>
               <span>Martinique</span>
               <span className="size-1 rounded-full bg-[#D4B996]/60" />
               <span>Guadeloupe</span>

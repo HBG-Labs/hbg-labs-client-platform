@@ -90,7 +90,7 @@ const MENU_CATEGORIES = [
   },
 ];
 
-export function RestaurantLanding() {
+export function RestaurantLanding({ isMobile = false }: { isMobile?: boolean }) {
   const [activeTab, setActiveTab] = useState('BRAISES');
   const [tableModalOpen, setTableModalOpen] = useState(false);
   const [tableSuccess, setTableSuccess] = useState(false);
@@ -107,88 +107,104 @@ export function RestaurantLanding() {
   return (
     <div className="min-h-screen bg-[#0E0D0C] text-[#F5EFEB] font-sans antialiased selection:bg-[#D97736] selection:text-white">
       {/* ── Top Bar ── */}
-      <div className="bg-[#1A1816] text-[#C4B6AD] text-xs py-2 px-4 text-center border-b border-[#2C2723] tracking-widest uppercase">
-        Service du soir du Mardi au Samedi &bull; Menu Dégustation en 6 temps sur réservation
+      <div className={`bg-[#1A1816] text-[#C4B6AD] ${isMobile ? 'text-[10px] py-1.5 px-3' : 'text-xs py-2 px-4'} text-center border-b border-[#2C2723] tracking-widest uppercase`}>
+        Service du soir du Mardi au Samedi &bull; Menu Dégustation en 6 temps
       </div>
 
       {/* ── Brand Header ── */}
       <header className="sticky top-0 z-40 bg-[#0E0D0C]/90 backdrop-blur-md border-b border-[#24211D]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Flame className="size-6 text-[#D97736]" />
+        <div className={`max-w-7xl mx-auto ${isMobile ? 'px-4 h-16' : 'px-4 sm:px-6 lg:px-8 h-20'} flex items-center justify-between`}>
+          <div className="flex items-center gap-2.5">
+            <Flame className={`${isMobile ? 'size-5' : 'size-6'} text-[#D97736]`} />
             <div>
-              <span className="font-serif text-2xl tracking-widest text-[#F5EFEB] uppercase font-normal block leading-none">
+              <span className={`font-serif ${isMobile ? 'text-lg' : 'text-2xl'} tracking-widest text-[#F5EFEB] uppercase font-normal block leading-none`}>
                 Racines &amp; Braise
               </span>
-              <span className="text-[9px] uppercase tracking-widest text-[#D97736] font-mono">
-                Gastronomie Caribéenne &bull; Cuisson au Feu
+              <span className="text-[8.5px] uppercase tracking-widest text-[#D97736] font-mono">
+                Gastronomie Caribéenne
               </span>
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest font-medium text-[#A89C94]">
-            <a href="#histoire" className="hover:text-[#F5EFEB] transition-colors">Notre Histoire</a>
-            <a href="#carte" className="hover:text-[#F5EFEB] transition-colors">La Carte &amp; Braise</a>
-            <a href="#chef" className="hover:text-[#F5EFEB] transition-colors">Le Chef</a>
-            <a href="#horaires" className="hover:text-[#F5EFEB] transition-colors">Horaires &amp; Lieu</a>
-          </nav>
+          {!isMobile && (
+            <nav className="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest font-medium text-[#A89C94]">
+              <a href="#histoire" className="hover:text-[#F5EFEB] transition-colors">Notre Histoire</a>
+              <a href="#carte" className="hover:text-[#F5EFEB] transition-colors">La Carte &amp; Braise</a>
+              <a href="#chef" className="hover:text-[#F5EFEB] transition-colors">Le Chef</a>
+              <a href="#horaires" className="hover:text-[#F5EFEB] transition-colors">Horaires &amp; Lieu</a>
+            </nav>
+          )}
 
-          <div className="flex items-center gap-4">
-            <button
-              type="button"
-              onClick={() => {
-                setTableModalOpen(true);
-                setTableSuccess(false);
-              }}
-              className="inline-flex items-center gap-2 bg-[#D97736] text-white text-xs uppercase tracking-widest font-semibold px-6 py-3 rounded-full hover:bg-[#E88645] transition-all shadow-md shadow-[#D97736]/20"
-            >
-              <UtensilsCrossed className="size-3.5" />
-              Réserver une table
-            </button>
+          <div className="flex items-center gap-2.5">
+            {!isMobile && (
+              <button
+                type="button"
+                onClick={() => {
+                  setTableModalOpen(true);
+                  setTableSuccess(false);
+                }}
+                className="hidden sm:inline-flex items-center gap-2 bg-[#D97736] text-white text-xs uppercase tracking-widest font-semibold px-5 py-2.5 rounded-full hover:bg-[#E88645] transition-all shadow-md shadow-[#D97736]/20"
+              >
+                <UtensilsCrossed className="size-3.5" />
+                Réserver une table
+              </button>
+            )}
 
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-[#F5EFEB]"
+              className={`${isMobile ? 'block' : 'md:hidden'} p-2 text-[#F5EFEB]`}
               aria-label="Menu"
             >
-              <Menu className="size-6" />
+              {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
           </div>
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden bg-[#1A1816] border-b border-[#2C2723] px-6 py-6 space-y-4 text-xs uppercase tracking-widest font-medium">
+          <div className="bg-[#1A1816] border-b border-[#2C2723] px-6 py-6 space-y-4 text-xs uppercase tracking-widest font-medium">
             <a href="#histoire" onClick={() => setMobileMenuOpen(false)} className="block py-1">Notre Histoire</a>
             <a href="#carte" onClick={() => setMobileMenuOpen(false)} className="block py-1">La Carte &amp; Braise</a>
             <a href="#chef" onClick={() => setMobileMenuOpen(false)} className="block py-1">Le Chef</a>
             <a href="#horaires" onClick={() => setMobileMenuOpen(false)} className="block py-1">Horaires &amp; Lieu</a>
+            <div className="pt-2 border-t border-[#2C2723]">
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setTableModalOpen(true);
+                }}
+                className="w-full py-2.5 rounded-full bg-[#D97736] text-white text-xs uppercase tracking-widest font-semibold"
+              >
+                Réserver une table
+              </button>
+            </div>
           </div>
         )}
       </header>
 
       {/* ── Hero Section ── */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden py-24 px-4 sm:px-6 lg:px-8 border-b border-[#24211D]">
+      <section className={`relative ${isMobile ? 'py-12 px-4' : 'min-h-[85vh] flex items-center justify-center py-24 px-4 sm:px-6 lg:px-8'} overflow-hidden border-b border-[#24211D]`}>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#D97736]/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1A1816] border border-[#2C2723] text-[#D97736] text-xs font-medium uppercase tracking-widest mb-6">
-            <Flame className="size-3.5" />
-            Restaurant Gastronomique &bull; Terroir Vivant
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#1A1816] border border-[#2C2723] text-[#D97736] text-[10px] sm:text-xs font-medium uppercase tracking-widest mb-4 sm:mb-6">
+            <Flame className="size-3" />
+            <span>Restaurant Gastronomique &bull; Terroir Vivant</span>
           </div>
 
-          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-normal tracking-tight text-[#F5EFEB] leading-[1.08]">
+          <h1 className={`font-serif ${isMobile ? 'text-3xl sm:text-4xl' : 'text-4xl sm:text-6xl md:text-7xl'} font-normal tracking-tight text-[#F5EFEB] leading-[1.12]`}>
             Les racines ont du caractère.
           </h1>
 
-          <p className="mt-6 text-base sm:text-lg text-[#C4B6AD] max-w-2xl mx-auto leading-relaxed">
+          <p className={`mt-4 ${isMobile ? 'text-xs' : 'text-base sm:text-lg'} text-[#C4B6AD] max-w-2xl mx-auto leading-relaxed`}>
             Une cuisine caribéenne façonnée par le feu de bois, les produits sauvages du terroir et l’émotion d’une transmission séculaire.
           </p>
 
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className={`mt-6 sm:mt-10 flex ${isMobile ? 'flex-col gap-3 w-full' : 'flex-col sm:flex-row items-center justify-center gap-4'}`}>
             <a
               href="#carte"
-              className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#D97736] text-white text-xs uppercase tracking-widest font-semibold hover:bg-[#E88645] transition-all shadow-lg"
+              className="w-full sm:w-auto px-7 py-3 rounded-full bg-[#D97736] text-white text-[11px] sm:text-xs uppercase tracking-widest font-semibold hover:bg-[#E88645] transition-all shadow-lg text-center"
             >
               Découvrir la carte
             </a>

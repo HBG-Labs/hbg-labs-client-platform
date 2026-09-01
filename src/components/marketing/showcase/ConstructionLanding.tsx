@@ -84,7 +84,7 @@ const CHANTIERS = [
   },
 ];
 
-export function ConstructionLanding() {
+export function ConstructionLanding({ isMobile = false }: { isMobile?: boolean }) {
   const [activeFilter, setActiveFilter] = useState('ALL');
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
   const [quoteSuccess, setQuoteSuccess] = useState(false);
@@ -102,80 +102,98 @@ export function ConstructionLanding() {
   return (
     <div className="min-h-screen bg-[#121316] text-[#E1E4EA] font-sans antialiased selection:bg-[#E65100] selection:text-white">
       {/* ── Top Bar Métier ── */}
-      <div className="bg-[#1A1C22] border-b border-[#2B2F38] text-xs py-2 px-4 text-[#9BA1B0] flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5 text-white font-medium">
+      <div className={`bg-[#1A1C22] border-b border-[#2B2F38] ${isMobile ? 'text-[10px] py-1.5 px-3' : 'text-xs py-2 px-4'} text-[#9BA1B0] flex items-center justify-between`}>
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1.5 text-white font-medium whitespace-nowrap">
             <span className="size-2 rounded-full bg-[#E65100] animate-pulse" />
-            Parc Matériel &bull; 45 Engins Opérationnels
+            Parc Matériel &bull; 45 Engins
           </span>
-          <span className="hidden sm:inline text-[#6C7280]">Garantie Décennale SMABTP &bull; Certifié Qualibat</span>
+          {!isMobile && (
+            <span className="hidden sm:inline text-[#6C7280]">Garantie Décennale SMABTP &bull; Certifié Qualibat</span>
+          )}
         </div>
-        <a href="tel:+596596000000" className="flex items-center gap-1.5 text-[#E65100] font-semibold hover:underline">
-          <PhoneCall className="size-3.5" />
-          Urgence Chantier 24/7
+        <a href="tel:+596596000000" className="flex items-center gap-1.5 text-[#E65100] font-semibold hover:underline whitespace-nowrap">
+          <PhoneCall className="size-3" />
+          Urgence 24/7
         </a>
       </div>
 
       {/* ── Brand Header ── */}
       <header className="sticky top-0 z-40 bg-[#121316]/95 backdrop-blur-md border-b border-[#22252C]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="size-10 bg-[#E65100] rounded-lg flex items-center justify-center text-white font-black text-xl tracking-tighter">
+        <div className={`max-w-7xl mx-auto ${isMobile ? 'px-4 h-16' : 'px-4 sm:px-6 lg:px-8 h-20'} flex items-center justify-between`}>
+          <div className="flex items-center gap-2.5">
+            <div className={`${isMobile ? 'size-8 text-base' : 'size-10 text-xl'} bg-[#E65100] rounded-lg flex items-center justify-center text-white font-black tracking-tighter shrink-0`}>
               K
             </div>
             <div>
-              <span className="font-black text-xl tracking-wider text-white uppercase block leading-none">
+              <span className={`font-black ${isMobile ? 'text-sm' : 'text-xl'} tracking-wider text-white uppercase block leading-none`}>
                 Kayo Construction
               </span>
-              <span className="text-[10px] tracking-widest text-[#9BA1B0] uppercase font-mono">
-                BTP &bull; Génie Civil &bull; Caraïbes
+              <span className="text-[9px] tracking-wider text-[#9BA1B0] uppercase font-mono">
+                BTP &bull; Génie Civil
               </span>
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center gap-7 text-xs uppercase tracking-widest font-semibold text-[#9BA1B0]">
-            <a href="#metiers" className="hover:text-white transition-colors">Nos Métiers</a>
-            <a href="#parc" className="hover:text-white transition-colors">Parc Matériel</a>
-            <a href="#chantiers" className="hover:text-white transition-colors">Réalisations</a>
-            <a href="#expertise" className="hover:text-white transition-colors">Normes &amp; Sécurité</a>
-          </nav>
+          {!isMobile && (
+            <nav className="hidden md:flex items-center gap-7 text-xs uppercase tracking-widest font-semibold text-[#9BA1B0]">
+              <a href="#metiers" className="hover:text-white transition-colors">Nos Métiers</a>
+              <a href="#parc" className="hover:text-white transition-colors">Parc Matériel</a>
+              <a href="#chantiers" className="hover:text-white transition-colors">Réalisations</a>
+              <a href="#expertise" className="hover:text-white transition-colors">Normes &amp; Sécurité</a>
+            </nav>
+          )}
 
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => {
-                setQuoteModalOpen(true);
-                setQuoteSuccess(false);
-              }}
-              className="inline-flex items-center gap-2 bg-[#E65100] text-white text-xs uppercase tracking-wider font-bold px-6 py-3 rounded-lg hover:bg-[#FF6D00] transition-all shadow-md shadow-[#E65100]/20"
-            >
-              <FileText className="size-4" />
-              Demander un devis
-            </button>
+          <div className="flex items-center gap-2.5">
+            {!isMobile && (
+              <button
+                type="button"
+                onClick={() => {
+                  setQuoteModalOpen(true);
+                  setQuoteSuccess(false);
+                }}
+                className="hidden sm:inline-flex items-center gap-2 bg-[#E65100] text-white text-xs uppercase tracking-wider font-bold px-5 py-2.5 rounded-lg hover:bg-[#FF6D00] transition-all shadow-md shadow-[#E65100]/20"
+              >
+                <FileText className="size-3.5" />
+                Demander un devis
+              </button>
+            )}
 
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-white"
+              className={`${isMobile ? 'block' : 'md:hidden'} p-2 text-white`}
               aria-label="Menu"
             >
-              <Menu className="size-6" />
+              {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
           </div>
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden bg-[#1A1C22] border-b border-[#2B2F38] px-6 py-6 space-y-4 text-xs uppercase tracking-widest font-semibold">
+          <div className="bg-[#1A1C22] border-b border-[#2B2F38] px-6 py-6 space-y-4 text-xs uppercase tracking-widest font-semibold">
             <a href="#metiers" onClick={() => setMobileMenuOpen(false)} className="block py-1">Nos Métiers</a>
             <a href="#parc" onClick={() => setMobileMenuOpen(false)} className="block py-1">Parc Matériel</a>
             <a href="#chantiers" onClick={() => setMobileMenuOpen(false)} className="block py-1">Réalisations</a>
             <a href="#expertise" onClick={() => setMobileMenuOpen(false)} className="block py-1">Normes &amp; Sécurité</a>
+            <div className="pt-2 border-t border-[#2B2F38]">
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setQuoteModalOpen(true);
+                }}
+                className="w-full py-2.5 rounded-lg bg-[#E65100] text-white text-xs font-bold uppercase tracking-wider"
+              >
+                Demander un devis
+              </button>
+            </div>
           </div>
         )}
       </header>
 
       {/* ── Hero Section ── */}
-      <section className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 border-b border-[#22252C] overflow-hidden bg-[#121316]">
+      <section className={`relative ${isMobile ? 'py-10 px-4' : 'py-24 sm:py-32 px-4 sm:px-6 lg:px-8'} border-b border-[#22252C] overflow-hidden bg-[#121316]`}>
         {/* Background Excavator Photo */}
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center"
@@ -183,67 +201,67 @@ export function ConstructionLanding() {
             backgroundImage: "url('/images/showcase/kayo-construction-hero.jpg')",
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#121316]/70 via-[#121316]/35 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#121316]/75 via-[#121316]/40 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto grid gap-12 lg:grid-cols-12 items-center">
-          <div className="lg:col-span-7">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-[#22252C] border border-[#323742] text-[#E65100] text-xs font-mono font-semibold uppercase tracking-wider mb-6">
-              <HardHat className="size-4" />
-              Entreprise Générale de BTP &bull; Gros Œuvre
+        <div className={`relative z-10 max-w-7xl mx-auto grid ${isMobile ? 'grid-cols-1 gap-8' : 'gap-12 lg:grid-cols-12'} items-center`}>
+          <div className={isMobile ? 'col-span-1' : 'lg:col-span-7'}>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#22252C]/90 border border-[#323742] text-[#E65100] text-[10px] sm:text-xs font-mono font-semibold uppercase tracking-wider mb-4 sm:mb-6">
+              <HardHat className="size-3.5" />
+              <span>Entreprise Générale de BTP &bull; Gros Œuvre</span>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white uppercase tracking-tight leading-[1.02]">
+            <h1 className={`${isMobile ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-5xl lg:text-6xl'} font-black text-white uppercase tracking-tight leading-[1.08]`}>
               Construire avec force. <br />
               <span className="text-[#E65100]">Bâtir avec précision.</span>
             </h1>
 
-            <p className="mt-6 text-base sm:text-lg text-[#9BA1B0] max-w-xl leading-relaxed">
+            <p className={`mt-4 ${isMobile ? 'text-xs' : 'text-sm sm:text-base md:text-lg'} text-[#9BA1B0] max-w-xl leading-relaxed`}>
               Des équipes expérimentées, 45 engins lourds en parc propre et une maîtrise totale des contraintes sismiques et cycloniques des Antilles.
             </p>
 
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+            <div className={`mt-6 sm:mt-8 flex ${isMobile ? 'flex-col gap-3' : 'flex-col sm:flex-row gap-4'}`}>
               <button
                 type="button"
                 onClick={() => {
                   setQuoteModalOpen(true);
                   setQuoteSuccess(false);
                 }}
-                className="inline-flex items-center justify-center gap-2 bg-[#E65100] text-white text-xs uppercase tracking-wider font-bold px-8 py-4 rounded-lg hover:bg-[#FF6D00] transition-all shadow-lg"
+                className="inline-flex items-center justify-center gap-2 bg-[#E65100] text-white text-[11px] sm:text-xs uppercase tracking-wider font-bold px-6 sm:px-8 py-3.5 sm:py-4 rounded-lg hover:bg-[#FF6D00] transition-all shadow-lg"
               >
                 Étudier mon projet de construction
-                <ArrowRight className="size-4" />
+                <ArrowRight className="size-3.5" />
               </button>
               <a
                 href="#parc"
-                className="inline-flex items-center justify-center gap-2 bg-[#22252C] border border-[#323742] text-white text-xs uppercase tracking-wider font-semibold px-8 py-4 rounded-lg hover:bg-[#2B2F38] transition-all"
+                className="inline-flex items-center justify-center gap-2 bg-[#22252C]/90 border border-[#323742] text-white text-[11px] sm:text-xs uppercase tracking-wider font-semibold px-6 sm:px-8 py-3.5 sm:py-4 rounded-lg hover:bg-[#2B2F38] transition-all"
               >
                 Découvrir le parc matériel
               </a>
             </div>
           </div>
 
-          <div className="lg:col-span-5 grid grid-cols-2 gap-4">
-            <div className="bg-[#1A1C22] border border-[#2B2F38] rounded-xl p-6">
-              <p className="font-mono text-3xl sm:text-4xl font-black text-[#E65100]">340+</p>
-              <p className="text-xs font-bold text-white uppercase tracking-wider mt-1">Chantiers Livrés</p>
-              <p className="text-[11px] text-[#6C7280] mt-1">Bâtiment, industrie et voirie</p>
+          <div className={`${isMobile ? 'col-span-1' : 'lg:col-span-5'} grid grid-cols-2 gap-3`}>
+            <div className="bg-[#1A1C22]/90 backdrop-blur-sm border border-[#2B2F38] rounded-xl p-4 sm:p-6">
+              <p className="font-mono text-2xl sm:text-4xl font-black text-[#E65100]">340+</p>
+              <p className="text-[11px] sm:text-xs font-bold text-white uppercase tracking-wider mt-1">Chantiers Livrés</p>
+              <p className="text-[10px] sm:text-[11px] text-[#6C7280] mt-0.5">Bâtiment, voirie</p>
             </div>
-            <div className="bg-[#1A1C22] border border-[#2B2F38] rounded-xl p-6">
-              <p className="font-mono text-3xl sm:text-4xl font-black text-white">45</p>
-              <p className="text-xs font-bold text-white uppercase tracking-wider mt-1">Engins Lourds</p>
-              <p className="text-[11px] text-[#6C7280] mt-1">En propriété exclusive</p>
+            <div className="bg-[#1A1C22]/90 backdrop-blur-sm border border-[#2B2F38] rounded-xl p-4 sm:p-6">
+              <p className="font-mono text-2xl sm:text-4xl font-black text-white">45</p>
+              <p className="text-[11px] sm:text-xs font-bold text-white uppercase tracking-wider mt-1">Engins Lourds</p>
+              <p className="text-[10px] sm:text-[11px] text-[#6C7280] mt-0.5">Propriété exclusive</p>
             </div>
-            <div className="bg-[#1A1C22] border border-[#2B2F38] rounded-xl p-6">
-              <p className="font-mono text-3xl sm:text-4xl font-black text-white">18 Ans</p>
-              <p className="text-xs font-bold text-white uppercase tracking-wider mt-1">D’Expérience</p>
-              <p className="text-[11px] text-[#6C7280] mt-1">Implantation locale forte</p>
+            <div className="bg-[#1A1C22]/90 backdrop-blur-sm border border-[#2B2F38] rounded-xl p-4 sm:p-6">
+              <p className="font-mono text-2xl sm:text-4xl font-black text-white">18 Ans</p>
+              <p className="text-[11px] sm:text-xs font-bold text-white uppercase tracking-wider mt-1">D’Expérience</p>
+              <p className="text-[10px] sm:text-[11px] text-[#6C7280] mt-0.5">Implantation locale</p>
             </div>
-            <div className="bg-[#1A1C22] border border-[#2B2F38] rounded-xl p-6">
-              <p className="font-mono text-3xl sm:text-4xl font-black text-[#E65100]">100 %</p>
-              <p className="text-xs font-bold text-white uppercase tracking-wider mt-1">Délais Tenus</p>
-              <p className="text-[11px] text-[#6C7280] mt-1">Pénalités de retard : 0</p>
+            <div className="bg-[#1A1C22]/90 backdrop-blur-sm border border-[#2B2F38] rounded-xl p-4 sm:p-6">
+              <p className="font-mono text-2xl sm:text-4xl font-black text-[#E65100]">100 %</p>
+              <p className="text-[11px] sm:text-xs font-bold text-white uppercase tracking-wider mt-1">Délais Tenus</p>
+              <p className="text-[10px] sm:text-[11px] text-[#6C7280] mt-0.5">Pénalités : 0</p>
             </div>
           </div>
         </div>

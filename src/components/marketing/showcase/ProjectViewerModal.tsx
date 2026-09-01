@@ -53,17 +53,18 @@ export function ProjectViewerModal({
   const currentProject = SHOWCASE_PROJECTS.find((p) => p.id === currentId) ?? SHOWCASE_PROJECTS[0]!;
 
   const renderLanding = () => {
+    const isMobile = deviceMode === 'mobile';
     switch (currentProject.id) {
       case 'soie-et-terre':
-        return <BeautyLanding />;
+        return <BeautyLanding isMobile={isMobile} />;
       case 'kayo-construction':
-        return <ConstructionLanding />;
+        return <ConstructionLanding isMobile={isMobile} />;
       case 'racines-et-braise':
-        return <RestaurantLanding />;
+        return <RestaurantLanding isMobile={isMobile} />;
       case 'horizons-prestige':
-        return <RealEstateLanding />;
+        return <RealEstateLanding isMobile={isMobile} />;
       default:
-        return <BeautyLanding />;
+        return <BeautyLanding isMobile={isMobile} />;
     }
   };
 

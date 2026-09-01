@@ -72,7 +72,7 @@ const PROPERTIES: PropertyItem[] = [
   },
 ];
 
-export function RealEstateLanding() {
+export function RealEstateLanding({ isMobile = false }: { isMobile?: boolean }) {
   const [selectedType, setSelectedType] = useState('ALL');
   const [selectedLocation, setSelectedLocation] = useState('ALL');
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
@@ -105,94 +105,112 @@ export function RealEstateLanding() {
   return (
     <div className="min-h-screen bg-[#0B131F] text-[#E2E8F0] font-sans antialiased selection:bg-[#0E7490] selection:text-white">
       {/* ── Top Bar Prestige ── */}
-      <div className="bg-[#070D16] text-[#94A3B8] text-xs py-2 px-4 border-b border-[#1E293B] flex items-center justify-between">
-        <span className="flex items-center gap-2 text-[#CBD5E1]">
+      <div className={`bg-[#070D16] text-[#94A3B8] ${isMobile ? 'text-[10px] py-1.5 px-3' : 'text-xs py-2 px-4'} border-b border-[#1E293B] flex items-center justify-between`}>
+        <span className="flex items-center gap-1.5 text-[#CBD5E1] whitespace-nowrap">
           <span className="size-2 rounded-full bg-[#0E7490]" />
           Cabinet Immobilier d’Exception &bull; Caraïbes
         </span>
-        <div className="hidden sm:flex items-center gap-6">
-          <span>St-Barth &bull; Martinique &bull; Guadeloupe &bull; Paris</span>
-          <a href="tel:+596596000000" className="text-[#0E7490] font-semibold hover:underline">
-            Ligne Confidentielle VIP
-          </a>
-        </div>
+        {!isMobile && (
+          <div className="hidden sm:flex items-center gap-6">
+            <span>St-Barth &bull; Martinique &bull; Guadeloupe &bull; Paris</span>
+            <a href="tel:+596596000000" className="text-[#0E7490] font-semibold hover:underline">
+              Ligne Confidentielle VIP
+            </a>
+          </div>
+        )}
       </div>
 
       {/* ── Brand Header ── */}
       <header className="sticky top-0 z-40 bg-[#0B131F]/90 backdrop-blur-md border-b border-[#1E293B]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Building className="size-6 text-[#0E7490]" />
+        <div className={`max-w-7xl mx-auto ${isMobile ? 'px-4 h-16' : 'px-4 sm:px-6 lg:px-8 h-20'} flex items-center justify-between`}>
+          <div className="flex items-center gap-2.5">
+            <Building className={`${isMobile ? 'size-5' : 'size-6'} text-[#0E7490]`} />
             <div>
-              <span className="font-serif text-2xl tracking-widest text-white uppercase font-normal block leading-none">
+              <span className={`font-serif ${isMobile ? 'text-lg' : 'text-2xl'} tracking-widest text-white uppercase font-normal block leading-none`}>
                 Horizons Prestige
               </span>
-              <span className="text-[9px] uppercase tracking-widest text-[#0E7490] font-mono">
+              <span className="text-[8.5px] uppercase tracking-widest text-[#0E7490] font-mono">
                 Propriétés &amp; Domaines d’Exception
               </span>
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest font-medium text-[#94A3B8]">
-            <a href="#recherche" className="hover:text-white transition-colors">Rechercher</a>
-            <a href="#proprietes" className="hover:text-white transition-colors">Propriétés</a>
-            <a href="#destinations" className="hover:text-white transition-colors">Destinations</a>
-            <a href="#estimation" className="hover:text-white transition-colors">Vendre &amp; Estimer</a>
-          </nav>
+          {!isMobile && (
+            <nav className="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest font-medium text-[#94A3B8]">
+              <a href="#recherche" className="hover:text-white transition-colors">Rechercher</a>
+              <a href="#proprietes" className="hover:text-white transition-colors">Propriétés</a>
+              <a href="#destinations" className="hover:text-white transition-colors">Destinations</a>
+              <a href="#estimation" className="hover:text-white transition-colors">Vendre &amp; Estimer</a>
+            </nav>
+          )}
 
-          <div className="flex items-center gap-4">
-            <button
-              type="button"
-              onClick={() => handleOpenContact(PROPERTIES[0]!)}
-              className="inline-flex items-center gap-2 bg-[#0E7490] text-white text-xs uppercase tracking-widest font-semibold px-6 py-3 rounded-full hover:bg-[#0891B2] transition-all shadow-md shadow-[#0E7490]/20"
-            >
-              <Key className="size-3.5" />
-              Accès Dossier Privé
-            </button>
+          <div className="flex items-center gap-2.5">
+            {!isMobile && (
+              <button
+                type="button"
+                onClick={() => handleOpenContact(PROPERTIES[0]!)}
+                className="hidden sm:inline-flex items-center gap-2 bg-[#0E7490] text-white text-xs uppercase tracking-widest font-semibold px-5 py-2.5 rounded-full hover:bg-[#0891B2] transition-all shadow-md shadow-[#0E7490]/20"
+              >
+                <Key className="size-3.5" />
+                Accès Dossier Privé
+              </button>
+            )}
 
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-white"
+              className={`${isMobile ? 'block' : 'md:hidden'} p-2 text-white`}
               aria-label="Menu"
             >
-              <Menu className="size-6" />
+              {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
           </div>
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden bg-[#070D16] border-b border-[#1E293B] px-6 py-6 space-y-4 text-xs uppercase tracking-widest font-medium">
+          <div className="bg-[#070D16] border-b border-[#1E293B] px-6 py-6 space-y-4 text-xs uppercase tracking-widest font-medium">
             <a href="#recherche" onClick={() => setMobileMenuOpen(false)} className="block py-1">Rechercher</a>
             <a href="#proprietes" onClick={() => setMobileMenuOpen(false)} className="block py-1">Propriétés</a>
             <a href="#destinations" onClick={() => setMobileMenuOpen(false)} className="block py-1">Destinations</a>
             <a href="#estimation" onClick={() => setMobileMenuOpen(false)} className="block py-1">Vendre &amp; Estimer</a>
+            <div className="pt-2 border-t border-[#1E293B]">
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleOpenContact(PROPERTIES[0]!);
+                }}
+                className="w-full py-2.5 rounded-full bg-[#0E7490] text-white text-xs uppercase tracking-widest font-semibold"
+              >
+                Accès Dossier Privé
+              </button>
+            </div>
           </div>
         )}
       </header>
 
       {/* ── Hero Section ── */}
-      <section className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 border-b border-[#1E293B] overflow-hidden bg-gradient-to-b from-[#0F172A] to-[#0B131F]">
+      <section className={`relative ${isMobile ? 'py-12 px-4' : 'py-24 sm:py-32 px-4 sm:px-6 lg:px-8'} border-b border-[#1E293B] overflow-hidden bg-gradient-to-b from-[#0F172A] to-[#0B131F]`}>
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#0E7490]/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1E293B] border border-[#334155] text-[#0E7490] text-xs font-medium uppercase tracking-widest mb-6">
-            <Building className="size-3.5" />
-            Immobilier d’Exception aux Antilles
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#1E293B] border border-[#334155] text-[#0E7490] text-[10px] sm:text-xs font-medium uppercase tracking-widest mb-4 sm:mb-6">
+            <Building className="size-3" />
+            <span>Immobilier d’Exception aux Antilles</span>
           </div>
 
-          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-normal tracking-tight text-white leading-[1.08]">
+          <h1 className={`font-serif ${isMobile ? 'text-3xl sm:text-4xl' : 'text-4xl sm:text-6xl md:text-7xl'} font-normal tracking-tight text-white leading-[1.12]`}>
             Votre horizon commence ici.
           </h1>
 
-          <p className="mt-6 text-base sm:text-lg text-[#94A3B8] max-w-2xl mx-auto leading-relaxed">
+          <p className={`mt-4 ${isMobile ? 'text-xs' : 'text-base sm:text-lg'} text-[#94A3B8] max-w-2xl mx-auto leading-relaxed`}>
             Découvrez une sélection confidentielle de villas contemporaines, domaines pieds dans l’eau et résidences d’exception.
           </p>
         </div>
 
         {/* ── Moteur de Recherche Interactif ── */}
-        <div id="recherche" className="mt-12 max-w-4xl mx-auto bg-[#1E293B]/90 backdrop-blur-md rounded-2xl border border-[#334155] p-6 shadow-2xl">
-          <div className="grid gap-4 sm:grid-cols-3">
+        <div id="recherche" className={`mt-8 sm:mt-12 max-w-4xl mx-auto bg-[#1E293B]/90 backdrop-blur-md rounded-2xl border border-[#334155] ${isMobile ? 'p-4' : 'p-6'} shadow-2xl`}>
+          <div className={`grid gap-3 sm:gap-4 ${isMobile ? 'grid-cols-1' : 'sm:grid-cols-3'}`}>
             <div>
               <label className="block text-[10px] uppercase tracking-widest text-[#94A3B8] font-semibold mb-1.5">
                 Type de bien
