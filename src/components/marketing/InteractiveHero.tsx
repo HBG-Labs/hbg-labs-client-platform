@@ -133,32 +133,36 @@ export function InteractiveHero({
     };
   }, [primeDecoder]);
 
-  // Écouteur global sur la fenêtre pour réagir immédiatement à tout déplacement de souris (desktop)
+  // Écouteur sur les déplacements de souris : interactif uniquement lorsque le curseur est dans la section Hero
   useEffect(() => {
     const handleGlobalMouseMove = (e: MouseEvent) => {
-      primeDecoder();
-      const width = window.innerWidth;
-      if (width > 0) {
-        // Droite vers gauche : 0 -> 1 (début vers la fin)
-        // Gauche vers droite : 1 -> 0 (recul vers le début)
-        const normalizedRatio = Math.max(0, Math.min(1, 1 - (e.clientX / width)));
-        targetRatioRef.current = normalizedRatio;
-      }
-
-      // Mise à jour de la position du curseur custom
-      cursorTargetRef.current = { x: e.clientX, y: e.clientY };
-
-      // Détecte si le curseur est dans la section hero
       const container = containerRef.current;
-      if (container) {
-        const rect = container.getBoundingClientRect();
-        const isInHero = (
-          e.clientY >= rect.top &&
-          e.clientY <= rect.bottom &&
-          e.clientX >= rect.left &&
-          e.clientX <= rect.right
-        );
-        setIsCursorVisible(isInHero);
+      if (!container) return;
+
+      const rect = container.getBoundingClientRect();
+      const isInHero = (
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom &&
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right
+      );
+
+      setIsCursorVisible(isInHero);
+
+      // Le scrubbing vidéo et le curseur custom n'agissent QUE lorsque la souris est dans le Hero
+      if (isInHero) {
+        primeDecoder();
+        const width = rect.width;
+        if (width > 0) {
+          const relativeX = e.clientX - rect.left;
+          // Droite vers gauche : 0 -> 1 (début vers la fin)
+          // Gauche vers droite : 1 -> 0 (recul vers le début)
+          const normalizedRatio = Math.max(0, Math.min(1, 1 - (relativeX / width)));
+          targetRatioRef.current = normalizedRatio;
+        }
+
+        // Mise à jour de la position du curseur custom
+        cursorTargetRef.current = { x: e.clientX, y: e.clientY };
       }
     };
 
