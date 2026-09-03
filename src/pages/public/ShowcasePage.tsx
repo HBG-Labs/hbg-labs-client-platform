@@ -13,12 +13,12 @@ export function ShowcasePage() {
   return (
     <>
       <Seo
-        title="Nos Réalisations &bull; Showcase de Maquettes"
-        description="Découvrez nos concepts de sites web et applications sur mesure : Soie & Terre (Soin & Beauté), Kayo Construction (BTP), Racines & Braise (Restauration), Horizons Prestige (Immobilier)."
+        title="Réalisations et concepts de sites web"
+        description="Découvrez les concepts interactifs du studio HBG Labs : Soie & Terre, pour le soin et la beauté, et Kayo Construction, pour les métiers du bâtiment."
         path="/showcase"
       />
 
-      <ShowcaseGallery />
+      <ShowcaseGallery asPage />
 
       {isModalOpen && projectId && (
         <ProjectViewerModal

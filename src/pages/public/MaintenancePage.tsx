@@ -5,6 +5,7 @@ import { Seo } from '@/components/Seo';
 import { Button } from '@/components/ui/Button';
 import { Container, Section, SectionHeading } from '@/components/ui/Layout';
 import { CtaBanner } from '@/components/marketing/CtaBanner';
+import { PublicPageHero } from '@/components/marketing/PublicPageHero';
 
 /**
  * Page « Maintenance » (§5).
@@ -30,22 +31,17 @@ export function MaintenancePage() {
         path="/maintenance"
       />
 
-      <Section>
-        <Container>
-          <SectionHeading
-            as="h1"
-            eyebrow="Maintenance"
-            title="Un site qui reste à jour, sans que vous y pensiez"
-            description="Les mises à jour techniques, les sauvegardes et les corrections sont à notre charge. Vos demandes de modification passent par votre espace client."
-          />
-
-          <div className="mt-10">
+      <PublicPageHero
+        eyebrow="Maintenance"
+        title="Votre site reste vivant après sa mise en ligne."
+        description="Mises à jour, sauvegardes et demandes de modification sont traitées au même endroit, par une équipe qui connaît déjà votre projet."
+      >
+          <div>
             <Button asChild size="lg">
               <Link to="/tarifs">Voir les offres avec maintenance</Link>
             </Button>
           </div>
-        </Container>
-      </Section>
+      </PublicPageHero>
 
       <Section tone="muted">
         <Container>

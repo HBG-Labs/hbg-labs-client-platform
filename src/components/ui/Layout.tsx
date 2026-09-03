@@ -15,9 +15,8 @@ export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Container({ className, width = 'default', ...props }: ContainerProps) {
   const widths = {
-    // 65 caractères par ligne environ, la longueur confortable en lecture.
     narrow: 'max-w-4xl',
-    default: 'max-w-7xl',
+    default: 'max-w-[1240px]',
     wide: 'max-w-[1480px]',
   };
 
@@ -42,7 +41,7 @@ export function Section({
   return (
     <section
       className={cn(
-        spacing === 'default' ? 'py-16 sm:py-24' : 'py-12 sm:py-16',
+        spacing === 'default' ? 'py-20 sm:py-28' : 'py-14 sm:py-20',
         tone === 'muted' && 'bg-surface-muted',
         className,
       )}
@@ -88,10 +87,10 @@ export function SectionHeading({
 
       <Tag
         className={cn(
-          'text-balance font-serif font-normal tracking-[-0.01em] text-ink',
+          'text-balance font-serif font-normal tracking-[-0.03em] text-ink',
           Tag === 'h1'
             ? 'text-4xl sm:text-6xl md:text-7xl leading-[1.05]'
-            : 'text-3xl sm:text-4xl md:text-5xl leading-[1.1]',
+            : 'text-4xl sm:text-5xl md:text-6xl leading-[0.98]',
         )}
       >
         {title}

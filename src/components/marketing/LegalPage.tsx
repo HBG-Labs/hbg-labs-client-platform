@@ -32,9 +32,10 @@ export function LegalPage({
   const missing = requiresLegalIdentity ? missingLegalFields() : [];
 
   return (
-    <Section>
+    <Section className="bg-surface-muted/45">
       <Container width="narrow">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Informations</p>
+        <h1 className="mt-4 font-serif text-5xl font-normal tracking-[-0.03em] text-ink sm:text-6xl">{title}</h1>
 
         <p className="mt-3 text-sm text-muted">
           Dernière mise à jour :{' '}
@@ -64,7 +65,7 @@ export function LegalPage({
           </Alert>
         )}
 
-        <div className="legal-content mt-10">{children}</div>
+        <div className="legal-content mt-10 rounded-2xl border border-border bg-surface p-6 sm:p-10">{children}</div>
       </Container>
     </Section>
   );
@@ -80,7 +81,7 @@ export function LegalSection({
 }) {
   return (
     <section className="mt-10 first:mt-0">
-      <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+      <h2 className="font-serif text-2xl tracking-[-0.02em] text-ink">{title}</h2>
       <div className="mt-4 space-y-4 leading-relaxed text-muted">{children}</div>
     </section>
   );

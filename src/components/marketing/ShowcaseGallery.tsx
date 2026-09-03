@@ -1,147 +1,138 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { SHOWCASE_PROJECTS, type ShowcaseSector } from '@/data/showcase';
-import { ShowcaseTotemCard } from './ShowcaseTotemCard';
-import { ProjectViewerModal } from './showcase/ProjectViewerModal';
+import { cn } from '@/lib/utils';
 import { Container } from '@/components/ui/Layout';
 import { Button } from '@/components/ui/Button';
+import { ShowcaseTotemCard } from './ShowcaseTotemCard';
+import { ProjectViewerModal } from './showcase/ProjectViewerModal';
+import './showcase.css';
 
-type FilterType = ShowcaseSector;
-
-const FILTER_ITEMS: { id: FilterType; label: string }[] = [
-  { id: 'BEAUTY', label: 'SOIN & BEAUTÉ' },
-  { id: 'BTP', label: 'ARTISAN & BTP' },
+const FILTERS: { id: ShowcaseSector | null; label: string }[] = [
+  { id: null, label: 'Tout voir' },
+  { id: 'BEAUTY', label: 'Soin & Beauté' },
+  { id: 'BTP', label: 'Artisan & BTP' },
 ];
 
-export function ShowcaseGallery() {
-  const [activeFilter, setActiveFilter] = useState<FilterType | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedProjectId, setSelectedProjectId] = useState<string>(
-    SHOWCASE_PROJECTS[0]?.id ?? 'soie-et-terre'
+export function ShowcaseGallery({ asPage = false }: { asPage?: boolean }) {
+  const [activeFilter, setActiveFilter] = useState<ShowcaseSector | null>(null);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const galleryRef = useRef<HTMLElement>(null);
+  const Heading = asPage ? 'h1' : 'h2';
+  const projects = SHOWCASE_PROJECTS.filter((project) =>
+    activeFilter === null || project.category === activeFilter,
   );
 
-  const handleOpenProject = (id: string) => {
-    setSelectedProjectId(id);
-    setModalOpen(true);
-  };
+  useEffect(() => {
+    const root = galleryRef.current;
+    if (!root || !('IntersectionObserver' in window)) return;
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const elements = root.querySelectorAll<HTMLElement>('[data-showcase-reveal]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).dataset.showcaseReveal = 'visible';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05 });
 
-  const handleFilterClick = (sectorId: FilterType) => {
-    setActiveFilter((prev) => (prev === sectorId ? null : sectorId));
-  };
+    // Le contenu reste visible sans observer ou en mouvement réduit.
+    const reveal = () => {
+      observer.disconnect();
+      elements.forEach((element) => {
+        if (!motion.matches && element.getBoundingClientRect().top >= window.innerHeight) {
+          element.dataset.showcaseReveal = 'pending';
+          observer.observe(element);
+        } else {
+          element.dataset.showcaseReveal = '';
+        }
+      });
+    };
+    reveal();
+    motion.addEventListener('change', reveal);
+    return () => {
+      observer.disconnect();
+      motion.removeEventListener('change', reveal);
+      elements.forEach((element) => { element.dataset.showcaseReveal = ''; });
+    };
+  }, [activeFilter]);
 
   return (
-    <section
-      id="realisations"
-      className="relative w-full bg-[#E5E3DE] overflow-hidden border-b border-stone-300/80"
-    >
-      {/* ── Realistic Studio Architectural Concrete Wall (Full 16:9 Scene Height) ── */}
-      <div className="relative w-full max-w-[2000px] mx-auto min-h-[680px] sm:min-h-[860px] md:min-h-[980px] lg:min-h-[1100px] flex flex-col justify-start">
-        {/* Natural Full-Height Wall Background */}
-        <div
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          style={{
-            backgroundImage: "url('/images/showcase-wall-bg.jpg')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center bottom',
-            backgroundRepeat: 'no-repeat',
-          }}
-        />
-
-        <div className="relative z-10 w-full max-w-[1780px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 pt-16 sm:pt-24 md:pt-28 lg:pt-32 pb-24 sm:pb-36 lg:pb-48">
-          {/* ── Header Area (True to reference image) ── */}
-          <div className="text-center max-w-3xl mx-auto">
-            <p className="text-xs sm:text-sm font-semibold tracking-widest text-[#3B3E48] uppercase">
-              Nos réalisations / Showcase
-            </p>
-
-            <h2 className="mt-2 font-sans text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-black uppercase tracking-tight text-[#111215] leading-tight">
-              Des expériences digitales pensées pour votre activité.
-            </h2>
-
-            <p className="mt-2 text-xs sm:text-sm md:text-base text-[#4A4D57] font-medium">
-              Chaque entreprise est unique. Votre site doit l’être aussi.
-            </p>
-
-            {/* ── Minimalist Inline Filter Bar (SOIN & BEAUTÉ | ARTISAN & BTP) ── */}
-            <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-y-2 text-xs sm:text-sm uppercase tracking-wider font-bold text-[#3B3E48]">
-              {FILTER_ITEMS.map((item, index) => {
-                const isActive = activeFilter === item.id;
-                return (
-                  <div key={item.id} className="inline-flex items-center">
-                    <button
-                      type="button"
-                      onClick={() => handleFilterClick(item.id)}
-                      className={`px-3 py-1 transition-all duration-200 cursor-pointer ${
-                        isActive
-                          ? 'text-[#111215] font-black underline decoration-[#111215] decoration-2 underline-offset-8 scale-105'
-                          : 'text-[#4A4D57] hover:text-[#111215]'
-                      }`}
-                    >
-                      {item.label}
-                    </button>
-                    {index < FILTER_ITEMS.length - 1 && (
-                      <span className="text-[#8E929E] select-none px-1.5 font-normal" aria-hidden="true">
-                        |
-                      </span>
-                    )}
-                  </div>
-                );
-              })}
+    <section id="realisations" ref={galleryRef} className="showcase-studio">
+      <Container width="wide">
+        <header className="showcase-intro">
+          <div className="showcase-kicker showcase-entrance">
+            <span>HBG Labs / Réalisations</span>
+            <span>Design & développement</span>
+          </div>
+          <div className="showcase-intro-grid">
+            <Heading className="showcase-title showcase-entrance">
+              Le web prend<br />{' '}
+              <span>du caractère.</span>
+            </Heading>
+            <div className="showcase-intro-note showcase-entrance">
+              <p>Des univers singuliers, pensés pour votre métier. Découvrez nos concepts de sites et parcourez les maquettes interactives.</p>
+              <a className="showcase-scroll" href="#selection-projets">
+                <span className="showcase-scroll-icon"><ArrowDown size={20} aria-hidden="true" /></span>
+                Voir la sélection
+              </a>
             </div>
           </div>
+        </header>
 
-          {/* ── 2 Wall-Mounted Interactive Ultra-Wide Panoramic Picture Frames ── */}
-          <div className="mt-10 sm:mt-14 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 xl:gap-10 items-start w-full max-w-[1740px] mx-auto">
-            {SHOWCASE_PROJECTS.map((project) => {
-              const isFocused =
-                activeFilter === null || activeFilter === project.category;
+        <div id="selection-projets" className="showcase-selection">
+          {asPage && <h2 className="sr-only">Notre sélection de concepts</h2>}
+          <div className="showcase-filter-row">
+            <div className="showcase-filters" role="group" aria-label="Filtrer par secteur">
+              {FILTERS.map((filter) => (
+                <button
+                  key={filter.id ?? 'all'}
+                  type="button"
+                  aria-pressed={activeFilter === filter.id}
+                  aria-controls="showcase-projects"
+                  onClick={() => setActiveFilter(filter.id)}
+                  className={cn('showcase-filter', activeFilter === filter.id && 'is-active')}
+                >
+                  {filter.label}
+                  {filter.id === null && <span aria-hidden="true">{String(SHOWCASE_PROJECTS.length).padStart(2, '0')}</span>}
+                </button>
+              ))}
+            </div>
+            <p className="showcase-project-count" role="status" aria-live="polite">
+              {projects.length} concept{projects.length > 1 ? 's' : ''} à découvrir
+            </p>
+          </div>
 
-              return (
-                <ShowcaseTotemCard
-                  key={project.id}
-                  project={project}
-                  isFocused={isFocused}
-                  onOpen={handleOpenProject}
-                />
-              );
-            })}
+          <div id="showcase-projects" className={cn('showcase-project-grid', projects.length === 1 && 'is-filtered')}>
+            {projects.map((project) => (
+              <ShowcaseTotemCard key={project.id} project={project} isFocused onOpen={setSelectedProjectId} />
+            ))}
+          </div>
+          <p className="showcase-disclaimer">Créations de démonstration du studio. Chaque projet illustre une direction artistique et un parcours de navigation.</p>
+        </div>
+
+        <div className="showcase-next" data-showcase-reveal="">
+          <div>
+            <p className="showcase-kicker">Et maintenant, votre univers.</p>
+            <h2>Votre projet a<br />{' '}<span>sa place ici.</span></h2>
+          </div>
+          <div className="showcase-next-action">
+            <p>Une identité à affirmer, une activité à faire connaître. Construisons le site qui vous ressemble.</p>
+            <Button asChild size="lg" className="showcase-cta">
+              <Link to="/devis">Parlons de votre projet <ArrowUpRight aria-hidden="true" /></Link>
+            </Button>
           </div>
         </div>
-      </div>
-
-      {/* ── Bottom Call To Action ── */}
-      <div className="relative z-10 bg-gradient-to-b from-transparent via-[#E5E3DE]/80 to-[#DCD9D3] pt-6 pb-20 sm:pb-24">
-        <Container width="wide">
-          <div className="max-w-2xl mx-auto rounded-3xl border border-stone-300/90 bg-white/85 backdrop-blur-md p-8 sm:p-10 text-center shadow-xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[11px] font-bold uppercase tracking-wider mb-3">
-              <Sparkles className="size-3" />
-              Sur Mesure &bull; Studio Digital
-            </div>
-            <h3 className="font-sans text-xl sm:text-2xl font-black uppercase text-[#111215] tracking-tight">
-              Votre activité mérite son propre univers digital.
-            </h3>
-            <p className="mt-2 text-xs sm:text-sm text-[#4A4D57] leading-relaxed">
-              Que vous soyez artisan, restaurateur, professionnel de l’immobilier ou entrepreneur, HBG Labs crée une expérience digitale pensée pour votre activité.
-            </p>
-            <div className="mt-6">
-              <Button asChild size="lg" variant="primary" className="rounded-full px-8 py-3 uppercase text-xs tracking-widest font-bold shadow-md">
-                <Link to="/devis">
-                  Démarrer mon projet
-                  <ArrowRight className="size-4 ml-1" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </Container>
-      </div>
-
-      {/* ── Interactive Project Viewer Modal ── */}
-      <ProjectViewerModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        initialProjectId={selectedProjectId}
-      />
+      </Container>
+      {selectedProjectId && (
+        <ProjectViewerModal
+          isOpen
+          onClose={() => setSelectedProjectId(null)}
+          initialProjectId={selectedProjectId}
+        />
+      )}
     </section>
   );
 }

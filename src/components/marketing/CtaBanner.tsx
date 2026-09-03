@@ -20,22 +20,23 @@ export function CtaBanner({
   description = 'Décrivez votre besoin en quelques lignes. Nous revenons vers vous avec une proposition chiffrée, sans engagement.',
 }: CtaBannerProps) {
   return (
-    <Section tone="muted">
+    <Section className="bg-[#e1e8df]">
       <Container>
-        <div className="rounded-3xl border border-border bg-surface px-8 py-16 text-center sm:px-16">
-          <h2 className="text-balance font-serif font-normal text-3xl sm:text-5xl text-ink tracking-tight">
+        <div className="relative overflow-hidden rounded-[2rem] bg-ink px-8 py-16 text-center sm:px-16 sm:py-20">
+          <div className="pointer-events-none absolute inset-0 opacity-70 [background:radial-gradient(circle_at_15%_100%,rgba(59,130,87,0.65),transparent_31%),radial-gradient(circle_at_84%_0%,rgba(255,255,255,0.13),transparent_25%)]" />
+          <h2 className="relative text-balance font-serif font-normal text-4xl text-white tracking-[-0.03em] sm:text-6xl">
             {title}
           </h2>
 
-          <p className="mx-auto mt-4 max-w-2xl text-pretty font-sans text-[15px] sm:text-base leading-relaxed text-muted">
+          <p className="relative mx-auto mt-5 max-w-2xl text-pretty font-sans text-[15px] leading-relaxed text-white/70 sm:text-base">
             {description}
           </p>
 
-          <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
-            <Button asChild size="lg" variant="primary" className="px-10">
+          <div className="relative mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+            <Button asChild size="lg" variant="primary" className="bg-white px-10 text-ink hover:bg-brand-100">
               <Link to="/devis">Créer mon site</Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="px-10">
+            <Button asChild size="lg" variant="outline" className="border-white/40 px-10 text-white hover:bg-white/10 hover:text-white">
               <Link to="/contact">Nous contacter</Link>
             </Button>
           </div>

@@ -28,17 +28,20 @@ function PlanCard({ plan, index }: PlanCardProps) {
   const ctaLabel = CTA_LABELS[index % CTA_LABELS.length];
 
   return (
-    <div className="relative flex flex-col justify-between p-7 sm:p-9 bg-white transition-all duration-200">
+    <div className={cn(
+      'relative flex flex-col justify-between bg-white p-7 transition-all duration-300 sm:p-9',
+      plan.is_featured && 'bg-ink text-white md:-my-3 md:rounded-2xl md:shadow-2xl',
+    )}>
       <div>
         {/* ── Header: Title ── */}
         <div className="flex items-center justify-between gap-3 min-h-[36px]">
-          <h3 className="font-serif text-3xl sm:text-4xl font-normal text-ink">
+          <h3 className={cn('font-serif text-3xl font-normal sm:text-4xl', plan.is_featured ? 'text-white' : 'text-ink')}>
             {plan.name}
           </h3>
         </div>
 
         {/* ── Subtitle / Tagline ── */}
-        <p className="mt-2.5 text-sm text-stone-600 leading-relaxed min-h-[44px]">
+        <p className={cn('mt-2.5 min-h-[44px] text-sm leading-relaxed', plan.is_featured ? 'text-white/65' : 'text-stone-600')}>
           {plan.tagline || plan.description}
         </p>
 
@@ -46,16 +49,16 @@ function PlanCard({ plan, index }: PlanCardProps) {
         <div className="mt-8 mb-6">
           {setup ? (
             <div>
-              <p className="text-xs font-sans text-stone-500 font-medium">
+              <p className={cn('font-sans text-xs font-medium', plan.is_featured ? 'text-brand-200' : 'text-stone-500')}>
                 {setup.is_starting_price ? 'à partir de' : 'Tarif'}
               </p>
               <div className="mt-1 flex items-baseline gap-1">
-                <span className="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">
+                <span className={cn('font-serif text-4xl font-normal tracking-tight sm:text-5xl', plan.is_featured ? 'text-white' : 'text-ink')}>
                   {formatAmountCompact(setup.unit_amount_cents, setup.currency)}
                 </span>
               </div>
               {monthly && (
-                <p className="mt-2 text-xs text-stone-500 font-medium">
+                <p className={cn('mt-2 text-xs font-medium', plan.is_featured ? 'text-white/60' : 'text-stone-500')}>
                   + <span>{formatAmountCompact(monthly.unit_amount_cents, monthly.currency)}</span> / mois (hébergement &amp; maintenance)
                 </p>
               )}
@@ -96,21 +99,21 @@ function PlanCard({ plan, index }: PlanCardProps) {
                 ? `/dashboard/facturation?offre=${plan.code}`
                 : `/devis?offre=${plan.code}`
             }
-            className="w-full rounded-full bg-black text-white px-6 py-3.5 font-semibold text-sm flex items-center justify-between shadow-md hover:bg-stone-900 transition-colors group cursor-pointer"
+            className={cn('group flex w-full cursor-pointer items-center justify-between rounded-full px-6 py-3.5 text-sm font-semibold shadow-md transition-colors', plan.is_featured ? 'bg-brand-300 text-ink hover:bg-brand-200' : 'bg-ink text-white hover:bg-ink/85')}
           >
             <span>{ctaLabel}</span>
-            <span className="size-6 rounded-full bg-white text-black flex items-center justify-center font-bold text-xs transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shadow-xs shrink-0">
+            <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-white text-black text-xs font-bold shadow-xs transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
               <ArrowUpRight className="size-3.5" />
             </span>
           </Link>
         </div>
 
         {/* ── Separator Line ── */}
-        <div className="border-t border-stone-200/80 my-8" />
+        <div className={cn('my-8 border-t', plan.is_featured ? 'border-white/15' : 'border-stone-200/80')} />
 
         {/* ── Features List ── */}
         <div>
-          <h4 className="text-sm font-bold text-ink mb-4">Inclus</h4>
+          <h4 className={cn('mb-4 text-sm font-bold', plan.is_featured ? 'text-white' : 'text-ink')}>Inclus</h4>
           <ul className="space-y-3 text-sm">
             {plan.plan_features.map((feature) => (
               <li key={feature.id} className="flex items-start gap-2.5">
@@ -118,7 +121,9 @@ function PlanCard({ plan, index }: PlanCardProps) {
                 <span
                   className={cn(
                     'leading-tight',
-                    feature.is_included ? 'text-stone-800' : 'text-stone-400 line-through',
+                    feature.is_included
+                      ? plan.is_featured ? 'text-white/75' : 'text-stone-800'
+                      : plan.is_featured ? 'text-white/30 line-through' : 'text-stone-400 line-through',
                   )}
                   title={feature.detail ?? undefined}
                 >
@@ -173,7 +178,7 @@ export function PricingGrid({ limit, className }: PricingGridProps) {
   return (
     <div
       className={cn(
-        'grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-stone-200 border border-stone-200 rounded-none bg-white relative',
+        'relative grid grid-cols-1 gap-4 rounded-2xl border border-border bg-surface p-3 md:grid-cols-3 md:gap-0 md:divide-x md:divide-y-0 md:p-0',
         className,
       )}
     >

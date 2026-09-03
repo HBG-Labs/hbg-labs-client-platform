@@ -46,7 +46,7 @@ describe('Adresse inconnue', () => {
     const { RouteErrorPage } = await import('./RouteErrorPage');
     renderWithProviders(<RouteErrorPage />);
 
-    expect(screen.getByText('Page introuvable')).toBeInTheDocument();
+    expect(screen.getByText('Cette page s’est perdue.')).toBeInTheDocument();
   });
 
   it('ne remonte rien à la supervision', async () => {

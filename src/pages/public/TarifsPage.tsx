@@ -8,6 +8,7 @@ import { Accordion, AccordionItem } from '@/components/ui/Accordion';
 import { PricingGrid } from '@/components/marketing/PricingGrid';
 import { ProcessMarquee } from '@/components/marketing/ProcessMarquee';
 import { CtaBanner } from '@/components/marketing/CtaBanner';
+import { PublicPageHero } from '@/components/marketing/PublicPageHero';
 
 const optionsList = [
   { service: 'Page supplémentaire', price: '80 €' },
@@ -71,22 +72,21 @@ export function TarifsPage() {
         path="/tarifs"
       />
 
+      <PublicPageHero
+        eyebrow="Tarifs & formules"
+        title="Un investissement clair. Un accompagnement qui dure."
+        description="Chaque offre associe la création initiale à un suivi mensuel pour l’hébergement et l’entretien de votre site."
+      />
+
       {/* 1. Grille des offres principales */}
       <Section>
         <Container>
-          <SectionHeading
-            as="h1"
-            eyebrow="Tarifs & Formules"
-            title="Des offres claires, sans surprise à l’échéance"
-            description="Chaque formule associe un coût de création initial et un abonnement mensuel HBG Care pour l’hébergement et l’entretien continu."
-            align="center"
-          />
 
           <div className="mt-14">
             <PricingGrid />
           </div>
 
-          <div className="mx-auto mt-12 max-w-3xl">
+          <div className="mx-auto mt-12 max-w-3xl rounded-2xl">
             <Alert tone="info" title="Comprendre les montants affichés">
               <p className="text-xs sm:text-sm leading-relaxed">
                 Les tarifs de création indiqués « à partir de » sont établis précisément au devis selon le nombre de pages et les fonctionnalités. 

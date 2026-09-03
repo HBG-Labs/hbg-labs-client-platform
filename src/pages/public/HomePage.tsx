@@ -15,24 +15,17 @@ import { faqSchema, localBusinessSchema } from '@/lib/structured-data';
 import { Button } from '@/components/ui/Button';
 import { Container, Section, SectionHeading } from '@/components/ui/Layout';
 import { Accordion, AccordionItem } from '@/components/ui/Accordion';
-import { InteractiveHero } from '@/components/marketing/InteractiveHero';
 import { PricingGrid } from '@/components/marketing/PricingGrid';
 import { ShowcaseGallery } from '@/components/marketing/ShowcaseGallery';
 import { CtaBanner } from '@/components/marketing/CtaBanner';
-import { useHeroVariant } from '@/hooks/useHeroVariant';
 
 /**
  * Page d'accueil (§6).
- *
- * Supporte la bascule dynamique entre le nouveau hero interactif vidéo
- * et l'ancien hero classique éditorial via le bouton de la topbar.
  *
  * Les tarifs affichés viennent de la base via `PricingGrid`, jamais de ce
  * fichier.
  */
 export function HomePage() {
-  const { variant } = useHeroVariant();
-
   return (
     <>
       <Seo
@@ -42,77 +35,54 @@ export function HomePage() {
         structuredData={[localBusinessSchema(), faqSchema(faq)]}
       />
 
-      {/* ---- 1. Hero : Vidéo interactive ou Ancien Hero classique ---- */}
-      {variant === 'video' ? (
-        <InteractiveHero
-          videoSrc="/videos/no_flying_bugs.mp4"
-          posterSrc="/images/hero-editorial.jpg"
+      {/* ---- 1. Hero ---- */}
+      <section className="relative isolate overflow-hidden bg-[#0e1917] text-white" aria-label="Présentation de HBG Labs">
+        <img
+          src="/images/hero-alpine.jpg"
+          alt="Un poste de travail face à un paysage montagneux"
+          loading="eager"
+          fetchPriority="high"
+          className="absolute inset-0 -z-20 h-full w-full object-cover object-center"
         />
-      ) : (
-        <section
-          className="relative min-h-[calc(100vh-52px)] min-h-[calc(100svh-52px)] w-full overflow-hidden flex items-start sm:items-center bg-background"
-          aria-label="Présentation principale classique HBG Labs"
-        >
-          {/* Fond Image Plein Cadre */}
-          <div
-            className="absolute inset-0 h-full w-full pointer-events-none overflow-hidden z-0 bg-background"
-            aria-hidden="true"
-          >
-            <img
-              src="/images/hero-editorial.jpg"
-              alt="HBG Labs — Création digitale et croissance"
-              loading="eager"
-              fetchPriority="high"
-              className="absolute inset-0 h-full w-full object-cover object-[78%_38%] sm:object-[75%_bottom] md:object-[80%_center]"
-            />
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(8,18,16,0.92)_0%,rgba(8,18,16,0.7)_43%,rgba(8,18,16,0.2)_100%)]" />
+        <Container width="wide" className="flex min-h-[min(760px,calc(100svh-52px))] flex-col justify-between py-12 sm:py-16 lg:py-20">
+          <div className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/70">
+            <span className="size-2 rounded-full bg-brand-300 shadow-[0_0_0_5px_rgba(134,239,172,0.14)]" aria-hidden="true" />
+            Studio digital basé en Martinique
           </div>
 
-          {/* Contenu Texte & Actions */}
-          <Container
-            width="wide"
-            className="relative z-10 pt-8 pb-12 sm:py-20 lg:py-24 min-h-[calc(100svh-52px)] sm:min-h-0 flex flex-col justify-between sm:justify-center"
-          >
-            <div className="max-w-xl lg:max-w-2xl">
-              <h1
-                id="hero-heading"
-                className="text-balance font-serif font-normal text-accent text-[clamp(52px,12vw,104px)] lg:text-[112px] leading-[0.98] tracking-[-0.02em]"
-              >
-                Créer <br />
-                <span className="italic font-normal">l'impossible</span>
+          <div className="grid items-end gap-10 py-14 lg:grid-cols-[minmax(0,1fr)_290px] lg:gap-20">
+            <div className="max-w-4xl">
+              <h1 id="hero-heading" className="text-balance font-serif text-[clamp(4rem,9vw,8.5rem)] leading-[0.83] tracking-[-0.045em]">
+                Votre activité mérite<br />{' '}
+                <span className="italic text-brand-200">sa propre allure.</span>
               </h1>
-
-              <p className="mt-5 sm:mt-8 max-w-sm sm:max-w-md font-sans text-[15px] sm:text-base leading-[1.65] text-ink/90">
-                On transforme vos idées les plus ambitieuses en sites web réels.
-                Parce qu'«&nbsp;infaisable&nbsp;» n'est que le point de départ.
+              <p className="mt-8 max-w-xl text-pretty text-base leading-7 text-white/82 sm:text-lg">
+                Nous concevons des sites singuliers, rapides et suivis dans la durée. Une présence digitale qui fait son travail, jour après jour.
               </p>
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                <Button asChild size="lg" variant="primary" className="group bg-white px-7 text-ink hover:bg-brand-100">
+                  <Link to="/devis">Parler de votre projet <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" /></Link>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="border-white/40 bg-white/5 px-7 text-white hover:bg-white/15 hover:text-white">
+                  <Link to="/showcase">Voir nos réalisations</Link>
+                </Button>
+              </div>
             </div>
 
-            {/* Actions Principales */}
-            <div className="mt-auto mb-3 sm:mb-0 pt-6 sm:mt-10 sm:pt-0 flex flex-col gap-3.5 sm:flex-row sm:items-center max-w-xl">
-              <Button
-                asChild
-                size="lg"
-                variant="primary"
-                className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 text-[15px] shadow-md justify-center text-center group"
-              >
-                <Link to="/devis">
-                  Démarrer un projet
-                  <ArrowRight className="size-4 ml-1 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-                </Link>
-              </Button>
+            <aside className="border-l border-white/30 pl-5 text-sm leading-6 text-white/75 lg:pb-2">
+              <p className="font-serif text-2xl leading-none text-white">Un seul partenaire.</p>
+              <p className="mt-3">Création, hébergement, domaine et maintenance restent entre les mêmes mains.</p>
+            </aside>
+          </div>
 
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="w-full sm:w-auto px-6 sm:px-8 py-4 sm:py-5 text-[15px] bg-surface/90 backdrop-blur-sm hover:bg-surface border-ink/20 shadow-xs justify-center text-center"
-              >
-                <Link to="/tarifs">Découvrir les offres</Link>
-              </Button>
-            </div>
-          </Container>
-        </section>
-      )}
+          <div className="grid gap-3 border-t border-white/25 pt-5 text-xs font-medium uppercase tracking-[0.16em] text-white/70 sm:grid-cols-3">
+            <span>Conception sur mesure</span>
+            <span>Hébergement infogéré</span>
+            <span>Maintenance continue</span>
+          </div>
+        </Container>
+      </section>
 
       {/* ---- 2. Problème client ---- */}
       <Section tone="muted">
@@ -123,12 +93,13 @@ export function HomePage() {
             description="Les difficultés que nos clients décrivent avant de nous confier leur présence en ligne."
           />
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {painPoints.map((point) => (
+          <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-3">
+            {painPoints.map((point, index) => (
               <div
                 key={point.title}
-                className="rounded-2xl border border-border bg-surface p-8 transition-colors duration-200 hover:border-ink/40"
+                className="bg-surface p-7 sm:p-8"
               >
+                <span className="font-serif text-3xl text-accent/60" aria-hidden="true">0{index + 1}</span>
                 <h3 className="font-sans text-lg font-semibold text-ink">{point.title}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
                   {point.description}
@@ -148,14 +119,16 @@ export function HomePage() {
             description="Nous concevons votre site, nous l’hébergeons et nous le maintenons. Quand quelque chose ne va pas, vous savez à qui vous adresser."
           />
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-12 grid gap-5 md:grid-cols-3">
             {pillars.map((pillar) => (
               <Link
                 key={pillar.to}
                 to={pillar.to}
-                className="group flex flex-col rounded-2xl border border-border bg-surface p-8 transition-all duration-200 hover:border-accent hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                className="group flex flex-col rounded-2xl border border-border bg-surface p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:p-8"
               >
-                <pillar.icon className="size-6 text-accent" aria-hidden="true" />
+                <span className="flex size-11 items-center justify-center rounded-full bg-brand-100 text-accent transition-colors group-hover:bg-accent group-hover:text-white">
+                  <pillar.icon className="size-5" aria-hidden="true" />
+                </span>
                 <h3 className="mt-4 font-sans text-lg font-semibold text-ink">{pillar.title}</h3>
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
                   {pillar.description}

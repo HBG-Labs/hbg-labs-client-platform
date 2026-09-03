@@ -17,7 +17,8 @@ import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { Field } from '@/components/ui/Field';
 import { Input, Select, Textarea } from '@/components/ui/Input';
-import { Container, Section, SectionHeading } from '@/components/ui/Layout';
+import { Container, Section } from '@/components/ui/Layout';
+import { PublicPageHero } from '@/components/marketing/PublicPageHero';
 
 /**
  * Demande de devis (§5).
@@ -95,15 +96,14 @@ export function DevisPage() {
         path="/devis"
       />
 
+      <PublicPageHero
+        eyebrow="Demande de devis"
+        title="Votre projet commence par une bonne conversation."
+        description="Quelques informations suffisent pour vous proposer un premier périmètre et un chiffrage adapté."
+      />
+
       <Section>
         <Container width="narrow">
-          <SectionHeading
-            as="h1"
-            eyebrow="Devis"
-            title="Parlons de votre projet"
-            description="Quelques informations suffisent pour un premier chiffrage. Nous revenons vers vous sous 24 heures ouvrées."
-          />
-
           {/* ---- État d'erreur ---- */}
           {mutation.isError && (
             <Alert
@@ -115,7 +115,7 @@ export function DevisPage() {
             </Alert>
           )}
 
-          <form onSubmit={onSubmit} noValidate className="mt-10 space-y-6">
+          <form onSubmit={onSubmit} noValidate className="space-y-6 rounded-2xl border border-border bg-surface p-6 shadow-sm sm:p-8">
             <div className="grid gap-6 sm:grid-cols-2">
               <Field label="Nom et prénom" error={errors.full_name?.message} required>
                 <Input

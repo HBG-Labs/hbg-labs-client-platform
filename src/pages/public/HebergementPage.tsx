@@ -4,8 +4,9 @@ import { hostingDetails } from '@/content/marketing';
 import { Seo } from '@/components/Seo';
 import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
-import { Container, Section, SectionHeading } from '@/components/ui/Layout';
+import { Container, Section } from '@/components/ui/Layout';
 import { CtaBanner } from '@/components/marketing/CtaBanner';
+import { PublicPageHero } from '@/components/marketing/PublicPageHero';
 
 /**
  * Page « Hébergement » (§5).
@@ -24,22 +25,17 @@ export function HebergementPage() {
         path="/hebergement"
       />
 
-      <Section>
-        <Container>
-          <SectionHeading
-            as="h1"
-            eyebrow="Hébergement"
-            title="Votre site en ligne, sans serveur à administrer"
-            description="Nous hébergeons votre site sur Vercel et prenons en charge le certificat, le domaine et la configuration DNS. Vous n’avez ni machine à louer, ni mise à jour système à suivre."
-          />
-
-          <div className="mt-10">
+      <PublicPageHero
+        eyebrow="Hébergement"
+        title="Votre site, toujours à sa place."
+        description="Nous prenons en charge l’infrastructure, le certificat et le domaine. Vous n’avez ni serveur à gérer, ni détail technique à surveiller."
+      >
+          <div>
             <Button asChild size="lg">
               <Link to="/tarifs">Voir les tarifs d’hébergement</Link>
             </Button>
           </div>
-        </Container>
-      </Section>
+      </PublicPageHero>
 
       <Section tone="muted">
         <Container>

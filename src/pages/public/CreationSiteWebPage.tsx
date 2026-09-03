@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { Container, Section, SectionHeading } from '@/components/ui/Layout';
 import { PricingGrid } from '@/components/marketing/PricingGrid';
 import { CtaBanner } from '@/components/marketing/CtaBanner';
+import { PublicPageHero } from '@/components/marketing/PublicPageHero';
 
 /**
  * Page « Création de site web » (§5).
@@ -34,16 +35,12 @@ export function CreationSiteWebPage() {
         path="/creation-site-web"
       />
 
-      <Section>
-        <Container>
-          <SectionHeading
-            as="h1"
-            eyebrow="Création de site web"
-            title="Un site professionnel, conçu pour votre activité"
-            description="Nous partons de vos objectifs et de votre clientèle, pas d’un gabarit générique. Vous validez les maquettes avant que la première ligne de code ne soit écrite."
-          />
-
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+      <PublicPageHero
+        eyebrow="Création de site web"
+        title="Un site qui ressemble enfin à votre entreprise."
+        description="Nous partons de vos objectifs et de votre clientèle, jamais d’un gabarit. Les maquettes sont validées avant le développement."
+      >
+          <div className="flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">
               <Link to="/devis">Demander un devis</Link>
             </Button>
@@ -51,8 +48,7 @@ export function CreationSiteWebPage() {
               <Link to="/tarifs">Voir les tarifs</Link>
             </Button>
           </div>
-        </Container>
-      </Section>
+      </PublicPageHero>
 
       <Section tone="muted" spacing="tight">
         <Container>

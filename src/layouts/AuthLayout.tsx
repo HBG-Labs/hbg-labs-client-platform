@@ -14,13 +14,14 @@ import { LoadingState } from '@/components/ui/States';
  */
 export function AuthLayout() {
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <header className="px-6 py-8 sm:px-10">
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-ink">
+      <div className="pointer-events-none absolute inset-0 [background:radial-gradient(circle_at_8%_0%,rgba(81,190,119,0.32),transparent_27%),radial-gradient(circle_at_100%_100%,rgba(255,255,255,0.12),transparent_30%)]" />
+      <header className="relative px-6 py-8 sm:px-10">
         <div className="mx-auto flex max-w-md items-center justify-between gap-4">
-          <Logo />
+          <Logo className="text-white [&>img]:brightness-0 [&>img]:invert" />
           <Link
             to="/"
-            className="inline-flex min-h-10 items-center gap-1.5 font-sans text-sm text-muted transition-colors hover:text-ink"
+            className="inline-flex min-h-10 items-center gap-1.5 font-sans text-sm text-white/65 transition-colors hover:text-white"
           >
             <ArrowLeft className="size-4" aria-hidden="true" />
             Retour au site
@@ -28,7 +29,7 @@ export function AuthLayout() {
         </div>
       </header>
 
-      <main id="contenu-principal" className="flex flex-1 items-start justify-center px-6 pb-16 sm:px-10">
+      <main id="contenu-principal" className="relative flex flex-1 items-start justify-center px-6 pb-16 sm:px-10">
         <div className="w-full max-w-md">
           <Suspense fallback={<LoadingState label="Chargement…" />}>
             <Outlet />
@@ -36,21 +37,21 @@ export function AuthLayout() {
         </div>
       </main>
 
-      <footer className="px-6 pb-8 sm:px-10">
-        <p className="mx-auto max-w-md text-center text-xs text-muted">
-          <Link to="/mentions-legales" className="hover:text-ink">
+      <footer className="relative px-6 pb-8 sm:px-10">
+        <p className="mx-auto max-w-md text-center text-xs text-white/45">
+          <Link to="/mentions-legales" className="hover:text-white">
             Mentions légales
           </Link>
           <span aria-hidden="true"> · </span>
-          <Link to="/politique-confidentialite" className="hover:text-ink">
+          <Link to="/politique-confidentialite" className="hover:text-white">
             Confidentialité
           </Link>
           <span aria-hidden="true"> · </span>
-          <Link to="/cgv" className="hover:text-ink">
+          <Link to="/cgv" className="hover:text-white">
             CGV
           </Link>
         </p>
-        <p className="mx-auto mt-2 max-w-md text-center text-xs text-muted">
+        <p className="mx-auto mt-2 max-w-md text-center text-xs text-white/45">
           © {new Date().getFullYear()} {site.legalName || site.name}
         </p>
       </footer>
@@ -72,15 +73,15 @@ export function AuthCard({
 }) {
   return (
     <>
-      <div className="rounded-3xl border border-border bg-surface p-8 sm:p-10 shadow-sm">
-        <h1 className="font-serif text-3xl font-normal tracking-tight text-ink">{title}</h1>
+      <div className="rounded-[2rem] border border-white/15 bg-surface p-8 shadow-2xl sm:p-10">
+        <h1 className="font-serif text-4xl font-normal tracking-[-0.03em] text-ink">{title}</h1>
         {description && (
           <p className="mt-2 font-sans text-[15px] leading-relaxed text-muted">{description}</p>
         )}
         <div className="mt-8">{children}</div>
       </div>
 
-      {footer && <div className="mt-6 text-center font-sans text-sm text-muted">{footer}</div>}
+      {footer && <div className="mt-6 text-center font-sans text-sm text-white/65">{footer}</div>}
     </>
   );
 }

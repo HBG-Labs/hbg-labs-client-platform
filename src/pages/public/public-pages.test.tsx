@@ -97,7 +97,7 @@ describe('Page d’accueil', () => {
     renderWithProviders(<HomePage />);
 
     const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent("Créer l'impossible");
+    expect(heading).toHaveTextContent('Votre activité mérite sa propre allure.');
   });
 
   it('ne comporte qu’un seul titre de niveau 1', async () => {
@@ -152,7 +152,7 @@ describe('Page tarifs', () => {
     renderWithProviders(<TarifsPage />);
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Des offres claires',
+      'Un investissement clair. Un accompagnement qui dure.',
     );
     expect(await screen.findByText('Pro')).toBeInTheDocument();
     expect(screen.getByText(/Comprendre les montants affichés/i)).toBeInTheDocument();

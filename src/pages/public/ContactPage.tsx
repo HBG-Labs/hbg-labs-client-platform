@@ -14,7 +14,8 @@ import { Alert } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { Field } from '@/components/ui/Field';
 import { Input, Textarea } from '@/components/ui/Input';
-import { Container, Section, SectionHeading } from '@/components/ui/Layout';
+import { Container, Section } from '@/components/ui/Layout';
+import { PublicPageHero } from '@/components/marketing/PublicPageHero';
 
 /**
  * Formulaire de contact (§5).
@@ -49,16 +50,15 @@ export function ContactPage() {
         path="/contact"
       />
 
+      <PublicPageHero
+        eyebrow="Contact"
+        title="Parlons de ce que votre site doit accomplir."
+        description="Une question, un projet à cadrer ou un site existant à reprendre : nous répondons sous 24 heures ouvrées."
+      />
+
       <Section>
         <Container>
-          <SectionHeading
-            as="h1"
-            eyebrow="Contact"
-            title="Écrivez-nous"
-            description="Une question sur nos offres, un projet à cadrer ou un site existant à reprendre. Nous répondons sous 24 heures ouvrées."
-          />
-
-          <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_20rem] lg:gap-16">
+          <div className="grid gap-12 lg:grid-cols-[1fr_20rem] lg:gap-16">
             <div>
               {mutation.isSuccess ? (
                 <div className="rounded-lg border border-success/30 bg-success-surface p-8 text-center">
@@ -91,7 +91,7 @@ export function ContactPage() {
                     </Alert>
                   )}
 
-                  <form onSubmit={onSubmit} noValidate className="space-y-6">
+                  <form onSubmit={onSubmit} noValidate className="rounded-2xl border border-border bg-surface p-6 shadow-sm space-y-6 sm:p-8">
                     <div className="grid gap-6 sm:grid-cols-2">
                       <Field
                         label="Nom et prénom"
@@ -173,7 +173,7 @@ export function ContactPage() {
 
             <aside className="space-y-8">
               {hasContactDetails && (
-                <div className="rounded-lg border border-border bg-surface p-6">
+                <div className="rounded-2xl border border-border bg-surface p-6">
                   <h2 className="font-semibold">Nous joindre directement</h2>
                   <ul className="mt-4 space-y-3 text-sm">
                     {email && (
@@ -205,7 +205,7 @@ export function ContactPage() {
                 </div>
               )}
 
-              <div className="rounded-lg border border-border bg-surface p-6">
+              <div className="rounded-2xl border border-border bg-surface p-6">
                 <h2 className="font-semibold">Zone d’intervention</h2>
                 <p className="mt-3 flex gap-3 text-sm leading-relaxed text-muted">
                   <MapPin
@@ -220,7 +220,7 @@ export function ContactPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-border bg-surface p-6">
+              <div className="rounded-2xl border border-border bg-surface p-6">
                 <h2 className="font-semibold">Un projet à chiffrer ?</h2>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
                   Le formulaire de devis pose les bonnes questions et accélère notre

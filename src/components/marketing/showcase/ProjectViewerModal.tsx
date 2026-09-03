@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
+import * as RadixDialog from '@radix-ui/react-dialog';
+import { Dialog } from '@/components/ui/Dialog';
 import { 
   X, 
   Monitor, 
@@ -26,27 +28,12 @@ export function ProjectViewerModal({
   const [prevInitialId, setPrevInitialId] = useState(initialProjectId);
   const [currentId, setCurrentId] = useState(initialProjectId);
   const [deviceMode, setDeviceMode] = useState<'desktop' | 'mobile'>('desktop');
+  const returnFocusRef = useRef<HTMLElement | null>(null);
 
   if (initialProjectId !== prevInitialId) {
     setPrevInitialId(initialProjectId);
     setCurrentId(initialProjectId);
   }
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      window.addEventListener('keydown', handleKeyDown);
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -69,15 +56,29 @@ export function ProjectViewerModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#0A0B0D] text-white animate-in fade-in duration-200">
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <RadixDialog.Portal>
+        <RadixDialog.Overlay className="fixed inset-0 z-50 bg-black/60" />
+        <RadixDialog.Content
+          className="showcase-viewer fixed inset-0 z-50 flex flex-col bg-[#0A0B0D] text-white"
+          onOpenAutoFocus={() => {
+            returnFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+          }}
+          onCloseAutoFocus={(event) => {
+            event.preventDefault();
+            returnFocusRef.current?.focus();
+          }}
+        >
+          <RadixDialog.Title className="sr-only">Maquette {currentProject.name}</RadixDialog.Title>
+          <RadixDialog.Description className="sr-only">Concept de démonstration interactif. Changez le format d’aperçu ou appuyez sur Échap pour revenir à la galerie.</RadixDialog.Description>
       {/* ── Studio Top Toolbar ── */}
-      <header className="h-16 shrink-0 bg-[#12141A] border-b border-[#232733] px-4 sm:px-6 flex items-center justify-between z-50 select-none">
+      <header className="h-16 shrink-0 bg-[#12141A] border-b border-[#232733] px-3 sm:px-6 flex items-center justify-between gap-2 z-50 select-none">
         {/* Left: Back button & brand */}
         <div className="flex items-center gap-4">
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#A0AEC0] hover:text-white bg-[#1A1D26] hover:bg-[#252A36] px-3.5 py-2 rounded-lg transition-colors border border-[#2B3140]"
+            className="inline-flex min-h-11 items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#A0AEC0] hover:text-white bg-[#1A1D26] hover:bg-[#252A36] px-2 sm:px-3.5 py-2 rounded-lg transition-colors border border-[#2B3140]"
           >
             <ArrowLeft className="size-4" />
             <span className="hidden sm:inline">Retour au site HBG Labs</span>
@@ -91,6 +92,7 @@ export function ProjectViewerModal({
                 key={proj.id}
                 type="button"
                 onClick={() => setCurrentId(proj.id)}
+                aria-pressed={currentId === proj.id}
                 className={`text-xs font-medium px-3 py-1.5 rounded-md transition-all ${
                   currentId === proj.id
                     ? 'bg-white text-black font-semibold shadow-xs'
@@ -108,7 +110,9 @@ export function ProjectViewerModal({
           <button
             type="button"
             onClick={() => setDeviceMode('desktop')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            aria-label="Aperçu ordinateur"
+            aria-pressed={deviceMode === 'desktop'}
+            className={`flex min-h-11 items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               deviceMode === 'desktop'
                 ? 'bg-[#2B3140] text-white shadow-xs'
                 : 'text-[#718096] hover:text-white'
@@ -116,12 +120,14 @@ export function ProjectViewerModal({
             title="Aperçu Écran Large / Ordinateur"
           >
             <Monitor className="size-4" />
-            <span className="hidden md:inline">Desktop</span>
+            <span className="hidden md:inline">Ordinateur</span>
           </button>
           <button
             type="button"
             onClick={() => setDeviceMode('mobile')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            aria-label="Aperçu mobile"
+            aria-pressed={deviceMode === 'mobile'}
+            className={`flex min-h-11 items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               deviceMode === 'mobile'
                 ? 'bg-[#2B3140] text-white shadow-xs'
                 : 'text-[#718096] hover:text-white'
@@ -137,7 +143,7 @@ export function ProjectViewerModal({
         <div className="flex items-center gap-3">
           <a
             href={`/devis?concept=${currentProject.id}`}
-            className="inline-flex items-center gap-2 bg-[#E65100] text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-lg hover:bg-[#FF6D00] transition-all shadow-sm"
+            className="inline-flex min-h-11 items-center gap-2 bg-[#E65100] text-white text-xs font-bold uppercase tracking-wider px-3 sm:px-4 py-2 rounded-lg hover:bg-[#FF6D00] transition-all shadow-sm"
           >
             <Sparkles className="size-3.5" />
             <span className="hidden sm:inline">Créer mon site similaire</span>
@@ -147,13 +153,17 @@ export function ProjectViewerModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-[#718096] hover:text-white rounded-lg hover:bg-[#1A1D26]"
+            className="hidden sm:inline-flex min-h-11 min-w-11 items-center justify-center p-2 text-[#718096] hover:text-white rounded-lg hover:bg-[#1A1D26]"
             aria-label="Fermer la vue immersive"
           >
             <X className="size-5" />
           </button>
         </div>
       </header>
+
+      <p className="shrink-0 px-3 py-1.5 text-center text-[10px] tracking-wide text-[#A0AEC0]">
+        Concept de démonstration : {currentProject.name}
+      </p>
 
       {/* ── Main Viewport Container ── */}
       <main className="flex-1 overflow-auto bg-[#07080A] flex items-center justify-center p-0 md:p-4">
@@ -163,7 +173,7 @@ export function ProjectViewerModal({
           </div>
         ) : (
           /* ── Clean Mobile Viewport Container ── */
-          <div className="my-auto relative w-full max-w-[390px] h-[844px] bg-black rounded-[36px] p-2 shadow-2xl ring-1 ring-white/15 border-2 border-[#2B3140] flex flex-col">
+          <div className="my-auto relative w-full max-w-[390px] h-[min(844px,calc(100dvh-120px))] bg-black rounded-[36px] p-2 shadow-2xl ring-1 ring-white/15 border-2 border-[#2B3140] flex flex-col">
             {/* Screen Content */}
             <div className="w-full h-full rounded-[28px] overflow-y-auto overflow-x-hidden bg-white">
               {renderLanding()}
@@ -171,6 +181,8 @@ export function ProjectViewerModal({
           </div>
         )}
       </main>
-    </div>
+        </RadixDialog.Content>
+      </RadixDialog.Portal>
+    </Dialog>
   );
 }

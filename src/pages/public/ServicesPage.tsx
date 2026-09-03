@@ -5,6 +5,7 @@ import { benefits, pillars } from '@/content/marketing';
 import { Seo } from '@/components/Seo';
 import { Container, Section, SectionHeading } from '@/components/ui/Layout';
 import { CtaBanner } from '@/components/marketing/CtaBanner';
+import { PublicPageHero } from '@/components/marketing/PublicPageHero';
 
 /** Vue d'ensemble des prestations (§5). */
 export function ServicesPage() {
@@ -16,24 +17,24 @@ export function ServicesPage() {
         path="/services"
       />
 
+      <PublicPageHero
+        eyebrow="Services"
+        title="Une présence digitale tenue de bout en bout."
+        description="Conception, hébergement et maintenance : trois expertises réunies pour que votre site reste juste, rapide et utile."
+      />
+
       <Section>
         <Container>
-          <SectionHeading
-            as="h1"
-            eyebrow="Services"
-            title="Concevoir, héberger et maintenir votre site"
-            description="Trois prestations complémentaires. Vous pouvez les prendre séparément, elles produisent leur plein effet ensemble."
-          />
 
           <div className="mt-14 space-y-6">
             {pillars.map((pillar) => (
               <article
                 key={pillar.to}
-                className="rounded-lg border border-border bg-surface p-6 sm:p-8"
+                className="group rounded-2xl border border-border bg-surface p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-xl sm:p-9"
               >
                 <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
                   <pillar.icon
-                    className="size-8 shrink-0 text-primary"
+                    className="size-10 shrink-0 rounded-full bg-brand-100 p-2 text-accent transition-colors group-hover:bg-accent group-hover:text-white"
                     aria-hidden="true"
                   />
 
