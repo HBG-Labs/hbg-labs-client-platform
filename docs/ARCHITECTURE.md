@@ -200,7 +200,7 @@ GitHub ──► Vercel ──► Production · Preview
               Stripe (checkout, billing, webhooks)
 ```
 
-En ligne sur **hbg-labs-client-platform.vercel.app**. Le dépôt GitHub est
+En ligne sur **hbglabs.vercel.app**. Le dépôt GitHub est
 connecté : chaque poussée sur `main` déploie en production, chaque branche
 obtient une prévisualisation.
 

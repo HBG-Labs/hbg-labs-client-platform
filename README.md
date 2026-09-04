@@ -3,7 +3,7 @@
 Plateforme SaaS multi-tenant de HBG Labs : création de sites web, hébergement,
 maintenance, gestion des domaines, abonnements, facturation et support client.
 
-**En ligne : https://hbg-labs-client-platform.vercel.app**
+**En ligne : https://hbglabs.vercel.app**
 
 **Statut : les dix lots sont livrés, plateforme déployée.** Schéma multi-tenant vérifié sur Supabase, site
 public complet, authentification réelle, espace d'administration permettant de

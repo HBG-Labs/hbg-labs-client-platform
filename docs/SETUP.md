@@ -254,7 +254,7 @@ conséquence.
 
 ## 7. Déploiement
 
-Le site est en ligne sur **https://hbg-labs-client-platform.vercel.app**.
+Le site est en ligne sur **https://hbglabs.vercel.app**.
 
 ### 7.1 Fonctionnement
 
@@ -371,7 +371,7 @@ Trois fonctions : `stripe-checkout`, `stripe-portal`, `stripe-webhook`.
 
 ```bash
 npx supabase secrets set STRIPE_SECRET_KEY=sk_test_...
-npx supabase secrets set APP_URL=https://hbg-labs-client-platform.vercel.app
+npx supabase secrets set APP_URL=https://hbglabs.vercel.app
 
 npx supabase functions deploy stripe-checkout
 npx supabase functions deploy stripe-portal
@@ -498,7 +498,7 @@ déclenche pas l'envoi d'un arriéré de messages périmés.
 ```bash
 npx supabase secrets set RESEND_API_KEY=re_...
 npx supabase secrets set EMAIL_FROM="HBG Labs <notifications@votre-domaine.fr>"
-npx supabase secrets set APP_URL=https://hbg-labs-client-platform.vercel.app
+npx supabase secrets set APP_URL=https://hbglabs.vercel.app
 
 npx supabase functions deploy notifications-dispatch
 ```

@@ -42,10 +42,26 @@ describe('Catalogue public', () => {
 
     expect(error).toBeNull();
     expect((data ?? []).length).toBeGreaterThanOrEqual(5);
-    // Les prix vivent en base, jamais en dur dans le frontend (§7).
-    expect((data ?? []).map((p) => p.unit_amount_cents)).toEqual(
-      expect.arrayContaining([59000, 1900, 89000, 4900, 7900]),
-    );
+
+    // Ce test portait autrefois la liste des montants attendus. Il est tombé au
+    // premier changement de tarif — en figeant des prix pour vérifier que les
+    // prix ne sont pas figés.
+    //
+    // Ce qu'il doit prouver n'a jamais été « le STARTER coûte 590 € » : c'est
+    // qu'un VISITEUR ANONYME atteint les montants réels. La décision
+    // commerciale appartient à la base ; le test vérifie la surface de lecture,
+    // et il doit survivre à une hausse de tarif.
+    for (const price of data ?? []) {
+      expect(Number.isInteger(price.unit_amount_cents)).toBe(true);
+      expect(price.unit_amount_cents).toBeGreaterThan(0);
+      expect(price.currency).toMatch(/^[A-Z]{3}$/);
+    }
+
+    // Au moins un abonnement et un paiement unique : c'est la structure du
+    // catalogue (§7), et son absence signalerait un catalogue amputé.
+    const kinds = new Set((data ?? []).map((price) => price.kind));
+    expect(kinds).toContain('RECURRING');
+    expect(kinds).toContain('ONE_TIME');
   });
 
   it('Le visiteur lit les caractéristiques des offres', async () => {

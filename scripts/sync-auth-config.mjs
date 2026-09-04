@@ -56,7 +56,7 @@ const RESET = '\x1b[0m';
  * Les origines de production seront ajoutées ici au moment du déploiement.
  */
 /** Adresse de production, celle vers laquelle pointent les liens par defaut. */
-const PRODUCTION_ORIGIN = 'https://hbg-labs-client-platform.vercel.app';
+const PRODUCTION_ORIGIN = 'https://hbglabs.vercel.app';
 
 /**
  * Configuration attendue.
